@@ -9,9 +9,11 @@ public class GameTimer : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI timerText;
 
+    public event Action TimerFinished;
+
     private void Start()
     {
-        StartTimer(10);
+        //StartTimer(10);
     }
 
     public void StartTimer(int duration)
@@ -30,5 +32,6 @@ public class GameTimer : MonoBehaviour
         }
         timerText.text = t.ToString();
         Debug.Log("Timer finished");
+        TimerFinished?.Invoke();
     }
 }

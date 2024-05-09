@@ -6,7 +6,6 @@ using UnityEngine;
 
 namespace Tae
 {
-    public enum Phase { Day, Night }
     public class LightController : MonoBehaviour
     {
         [SerializeField] private Phase phase;
@@ -20,14 +19,6 @@ namespace Tae
         {
             phase = Phase.Day;
             transform.rotation = Quaternion.Euler(dayRotation);
-        }
-
-        private void Update()
-        {
-            if ( Input.GetKeyDown(KeyCode.A) )
-            {
-                ChangePhase();
-            }
         }
 
         public void ChangePhase()

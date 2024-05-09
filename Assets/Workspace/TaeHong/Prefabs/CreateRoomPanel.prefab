@@ -3479,7 +3479,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4602511753295183132}
   - component: {fileID: 3166845575123962755}
-  - component: {fileID: 8950638630667237364}
   - component: {fileID: 6886997751984488900}
   m_Layer: 5
   m_Name: CreateRoomPanel
@@ -3524,18 +3523,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8261034071912659273}
   m_CullTransparentMesh: 1
---- !u!114 &8950638630667237364
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8261034071912659273}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0bb04ce0499e84e578d2da964d80ec38, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &6886997751984488900
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
-public enum GameMode { Mafia, Knife }
+public enum GameMode { Mafia, Knife, HideAndSeek }
 public class MainPanel : MonoBehaviour
 {
     [SerializeField] GameObject menuPanel;

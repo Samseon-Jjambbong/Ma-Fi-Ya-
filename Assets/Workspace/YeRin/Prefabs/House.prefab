@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 7455475136134798601}
   - component: {fileID: 1903713890777542000}
   - component: {fileID: 6572344848847490219}
+  - component: {fileID: 6146704850381721164}
   m_Layer: 0
   m_Name: House
   m_TagString: Untagged
@@ -131,6 +132,21 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 43466950791932432, guid: 645e672f93a1a14478b693736f184b56, type: 2}
+--- !u!114 &6146704850381721164
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1105039703020611738}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 527be90d70a77c9408f227f79d8d7538, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  time: 1
+  speed: 0.02
+  light: {fileID: 8742545863083183178}
 --- !u!1 &3741597015210395778
 GameObject:
   m_ObjectHideFlags: 0
@@ -261,6 +277,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Item_Lantern_02
       objectReference: {fileID: 0}
+    - target: {fileID: 139430, guid: 4584be541115cdc4bbf6147fe22347b2, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 422130, guid: 4584be541115cdc4bbf6147fe22347b2, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.068
@@ -337,7 +357,7 @@ Light:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1143022679481451116}
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 10
   m_Type: 2
   m_Shape: 0

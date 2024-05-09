@@ -74,7 +74,7 @@ public class VCamController : MonoBehaviour
         float angle = rotateAngle * dir;
 
         startRotation = vCam.transform.rotation;
-        targetRotation = Quaternion.Euler(0f, vCam.transform.rotation.eulerAngles.y + angle , 0f);
+        targetRotation = Quaternion.Euler(vCam.transform.rotation.eulerAngles.x, vCam.transform.rotation.eulerAngles.y + angle , 0f);
 
         StartCoroutine(RotateRoutine(vCam));
     }

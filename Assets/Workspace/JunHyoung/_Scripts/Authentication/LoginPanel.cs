@@ -53,7 +53,6 @@ public class LoginPanel : MonoBehaviour
                 SetInteractable(true);
                 return;
             }
-            VCamController.Instance.RotateVCam();
             panelController.SetActivePanel(PanelController.Panel.Verify);
             SetInteractable(true);
             //Firebase.Auth.AuthResult result = task.Result;

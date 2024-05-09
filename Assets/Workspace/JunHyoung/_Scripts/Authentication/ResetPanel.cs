@@ -44,7 +44,7 @@ public class ResetPanel : MonoBehaviour
 
     private void Cancel()
     {
-        VCamController.Instance.RotateVCam(-1);
+        VCamController.Instance.RotateVCam();
         panelController.SetActivePanel(PanelController.Panel.Login);
     }
 

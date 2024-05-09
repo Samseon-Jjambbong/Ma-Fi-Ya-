@@ -53,5 +53,6 @@ public class MainPanel : MonoBehaviour
     {
         VCamController.Instance.SetVCam(VCamController.VCam.Lobby);
         lobbyCanvas.SetActive(true);
+        panelController.gameObject.SetActive(false);
     }
 }

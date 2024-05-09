@@ -5,8 +5,7 @@ using UnityEngine.UI;
 
 public class TitleCanvas : MonoBehaviour
 {
-    [SerializeField] GameObject titleCanvas;
-    [SerializeField] GameObject loginCanvas;
+    [SerializeField] PanelController loginCanvas;
     [SerializeField] TMP_Text text;
     [SerializeField] Button buttonConnectAgain;
 
@@ -26,9 +25,9 @@ public class TitleCanvas : MonoBehaviour
 
         if ( Input.anyKey )
         {
-            loginCanvas.SetActive(true);
-            titleCanvas.SetActive(false);
+            loginCanvas.gameObject.SetActive(true);
             VCamController.Instance.SetVCam(VCamController.VCam.Login);
+            this.gameObject.SetActive(false);
         }
     }
 

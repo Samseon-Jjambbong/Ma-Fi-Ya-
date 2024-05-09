@@ -14,6 +14,8 @@ public class LoginPanel : MonoBehaviour
     [SerializeField] Button loginButton;
     [SerializeField] Button resetPasswordButton;
 
+    [SerializeField] bool isDebug; // debug flag for skip email Varify
+
     private void Awake()
     {
         signUpButton.onClick.AddListener(SignUp);
@@ -53,11 +55,26 @@ public class LoginPanel : MonoBehaviour
                 SetInteractable(true);
                 return;
             }
-            panelController.SetActivePanel(PanelController.Panel.Verify);
-            SetInteractable(true);
+
+            if ( isDebug )
+            {
+                panelController.SetActivePanel(PanelController.Panel.Main);
+                SetInteractable(true);
+            }
+            else
+            {
+                panelController.SetActivePanel(PanelController.Panel.Verify);
+                SetInteractable(true);
+            }
             //Firebase.Auth.AuthResult result = task.Result;
             //panelController.ShowInfo($"User signed in successfully: {result.User.DisplayName} ({result.User.UserId})");
         });
+    }
+
+    public void FromSignUpPanel(string id, string pass )
+    {
+        emailInputField.text = id;
+        passInputField.text = pass;
     }
 
     private void SetInteractable(bool interactable)

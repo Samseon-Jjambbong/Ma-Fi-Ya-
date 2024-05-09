@@ -1,3 +1,4 @@
+using Cinemachine;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -27,6 +28,7 @@ public class TitleCanvas : MonoBehaviour
         {
             loginCanvas.SetActive(true);
             titleCanvas.SetActive(false);
+            VCamController.Instance.ChangeVCam(VCamController.VCam.Login);
         }
     }
 

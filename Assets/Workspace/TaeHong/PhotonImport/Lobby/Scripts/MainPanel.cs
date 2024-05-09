@@ -3,14 +3,17 @@ using Photon.Pun;
 using Photon.Realtime;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
+public enum GameMode { Mafia, Knife }
 public class MainPanel : MonoBehaviour
 {
     [SerializeField] GameObject menuPanel;
     [SerializeField] GameObject createRoomPanel;
     [SerializeField] TMP_InputField roomNameInputField;
-    [SerializeField] TMP_InputField maxPlayerInputField;
+    [SerializeField] TMP_Dropdown maxPlayerDropdown;
+    [SerializeField] ToggleGroup gameModeToggleGroup;
 
     private void OnEnable()
     {
@@ -26,9 +29,9 @@ public class MainPanel : MonoBehaviour
     {
         // Get room option inputs
         string roomName = roomNameInputField.text == "" ? $"Room {Random.Range(1000, 10000)}" : roomNameInputField.text;
-        int maxPlayers = maxPlayerInputField.text == "" ? 8 : int.Parse(maxPlayerInputField.text);
-        maxPlayers = Mathf.Clamp(maxPlayers, 1, 8);
-
+        int maxPlayers = int.Parse(maxPlayerDropdown.options [maxPlayerDropdown.value].text);
+        GameMode gameMode = gameModeToggleGroup.GetFirstActiveToggle().GetComponent<GameModeButton>().gameMode;
+        
         // Create and join new room
         RoomOptions options = new RoomOptions { MaxPlayers = maxPlayers};
         PhotonNetwork.CreateRoom(roomName, options);

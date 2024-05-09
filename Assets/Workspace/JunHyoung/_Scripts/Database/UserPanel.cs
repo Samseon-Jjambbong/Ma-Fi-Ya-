@@ -22,7 +22,7 @@ public class UserPanel : MonoBehaviour
         string json = JsonUtility.ToJson(data);
         //SetRawDB("UserData", "Park", json);
 
-       // GetDB("UserData", "Park");
+        // GetDB("UserData", "Park");
     }
 
     public void ButtonGetDB()
@@ -75,7 +75,14 @@ public class UserPanel : MonoBehaviour
             .Child("nickName")
             .SetValueAsync(nickName).ContinueWithOnMainThread(task =>
             {
-
+                if ( task.IsFaulted )
+                {
+                    return;
+                }
+                if ( task.IsCanceled )
+                {
+                    return;
+                }
             });
     }
 
@@ -92,7 +99,6 @@ public class UserPanel : MonoBehaviour
                 }
                 if ( task.IsCanceled )
                 {
-
                     return;
                 }
 

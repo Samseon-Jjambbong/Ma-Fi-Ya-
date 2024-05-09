@@ -1,6 +1,4 @@
-
 using System;
-
 
 //직렬화 가능한것만 Json 으로 만들 수 있음 
 [Serializable]

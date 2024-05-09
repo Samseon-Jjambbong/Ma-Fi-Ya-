@@ -1,26 +1,33 @@
+using Photon.Pun;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Tae;
 using UnityEngine;
 
-public class PhaseManager : MonoBehaviour
-{
-    [SerializeField] private bool isDay;
-    [SerializeField] private GameTimer timer;
-    [SerializeField] private LightController light;
+/// <summary>
+/// programmer : Yerin, TaeHong
+/// 
+/// Manager for Mafia game mode.
+/// </summary>
 
+public class MafiaManager : Singleton<MafiaManager>
+{
+    [SerializeField] private int playerCount;
+    public int PlayerCount => playerCount;
+
+    private bool isDay;
+    public bool IsDay => isDay;
+    [SerializeField] private GameTimer timer;
+    [SerializeField] private Tae.LightController light;
     [SerializeField] private int roleUseTime;
     [SerializeField] private int voteTime;
-    
+
     private void Start()
     {
-        // Game Start
         isDay = true;
         timer.StartTimer(roleUseTime);
-        
     }
-
+    
     private void OnEnable()
     {
         timer.TimerFinished += OnTimerFinished;
@@ -34,6 +41,7 @@ public class PhaseManager : MonoBehaviour
     private void OnTimerFinished()
     {
         light.ChangePhase();
+        isDay = !isDay;
         timer.StartTimer(roleUseTime);
     }
 
@@ -42,5 +50,4 @@ public class PhaseManager : MonoBehaviour
         this.roleUseTime = roleUseTime;
         this.voteTime = voteTime;
     }
-
 }

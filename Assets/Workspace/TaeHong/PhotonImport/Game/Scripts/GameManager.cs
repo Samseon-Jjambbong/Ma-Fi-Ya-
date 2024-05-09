@@ -8,78 +8,82 @@ using UnityEngine;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 using Random = UnityEngine.Random;
 
-public class GameManager : MonoBehaviourPunCallbacks
+namespace Photon
 {
-    [SerializeField] private TMP_Text infoText;
-    [SerializeField] private float countDownTime;
-    
-    private void Start()
+    public class GameManager : MonoBehaviourPunCallbacks
     {
-        PhotonNetwork.LocalPlayer.SetLoaded(true);
-    }
-
-    public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
-    {
-        if (changedProps.ContainsKey(CustomProperty.LOAD))
+        [SerializeField] private TMP_Text infoText;
+        [SerializeField] private float countDownTime;
+        
+        private void Start()
         {
-            if (PlayerLoadCount() == PhotonNetwork.PlayerList.Length)
+            PhotonNetwork.LocalPlayer.SetLoaded(true);
+        }
+
+        public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
+        {
+            if (changedProps.ContainsKey(CustomProperty.LOAD))
             {
-                // Everyone finished loading
-                if (PhotonNetwork.IsMasterClient)
+                if (PlayerLoadCount() == PhotonNetwork.PlayerList.Length)
                 {
-                    PhotonNetwork.CurrentRoom.SetGameStart(true);
-                    PhotonNetwork.CurrentRoom.SetGameStartTime(PhotonNetwork.Time);
+                    // Everyone finished loading
+                    if (PhotonNetwork.IsMasterClient)
+                    {
+                        PhotonNetwork.CurrentRoom.SetGameStart(true);
+                        PhotonNetwork.CurrentRoom.SetGameStartTime(PhotonNetwork.Time);
+                    }
+                }
+                else
+                {
+                    // Wait for everyone to load
+                    infoText.text = $"{PlayerLoadCount()} / {PhotonNetwork.PlayerList.Length}";
                 }
             }
-            else
+        }
+
+        public override void OnRoomPropertiesUpdate(Hashtable propertiesThatChanged)
+        {
+            if (propertiesThatChanged.ContainsKey(CustomProperty.GAMESTARTTIME))
             {
-                // Wait for everyone to load
-                infoText.text = $"{PlayerLoadCount()} / {PhotonNetwork.PlayerList.Length}";
+                StartCoroutine(StartTimer());
             }
         }
-    }
 
-    public override void OnRoomPropertiesUpdate(Hashtable propertiesThatChanged)
-    {
-        if (propertiesThatChanged.ContainsKey(CustomProperty.GAMESTARTTIME))
+        IEnumerator StartTimer()
         {
-            StartCoroutine(StartTimer());
-        }
-    }
+            double loadTime = PhotonNetwork.CurrentRoom.GetGameStartTime();
+            while (PhotonNetwork.Time - loadTime < countDownTime)
+            {
+                int remainTime = (int)(countDownTime - (PhotonNetwork.Time - loadTime));
+                infoText.text = (remainTime + 1).ToString();
+                yield return null;
+            }
+            
+            infoText.text = "Game Start!";
+            GameStart();
+            yield return new WaitForSeconds(1f);
 
-    IEnumerator StartTimer()
-    {
-        double loadTime = PhotonNetwork.CurrentRoom.GetGameStartTime();
-        while (PhotonNetwork.Time - loadTime < countDownTime)
-        {
-            int remainTime = (int)(countDownTime - (PhotonNetwork.Time - loadTime));
-            infoText.text = (remainTime + 1).ToString();
-            yield return null;
+            infoText.text = "";
         }
         
-        infoText.text = "Game Start!";
-        GameStart();
-        yield return new WaitForSeconds(1f);
-
-        infoText.text = "";
-    }
-    
-    public void GameStart()
-    {
-        Vector2 spawnPos = Random.insideUnitCircle * 30;
-        PhotonNetwork.Instantiate("Player", new Vector3(spawnPos.x, 0,spawnPos.y), Quaternion.identity);
-    }
-
-    private int PlayerLoadCount()
-    {
-        int loadCount = 0;
-        foreach (var player in PhotonNetwork.PlayerList)
+        public void GameStart()
         {
-            if (player.GetLoaded())
-            {
-                loadCount++;
-            }
+            Vector2 spawnPos = Random.insideUnitCircle * 30;
+            PhotonNetwork.Instantiate("Player", new Vector3(spawnPos.x, 0,spawnPos.y), Quaternion.identity);
         }
-        return loadCount;
-    }
+
+        private int PlayerLoadCount()
+        {
+            int loadCount = 0;
+            foreach (var player in PhotonNetwork.PlayerList)
+            {
+                if (player.GetLoaded())
+                {
+                    loadCount++;
+                }
+            }
+            return loadCount;
+        }
+    }    
 }
+

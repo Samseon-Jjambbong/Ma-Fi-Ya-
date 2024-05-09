@@ -1420,6 +1420,7 @@ GameObject:
   - component: {fileID: 469365492}
   - component: {fileID: 469365491}
   - component: {fileID: 469365493}
+  - component: {fileID: 469365494}
   m_Layer: 5
   m_Name: TXT-GuidText
   m_TagString: Untagged
@@ -1558,53 +1559,21 @@ MonoBehaviour:
   m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
   m_EffectDistance: {x: 1, y: -1}
   m_UseGraphicAlpha: 1
---- !u!1 &510801030
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 510801032}
-  - component: {fileID: 510801031}
-  m_Layer: 0
-  m_Name: TitleScene
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &510801031
+--- !u!114 &469365494
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 510801030}
+  m_GameObject: {fileID: 469365489}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8112697aa2f671f4d807cdabe9067753, type: 3}
+  m_Script: {fileID: 11500000, guid: 2088d503c54564344923f9cf295fd5b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  titleCanvas: {fileID: 1050639885}
-  loginCanvas: {fileID: 916660042}
-  lobbyCanvas: {fileID: 757385944}
---- !u!4 &510801032
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 510801030}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  rectTransform: {fileID: 0}
+  floatRange: 10
+  floatSpeed: 1
 --- !u!1001 &667203100
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2166,6 +2135,16 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1028447423338327804, guid: a0df9bd96af722b4a89987d64402b8c7,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1893654422006072366, guid: a0df9bd96af722b4a89987d64402b8c7,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2149605313361881817, guid: a0df9bd96af722b4a89987d64402b8c7,
         type: 3}
       propertyPath: vCamController
@@ -2276,6 +2255,11 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3596695742799761375, guid: a0df9bd96af722b4a89987d64402b8c7,
+        type: 3}
+      propertyPath: lobbyCanvas
+      value: 
+      objectReference: {fileID: 757385944}
     - target: {fileID: 6840950680847676800, guid: a0df9bd96af722b4a89987d64402b8c7,
         type: 3}
       propertyPath: m_AnchorMax.x
@@ -2306,10 +2290,15 @@ PrefabInstance:
       propertyPath: m_SizeDelta.y
       value: 1080
       objectReference: {fileID: 0}
+    - target: {fileID: 7525164641041266813, guid: a0df9bd96af722b4a89987d64402b8c7,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8013641362286351234, guid: a0df9bd96af722b4a89987d64402b8c7,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8584462706113907858, guid: a0df9bd96af722b4a89987d64402b8c7,
         type: 3}
@@ -2331,19 +2320,13 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a0df9bd96af722b4a89987d64402b8c7, type: 3}
---- !u!1 &916660041 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8584462706113907858, guid: a0df9bd96af722b4a89987d64402b8c7,
-    type: 3}
-  m_PrefabInstance: {fileID: 916660040}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &916660042 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2149605313361881817, guid: a0df9bd96af722b4a89987d64402b8c7,
     type: 3}
   m_PrefabInstance: {fileID: 916660040}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 916660041}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 93cdd50f7b210d1428f30778c3ed47c1, type: 3}
@@ -2748,8 +2731,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ef5f06feb8e71049910ecba08dfcecb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  titleCanvas: {fileID: 1038925721}
-  loginCanvas: {fileID: 916660041}
+  loginCanvas: {fileID: 916660042}
   text: {fileID: 469365491}
   buttonConnectAgain: {fileID: 1101340935}
 --- !u!1 &1080365264
@@ -2823,7 +2805,7 @@ GameObject:
   - component: {fileID: 1101340936}
   - component: {fileID: 1101340935}
   m_Layer: 5
-  m_Name: BTN-ConnectAgain
+  m_Name: BTN-Refresh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2846,7 +2828,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 269.99997, y: -159.99997}
+  m_AnchoredPosition: {x: 269.99997, y: -150}
   m_SizeDelta: {x: 100, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1101340935
@@ -2913,8 +2895,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
+  m_Sprite: {fileID: 21300000, guid: f7e6e05a0f6f6cd41acac0e427f3de0e, type: 3}
+  m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -4147,4 +4129,3 @@ SceneRoots:
   - {fileID: 757385948}
   - {fileID: 1080365265}
   - {fileID: 413402955}
-  - {fileID: 510801032}

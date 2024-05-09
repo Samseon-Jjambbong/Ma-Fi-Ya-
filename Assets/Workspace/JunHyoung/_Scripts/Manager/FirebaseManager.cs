@@ -47,6 +47,7 @@ public class FirebaseManager : MonoBehaviour
 
     private async void CheckDependency()
     {
+        Debug.Log("Start Check!");
         DependencyStatus dependencyStatus = await FirebaseApp.CheckAndFixDependenciesAsync();
         if (dependencyStatus == DependencyStatus.Available)
         {

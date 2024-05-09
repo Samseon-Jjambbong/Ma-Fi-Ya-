@@ -33,7 +33,30 @@ public class EditPanel : MonoBehaviour
     {
         SetInteractable(false);
 
-        profile.DisplayName = nameInputField.text;
+        string name = nameInputField.text;
+        profile.DisplayName = name;
+
+        //Database Update 
+        FirebaseManager.DB
+            .GetReference("UserData")
+            .Child(FirebaseManager.Auth.CurrentUser.UserId)
+            .Child("Name")
+            .SetValueAsync(name).ContinueWithOnMainThread(task =>
+            {
+                if ( task.IsFaulted )
+                {
+                    Debug.Log($"DB SetValueAsync Faulted : {task.Exception}");
+                    return;
+                }
+                if ( task.IsCanceled )
+                {
+                    Debug.Log("DB SetValueAsync Canceled");
+                    return;
+                }
+                Debug.Log("All Success");
+                panelController.ShowInfo("SetValueAsync Success!");
+            });
+
         FirebaseManager.Auth.CurrentUser.UpdateUserProfileAsync(profile).ContinueWithOnMainThread(task =>
         {
             if ( task.IsCanceled )

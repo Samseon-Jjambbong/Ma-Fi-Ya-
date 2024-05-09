@@ -74,7 +74,7 @@ public class SignUpPanel : MonoBehaviour
             panelController.ShowInfo($"Firebase user created successfully:" +
                 $" {result.User.DisplayName} ({result.User.UserId})");
             NameApply(name);
-            VCamController.Instance.RotateVCam(VCamController.VCam.Login);
+            VCamController.Instance.RotateVCam();
             panelController.SetActivePanel(PanelController.Panel.Login);
             SetInteractable(true);
         });
@@ -107,7 +107,7 @@ public class SignUpPanel : MonoBehaviour
 
     public void Cancel()
     {
-        VCamController.Instance.RotateVCam(VCamController.VCam.Login);
+        VCamController.Instance.RotateVCam();
         panelController.SetActivePanel(PanelController.Panel.Login);
     }
 

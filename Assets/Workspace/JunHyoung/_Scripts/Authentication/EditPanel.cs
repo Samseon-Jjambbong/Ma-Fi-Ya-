@@ -89,7 +89,7 @@ public class EditPanel : MonoBehaviour
 
     private void Back()
     {
-        VCamController.Instance.RotateVCam(VCamController.VCam.Login, -1);
+        VCamController.Instance.RotateVCam(-1);
         panelController.SetActivePanel(PanelController.Panel.Main);
     }
 

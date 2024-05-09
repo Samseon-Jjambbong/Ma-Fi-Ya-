@@ -13,6 +13,7 @@ public class VCamController : MonoBehaviour
     [SerializeField] CinemachineVirtualCamera vCamLogin;
     [SerializeField] CinemachineVirtualCamera vCamLobby;
 
+    CinemachineVirtualCamera curCam;
 
     [SerializeField] float rotateTime;
     [SerializeField] float rotateAngle;
@@ -38,7 +39,7 @@ public class VCamController : MonoBehaviour
         }
     }
 
-    public void ChangeVCam( VCam vCam )
+    public void SetVCam( VCam vCam )
     {
         switch ( vCam )
         {
@@ -46,33 +47,26 @@ public class VCamController : MonoBehaviour
                 vCamTitle.Priority = 100;
                 vCamLogin.Priority = 0;
                 vCamLobby.Priority = 0;
+                curCam = vCamTitle;
                 break;
             case VCam.Login:
                 vCamTitle.Priority = 0;
                 vCamLobby.Priority = 100;
                 vCamLobby.Priority = 0;
+                curCam = vCamLogin;
                 break;
             case VCam.Lobby:
                 vCamTitle.Priority = 0;
                 vCamLobby.Priority = 0;
                 vCamLobby.Priority = 100;
+                curCam = vCamLobby;
                 break;
         }
     }
 
-    public void RotateVCam(VCam vCam, int dir = 1)
+    public void RotateVCam( int dir = 1)
     {
-        switch ( vCam )
-        {
-            case VCam.Title:
-                break;
-            case VCam.Login:
-                Rotate(vCamLogin, dir);
-                break;
-            case VCam.Lobby:
-                Rotate(vCamLobby, dir);
-                break;
-        }
+        Rotate(curCam, dir);
     }
 
     private void Rotate( CinemachineVirtualCamera vCam, int dir )

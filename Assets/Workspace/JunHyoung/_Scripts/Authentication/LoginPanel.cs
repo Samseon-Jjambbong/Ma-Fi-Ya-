@@ -23,13 +23,13 @@ public class LoginPanel : MonoBehaviour
 
     public void SignUp()
     {
-        VCamController.Instance.RotateVCam(VCamController.VCam.Login, -1);
+        VCamController.Instance.RotateVCam(-1);
         panelController.SetActivePanel(PanelController.Panel.SignUp);
     }
 
     private void ResetPassword()
     {
-        VCamController.Instance.RotateVCam(VCamController.VCam.Login, -1);
+        VCamController.Instance.RotateVCam(-1);
         panelController.SetActivePanel(PanelController.Panel.Reset);
     }
 
@@ -53,7 +53,7 @@ public class LoginPanel : MonoBehaviour
                 SetInteractable(true);
                 return;
             }
-            VCamController.Instance.RotateVCam(VCamController.VCam.Login);
+            VCamController.Instance.RotateVCam();
             panelController.SetActivePanel(PanelController.Panel.Verify);
             SetInteractable(true);
             //Firebase.Auth.AuthResult result = task.Result;

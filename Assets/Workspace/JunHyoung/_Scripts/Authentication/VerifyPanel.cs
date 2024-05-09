@@ -65,7 +65,7 @@ public class VerifyPanel : MonoBehaviour
     private void Logout()
     {
         FirebaseManager.Auth.SignOut();
-        VCamController.Instance.RotateVCam(VCamController.VCam.Login, -1);
+        VCamController.Instance.RotateVCam(-1);
         panelController.SetActivePanel(PanelController.Panel.Login);
     }
 

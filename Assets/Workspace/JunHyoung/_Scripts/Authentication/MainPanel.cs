@@ -16,6 +16,8 @@ public class MainPanel : MonoBehaviour
     [SerializeField] Button editButton;
     [SerializeField] Button startButton;
 
+    [SerializeField] GameObject lobbyCanvas; // Replace 
+
     private void Awake()
     {
         logoutButton.onClick.AddListener(Logout);
@@ -37,18 +39,19 @@ public class MainPanel : MonoBehaviour
     private void Logout()
     {
         FirebaseManager.Auth.SignOut();
-        VCamController.Instance.RotateVCam(VCamController.VCam.Login, -1);
+        VCamController.Instance.RotateVCam( -1);
         panelController.SetActivePanel(PanelController.Panel.Login);
     }
 
     private void Edit()
     {
-        VCamController.Instance.RotateVCam(VCamController.VCam.Login, -1);
+        VCamController.Instance.RotateVCam( -1);
         panelController.SetActivePanel(PanelController.Panel.Edit);
     }
 
     private void GameStart()
     {
-        //Lobby Canvas 활성화 할 것
+        VCamController.Instance.SetVCam(VCamController.VCam.Lobby);
+        lobbyCanvas.SetActive(true);
     }
 }

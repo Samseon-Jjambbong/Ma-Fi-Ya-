@@ -2135,6 +2135,11 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 897973994493151940, guid: a0df9bd96af722b4a89987d64402b8c7,
+        type: 3}
+      propertyPath: isDebug
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1028447423338327804, guid: a0df9bd96af722b4a89987d64402b8c7,
         type: 3}
       propertyPath: m_IsActive

@@ -76,3 +76,7 @@ Assets/ExternalDependencyManager
 Assets/Firebase
 Assets/Photon
 Assets/Plugins
+Assets/StreamingAssets
+Assets/google-services.json
+Assets/google-services.json.meta
+Assets/StreamingAssets.meta

@@ -31,4 +31,9 @@ public class PanelController : MonoBehaviour
     {
         infoPanel.ShowInfo(message);
     }
+
+    public void SignUpToLogin(string id, string pass)
+    {
+        loginPanel.FromSignUpPanel(id, pass);
+    }
 }

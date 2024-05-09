@@ -46,14 +46,6 @@ public class SignUpPanel : MonoBehaviour
             SetInteractable(true);
             return;
         }
-
-        /*
-        FirebaseManager.DB
-            .GetReference("UserData/dd")
-            .GetValueAsync()
-            .ContinueWithOnMainThread(task =>
-            {
-            });*/
         FirebaseManager.Auth.CreateUserWithEmailAndPasswordAsync(id, pass).ContinueWithOnMainThread(task =>
         {
             if ( task.IsCanceled )
@@ -75,6 +67,7 @@ public class SignUpPanel : MonoBehaviour
                 $" {result.User.DisplayName} ({result.User.UserId})");
             NameApply(name);
             VCamController.Instance.RotateVCam();
+            panelController.SignUpToLogin(id, pass);
             panelController.SetActivePanel(PanelController.Panel.Login);
             SetInteractable(true);
         });
@@ -90,18 +83,41 @@ public class SignUpPanel : MonoBehaviour
         {
             if ( task.IsCanceled )
             {
-                panelController.ShowInfo("UpdateUserProfileAsync Canceled");
+                //panelController.ShowInfo("UpdateUserProfileAsync Canceled");
+                Debug.Log("UpdateUserProfileAsync Canceled");
                 return;
             }
             else if ( task.IsFaulted )
             {
-                panelController.ShowInfo($"UpdateUserProfileAsync failed : {task.Exception.Message}");
+                //panelController.ShowInfo($"UpdateUserProfileAsync failed : {task.Exception.Message}");
+                Debug.LogException(task.Exception);
                 return;
             }
-            panelController.ShowInfo("UpdateUserProfileAsync Success!");
+            //panelController.ShowInfo("UpdateUserProfileAsync Success!");
+            Debug.Log("UpdateUserProfileAsync Success!");
         });
 
         //Database Update
+        UserData userData = new UserData(name);
+        string json = JsonUtility.ToJson(userData);
+        FirebaseManager.DB
+            .GetReference("UserData")
+            .Child(FirebaseManager.Auth.CurrentUser.UserId)
+            .SetRawJsonValueAsync(json).ContinueWithOnMainThread(task =>
+            {
+                if ( task.IsFaulted )
+                {
+                    Debug.Log($"DB SetValueAsync Faulted : {task.Exception}");
+                    return;
+                }
+                if ( task.IsCanceled )
+                {
+                    Debug.Log("DB SetValueAsync Canceled");
+                    return;
+                }
+                Debug.Log("All Success");
+                panelController.ShowInfo("SetValueAsync Success!");
+            });
     }
 
 

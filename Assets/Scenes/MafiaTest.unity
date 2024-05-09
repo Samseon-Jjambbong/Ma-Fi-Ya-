@@ -248,7 +248,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerPrefab: {fileID: 8492271994209432676, guid: b079fcfeae06299498566315846f5d66,
     type: 3}
-  playerCount: 4
   radius: 15
 --- !u!4 &41385844
 Transform:
@@ -260,6 +259,55 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.9174008, y: -28.82138, z: 16.753664}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &63178420
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 63178422}
+  - component: {fileID: 63178421}
+  m_Layer: 0
+  m_Name: MafiaManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &63178421
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 63178420}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01b066014f9dc4725bab194fdf11253c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerCount: 5
+  timer: {fileID: 287919190}
+  light: {fileID: 410087043}
+  roleUseTime: 3
+  voteTime: 3
+--- !u!4 &63178422
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 63178420}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -5.39, y: 1.9, z: 6.34}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -612,7 +660,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &215935512
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -625,7 +673,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3420bf5f2141a49819a0c65acdb331c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  curPhase: 0
+  isDay: 0
   timer: {fileID: 287919190}
   light: {fileID: 410087043}
   roleUseTime: 3
@@ -1325,7 +1373,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b843bfd2f2fd438d9fca6bd05742fc4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  phase: 0
   dayRotation: {x: 50, y: -30, z: 0}
   nightRotation: {x: 180, y: -30, z: 0}
   phaseChangeDuration: 1
@@ -1486,7 +1533,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   housePrefab: {fileID: 1105039703020611738, guid: 9297c19b8bd964841a6f8578ae9bdc7a,
     type: 3}
-  playerCount: 4
   radius: 21
 --- !u!4 &535702953
 Transform:
@@ -2938,3 +2984,4 @@ SceneRoots:
   - {fileID: 535702953}
   - {fileID: 41385844}
   - {fileID: 215935513}
+  - {fileID: 63178422}

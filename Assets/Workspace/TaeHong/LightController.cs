@@ -8,7 +8,6 @@ namespace Tae
 {
     public class LightController : MonoBehaviour
     {
-        [SerializeField] private Phase phase;
         [SerializeField] private Vector3 dayRotation;
         [SerializeField] private Vector3 nightRotation;
         [SerializeField] private float phaseChangeDuration;
@@ -17,7 +16,6 @@ namespace Tae
 
         private void Start()
         {
-            phase = Phase.Day;
             transform.rotation = Quaternion.Euler(dayRotation);
         }
 
@@ -26,15 +24,13 @@ namespace Tae
             if ( isChanging )
                 return;
             
-            if ( phase == Phase.Day )
+            if ( Manager.Mafia.IsDay )
             {
                 StartCoroutine(ChangePhaseRoutine(dayRotation, nightRotation));
-                phase = Phase.Night;
             }
             else
             {
                 StartCoroutine(ChangePhaseRoutine(nightRotation, dayRotation));
-                phase = Phase.Day;
             }
         }
 

@@ -5,7 +5,6 @@ using UnityEngine;
 public class PlayerCreator : MonoBehaviour
 {
     [SerializeField] GameObject playerPrefab;
-    [SerializeField] int playerCount;
 
     [SerializeField] int radius;    // 21이 가장 이상적
 
@@ -16,10 +15,10 @@ public class PlayerCreator : MonoBehaviour
 
     private void CreatePlayers()
     {
-        int angle = 180 / ( playerCount - 1 );    // 각 집의 간격의 각도
+        int angle = 180 / ( Manager.Mafia.PlayerCount - 1 );    // 각 집의 간격의 각도
 
         int currentAngle = 0;
-        for ( int i = 0; i < playerCount; i++ )
+        for ( int i = 0; i < Manager.Mafia.PlayerCount; i++ )
         {
             Vector3 pos = new Vector3(Mathf.Cos(currentAngle * Mathf.Deg2Rad) * radius, 1.8f, Mathf.Sin(currentAngle * Mathf.Deg2Rad) * radius);
             Transform player = Instantiate(playerPrefab).transform;

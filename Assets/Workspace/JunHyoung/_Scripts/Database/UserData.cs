@@ -4,18 +4,18 @@ using System;
 [Serializable]
 public class UserData
 {
-    public string nickName;
+    public string Name;
     public int playCount;
-    public int WinCount;
+    public int winCount;
     public int level;
 
-    public UserData() { this.nickName = "nickName"; this.playCount = 0; this.WinCount = 0;  this.level = 1;  }
+    public UserData() { this.Name = "nickName"; this.playCount = 0; this.winCount = 0;  this.level = 1;  }
 
     public UserData( string nickName)
     {
-        this.nickName = nickName;
+        this.Name = nickName;
         this.playCount = 0;
-        this.WinCount = 0;
+        this.winCount = 0;
         this.level = 1;
     }
 }

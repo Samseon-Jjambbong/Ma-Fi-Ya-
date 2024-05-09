@@ -55,7 +55,7 @@ public class UserPanel : MonoBehaviour
                     Debug.Log(json);
                     userData = JsonUtility.FromJson<UserData>(json);
 
-                    Debug.Log($"{userData.nickName}");
+                    Debug.Log($"{userData.Name}");
                     return;
                 }
                 else
@@ -71,7 +71,7 @@ public class UserPanel : MonoBehaviour
 
         FirebaseManager.DB
             .GetReference("UserData")
-            .Child("")
+            .Child(FirebaseManager.Auth.CurrentUser.UserId)
             .Child("nickName")
             .SetValueAsync(nickName).ContinueWithOnMainThread(task =>
             {

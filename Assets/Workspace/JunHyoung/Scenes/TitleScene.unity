@@ -1590,7 +1590,6 @@ MonoBehaviour:
   titleCanvas: {fileID: 1050639885}
   loginCanvas: {fileID: 916660042}
   lobbyCanvas: {fileID: 757385944}
-  vCam: {fileID: 0}
 --- !u!4 &510801032
 Transform:
   m_ObjectHideFlags: 0
@@ -2753,7 +2752,6 @@ MonoBehaviour:
   loginCanvas: {fileID: 916660041}
   text: {fileID: 469365491}
   buttonConnectAgain: {fileID: 1101340935}
-  vCamLogin: {fileID: 987803831}
 --- !u!1 &1080365264
 GameObject:
   m_ObjectHideFlags: 0
@@ -2804,7 +2802,7 @@ MonoBehaviour:
   vCamTitle: {fileID: 791586062}
   vCamLogin: {fileID: 987803831}
   vCamLobby: {fileID: 1831897859}
-  rotationSpeed: 1
+  rotateTime: 0.5
   rotateAngle: 30
 --- !u!4 &1086970173 stripped
 Transform:

@@ -5,9 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="095ac73e-a33e-41a1-b55c-8fb41e8f844b" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/Assets/Workspace/TaeHong/PhotonImport/Game/Scripts/GameManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Workspace/TaeHong/PhotonImport/Game/Scripts/GameManager.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Workspace/TaeHong/TaeHong.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Workspace/TaeHong/TaeHong.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Workspace/TaeHong/PhotonImport/Lobby/Scripts/CustomProperty.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Workspace/TaeHong/PhotonImport/Lobby/Scripts/CustomProperty.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Workspace/TaeHong/PhotonImport/Lobby/Scripts/MainPanel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Workspace/TaeHong/PhotonImport/Lobby/Scripts/MainPanel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Workspace/YeRin/Scene/UITest.unity.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Workspace/YeRin/Scene/UITest.unity.meta" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -17,26 +17,26 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
-  "lastFilter": {
-    "state": "OPEN",
-    "assignee": "taehong99"
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;taehong99&quot;
   }
-}]]></component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/Samseon-Jjambbong/Ma-Fi-Ya-.git",
-    "accountId": "77feb4e9-a1a6-4e28-95bb-c2991a971faa"
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/Samseon-Jjambbong/Ma-Fi-Ya-.git&quot;,
+    &quot;accountId&quot;: &quot;77feb4e9-a1a6-4e28-95bb-c2991a971faa&quot;
   }
-}]]></component>
+}</component>
   <component name="HighlightingSettingsPerFile">
     <setting file="mock:///Users/tae/Documents/Unity/Ma-Fi-Ya-/Assets/Workspace/TaeHong/PhotonImport/Game/Scripts/GameManager.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Users/tae/Documents/Unity/Ma-Fi-Ya-/Assets/Workspace/TaeHong/PhotonImport/Game/Scripts/GameManager.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 6
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 6
+}</component>
   <component name="ProjectId" id="2gAJkhNfeInAVIbxFaWnyFlCkj1" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -44,8 +44,9 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
-    "git-widget-placeholder": "photon",
-    "node.js.selected.package.tslint": "(autodetect)"
+    "git-widget-placeholder": "rooms",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "settings.editor.selected.configurable": "editor.preferences.tabs"
   }
 }]]></component>
   <component name="RunManager" selected="Attach to Unity Editor.Attach to Unity Editor">

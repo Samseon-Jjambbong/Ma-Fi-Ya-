@@ -33,7 +33,8 @@ public class MainPanel : MonoBehaviour
         GameMode gameMode = gameModeToggleGroup.GetFirstActiveToggle().GetComponent<GameModeButton>().gameMode;
         
         // Create and join new room
-        RoomOptions options = new RoomOptions { MaxPlayers = maxPlayers};
+        RoomOptions options = new RoomOptions { MaxPlayers = maxPlayers };
+        options.SetGameMode(gameMode, true);
         PhotonNetwork.CreateRoom(roomName, options);
     }
 

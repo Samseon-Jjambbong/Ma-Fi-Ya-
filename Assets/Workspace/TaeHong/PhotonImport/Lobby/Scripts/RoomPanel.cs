@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using ExitGames.Client.Photon;
 using Photon.Pun;
 using Photon.Realtime;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,7 +12,9 @@ public class RoomPanel : MonoBehaviour
     [SerializeField] RectTransform playerContent;
     [SerializeField] PlayerEntry playerEntryPrefab;
     [SerializeField] Button startButton;
-
+    [SerializeField] private TextMeshProUGUI gameModeText;
+    [SerializeField] private TextMeshProUGUI playerCountText;
+    
     private List<PlayerEntry> playerList;
 
     private void Awake()
@@ -35,6 +38,14 @@ public class RoomPanel : MonoBehaviour
         
         // Follow room owner on scene change (game start)
         PhotonNetwork.AutomaticallySyncScene = true;
+        
+        // Display GameMode
+        string gameMode = Enum.GetName(typeof(GameMode), PhotonNetwork.CurrentRoom.GetGameMode());
+        gameModeText.text = $"Game Mode: {gameMode}";
+        
+        // Display PlayerCount
+        playerCountText.text =
+            $"Player Count: {PhotonNetwork.CurrentRoom.PlayerCount}/{PhotonNetwork.CurrentRoom.MaxPlayers}";
     }
 
     private void OnDisable()
@@ -61,6 +72,10 @@ public class RoomPanel : MonoBehaviour
         playerList.Add(playerEntry);
         
         AllPlayersReadyCheck();
+        
+        // Display PlayerCount
+        playerCountText.text =
+            $"Player Count: {PhotonNetwork.CurrentRoom.PlayerCount}/{PhotonNetwork.CurrentRoom.MaxPlayers}";
     }
 
     public void PlayerLeftRoom(Player otherPlayer)

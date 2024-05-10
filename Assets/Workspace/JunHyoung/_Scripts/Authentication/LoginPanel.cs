@@ -25,6 +25,12 @@ namespace LoginSystem
             resetPasswordButton.onClick.AddListener(ResetPassword);
         }
 
+        private void OnDisable()
+        {
+            emailInputField.text = string.Empty;
+            passInputField.text = string.Empty;
+        }
+
         public void SignUp()
         {
             VCamController.Instance.RotateVCam(-1);

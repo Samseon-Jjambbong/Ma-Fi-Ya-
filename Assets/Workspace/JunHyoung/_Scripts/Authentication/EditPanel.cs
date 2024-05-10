@@ -31,6 +31,13 @@ namespace LoginSystem
             profile = new UserProfile();
         }
 
+        private void OnDisable()
+        {
+            nameInputField.text = string.Empty;
+            passInputField.text = string.Empty;
+            confirmInputField.text = string.Empty;
+        }
+
         private void NameApply()
         {
             SetInteractable(false);

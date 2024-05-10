@@ -20,6 +20,11 @@ namespace LoginSystem
             cancelButton.onClick.AddListener(Cancel);
         }
 
+        private void OnDisable()
+        {
+            emailInputField.text = string.Empty;
+        }
+
         private void SendResetMail()
         {
             SetInteractable(false);

@@ -10,6 +10,7 @@ public static class CustomProperty
     public const string LOAD = "Load";
     public const string GAMESTART = "GameStart";
     public const string GAMESTARTTIME = "GameStartTime";
+    public const string GAMEMODE = "GameMode";
     
     public static bool GetReady(this Player player)
     {
@@ -70,5 +71,22 @@ public static class CustomProperty
         PhotonHashtable propertiesToSet = new PhotonHashtable { { GAMESTARTTIME, value } };
         room.SetCustomProperties(propertiesToSet);
     }
-
+    
+    // Room Custom Property for Game Mode
+    public static GameMode GetGameMode( this Room room )
+    {
+        PhotonHashtable properties = room.CustomProperties;
+        if (properties.ContainsKey(GAMEMODE))
+            return (GameMode)properties[GAMEMODE];
+        return 0;
+    }
+    
+    public static void SetGameMode(this RoomOptions room, GameMode value, bool setPropertyToLobby)
+    {
+        PhotonHashtable propertiesToSet = new PhotonHashtable { { GAMEMODE, value } };
+        room.CustomRoomProperties = propertiesToSet;
+        
+        if ( setPropertyToLobby )
+            room.CustomRoomPropertiesForLobby = new string [] { GAMEMODE };
+    }
 }

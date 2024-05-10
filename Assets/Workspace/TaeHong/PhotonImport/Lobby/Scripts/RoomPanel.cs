@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using ExitGames.Client.Photon;
 using Photon.Pun;
 using Photon.Realtime;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,7 +12,8 @@ public class RoomPanel : MonoBehaviour
     [SerializeField] RectTransform playerContent;
     [SerializeField] PlayerEntry playerEntryPrefab;
     [SerializeField] Button startButton;
-
+    [SerializeField] private TextMeshProUGUI gameModeText;
+    
     private List<PlayerEntry> playerList;
 
     private void Awake()
@@ -35,6 +37,10 @@ public class RoomPanel : MonoBehaviour
         
         // Follow room owner on scene change (game start)
         PhotonNetwork.AutomaticallySyncScene = true;
+        
+        // WIP: Display GameMode
+        string gameMode = Enum.GetName(typeof(GameMode), PhotonNetwork.CurrentRoom.GetGameMode());
+        gameModeText.text = gameMode;
     }
 
     private void OnDisable()

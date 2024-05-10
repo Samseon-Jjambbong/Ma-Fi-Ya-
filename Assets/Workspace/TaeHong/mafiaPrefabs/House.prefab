@@ -949,6 +949,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   useSkillUI: {fileID: 949041914881587969}
   voteUI: {fileID: 965939242096875593}
+  outline: {fileID: 7400318162097117840}
 --- !u!114 &7400318162097117840
 MonoBehaviour:
   m_ObjectHideFlags: 0

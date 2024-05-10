@@ -2,6 +2,8 @@ using Firebase;
 using Firebase.Auth;
 using Firebase.Database;
 using Firebase.Extensions;
+using Google.MiniJSON;
+using System.IO;
 using UnityEngine;
 
 public class FirebaseManager : MonoBehaviour
@@ -39,6 +41,7 @@ public class FirebaseManager : MonoBehaviour
         {
             instance = this;
             profile = new UserProfile();
+            userData = new UserData();
             DontDestroyOnLoad(gameObject);
         }
         else
@@ -80,9 +83,12 @@ public class FirebaseManager : MonoBehaviour
     *                    Public Methods
     ******************************************************/
     private static UserProfile profile;
+    private static UserData userData;
 
     private const string VALIDFAIL = "Instance is not Valid";
+    private const string PATH = "UserData";
 
+    //bool 반환대신 구조체 만들어서 작업 로그와 성공 여부를 함께 넘기는거 좀더 고려해볼것.
     /// <summary>
     ///  Update UserProfile And Create new UserData on RealtimeDatabase. 
     ///  Return it works done well or not by bool 
@@ -121,7 +127,7 @@ public class FirebaseManager : MonoBehaviour
         UserData userData = new UserData(name);
         string json = JsonUtility.ToJson(userData);
         DB
-            .GetReference("UserData")
+            .GetReference(PATH)
             .Child(Auth.CurrentUser.UserId)
             .SetRawJsonValueAsync(json).ContinueWithOnMainThread(task =>
             {
@@ -158,7 +164,7 @@ public class FirebaseManager : MonoBehaviour
         bool workFlag = true;
         //Database Update 
         DB
-            .GetReference("UserData")
+            .GetReference(PATH)
             .Child(Auth.CurrentUser.UserId)
             .Child("Name")
             .SetValueAsync(name).ContinueWithOnMainThread(task =>
@@ -209,9 +215,79 @@ public class FirebaseManager : MonoBehaviour
         return profile.DisplayName;
     }
 
-    public static bool UpdateRecord(bool isWin )
+    /// <summary>
+    /// Update User Recoord
+    /// </summary>
+    /// <param name="isWin"> true = win game , false or empty  = lose game  </param>
+    /// <returns></returns>
+    public static bool UpdateRecord(bool isWin = false )
     {
+        if ( !isValid )
+        {
+            Debug.Log(VALIDFAIL);
+            return isValid;
+        }
 
-        return true;
+        bool workFlag = true;
+        //Get Data From Database
+        DB
+             .GetReference(PATH).Child(Auth.CurrentUser.UserId)
+             .GetValueAsync().ContinueWithOnMainThread(task =>
+             {
+                 if ( task.IsFaulted )
+                 {
+                     Debug.LogError($"DB GetValueAsync Faulted : {task.Exception}");
+                     workFlag = false;
+                     return;
+                 }
+                 if ( task.IsCanceled )
+                 {
+                     Debug.LogError($"DB SetValueAsync Canceled");
+                     workFlag = false;
+                     return;
+                 }
+
+                 DataSnapshot snapshot = task.Result;
+                 if ( snapshot.Exists )
+                 {
+                     string json = snapshot.GetRawJsonValue();
+                     Debug.Log(json);
+                     userData = JsonUtility.FromJson<UserData>(json);
+
+                     Debug.Log($"{userData.Name}");
+                     return;
+                 }
+             });
+
+        //Update UserData Value
+
+        if( isWin )
+            userData.winCount++;
+        
+        userData.playCount++;
+
+        //Update Database
+        string json = JsonUtility.ToJson(userData);
+
+        DB
+           .GetReference(PATH)
+           .Child(Auth.CurrentUser.UserId)
+           .SetRawJsonValueAsync(json).ContinueWithOnMainThread(task =>
+           {
+               if ( task.IsFaulted )
+               {
+                   Debug.LogError($"DB SetValueAsync Faulted : {task.Exception}");
+                   workFlag = false;
+                   return;
+               }
+               if ( task.IsCanceled )
+               {
+                   Debug.LogError("DB SetValueAsync Canceled");
+                   workFlag = false;
+                   return;
+               }
+           });
+
+        return workFlag;
     }
 }

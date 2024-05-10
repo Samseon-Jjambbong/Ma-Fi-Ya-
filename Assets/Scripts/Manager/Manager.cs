@@ -3,6 +3,7 @@ using UnityEngine;
 public static class Manager
 {
     public static GameManager Game { get { return GameManager.Instance; } }
+    public static MafiaManager Mafia { get { return MafiaManager.Instance; } }
     public static DataManager Data { get { return DataManager.Instance; } }
     public static PoolManager Pool { get { return PoolManager.Instance; } }
     public static ResourceManager Resource { get { return ResourceManager.Instance; } }

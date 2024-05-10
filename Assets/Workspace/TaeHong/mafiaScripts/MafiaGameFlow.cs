@@ -6,17 +6,34 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-public class MafiaGameFlow : MonoBehaviour
+public class MafiaGameFlow : Singleton<MafiaGameFlow>
 {
     [SerializeField] private GameTimer timer;
     [SerializeField] private LightController lightController;
     [SerializeField] private GameObject roleUI;
     private float displayRoleDuration = 3f;
     private float chatDuration = 3f;
+    private bool isDay;
+    public List<House> Houses { get; set; }
 
     private void Start()
     {
+        isDay = true;
+        StartCoroutine(GameFlow());
+    }
+
+    IEnumerator GameFlow()
+    {
+        yield return new WaitForSeconds(1);
+        yield return DisplayRoleRoutine();
+        yield return AllowChatRoutine();
+        yield return lightController.ChangePhase(isDay);
+        isDay = false;
+        //ChangeIntoNight();
+        yield return NightRoutine();
         
+        yield return lightController.ChangePhase(isDay);
+        isDay = true;
     }
 
     // Display Role for X seconds
@@ -24,7 +41,7 @@ public class MafiaGameFlow : MonoBehaviour
     {
         roleUI.SetActive(true);
         yield return new WaitForSeconds(displayRoleDuration);
-        roleUI.SetActive(true);
+        roleUI.SetActive(false);
     }
     
     // Allow Chat for X Seconds
@@ -42,12 +59,31 @@ public class MafiaGameFlow : MonoBehaviour
     // Day -> Night
     private void ChangeIntoNight()
     {
-        lightController.ChangePhase();
+        lightController.ChangePhase(isDay);
+        isDay = false;
     }
     
     // Night Stuff
-    // Allow chat for mafia
-    // Allow skill usage for X Seconds
+    private IEnumerator NightRoutine()
+    {
+        // Allow chat for mafia
+        Debug.Log("Mafia Chat enabled");
+
+        // Allow skill usage for X Seconds
+        foreach ( var house in Houses )
+        {
+            house.ActivateOutline(true);
+        }
+
+        yield return new WaitForSeconds(chatDuration);
+        
+        foreach ( var house in Houses )
+        {
+            house.ActivateOutline(false);
+        }
+        
+        Debug.Log("Mafia Chat disabled");
+    }
     
     // Night -> Day
     // Allow Chat for X Seconds

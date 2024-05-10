@@ -7,7 +7,7 @@ using UnityEngine;
 /// 
 /// Class for Mafia mode players
 /// </summary>
-public class Player : MonoBehaviour
+public class MafiaPlayer : MonoBehaviour
 {
     // 플레이어 직업 진형
     private bool isMafia;

@@ -11,7 +11,7 @@ public class LoginManager : MonoBehaviour
     [SerializeField] SignUpPanel signUpPanel;
     [SerializeField] ResetPanel resetPanel;
     [SerializeField] VerifyPanel verifyPanel;
-    [SerializeField] MainPanel mainPanel;
+    [SerializeField] LoginSystem.MainPanel mainPanel;
     [SerializeField] EditPanel editPanel;
 
     private void OnEnable()

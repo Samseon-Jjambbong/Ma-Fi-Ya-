@@ -25,6 +25,14 @@ namespace LoginSystem
             signUpButton.onClick.AddListener(SignUp);
         }
 
+        private void OnDisable()
+        {
+            emailInputField.text = string.Empty;
+            passInputField.text = string.Empty;
+            confirmInputField.text = string.Empty;
+            nameInputField.text = string.Empty;
+        }
+
         public void SignUp()
         {
             SetInteractable(false);
@@ -65,63 +73,22 @@ namespace LoginSystem
                 }
                 // Firebase user has been created.
                 Firebase.Auth.AuthResult result = task.Result;
-                panelController.ShowInfo($"Firebase user created successfully:" +
-                    $" {result.User.DisplayName} ({result.User.UserId})");
-                NameApply(name);
-                VCamController.Instance.RotateVCam();
-                panelController.SignUpToLogin(id, pass);
-                panelController.SetActivePanel(LoginManager.Panel.Login);
-                SetInteractable(true);
+                if ( FirebaseManager.SetName(name) )
+                {
+                    panelController.ShowInfo($"Firebase user created successfully:" +
+                                    $" {result.User.DisplayName} ({result.User.UserId})");
+                    VCamController.Instance.RotateVCam();
+                    panelController.SignUpToLogin(id, pass);
+                    panelController.SetActivePanel(LoginManager.Panel.Login);
+                    SetInteractable(true);
+                }
+                else
+                {
+                    panelController.ShowInfo($"Firebase user created Failed : ");
+                    SetInteractable(true);
+                }
             });
         }
-
-
-        private void NameApply( string name )
-        {
-            //UserProfile Update
-            UserProfile profile = new UserProfile();
-            profile.DisplayName = name;
-            FirebaseManager.Auth.CurrentUser.UpdateUserProfileAsync(profile).ContinueWithOnMainThread(task =>
-            {
-                if ( task.IsCanceled )
-                {
-                    //panelController.ShowInfo("UpdateUserProfileAsync Canceled");
-                    Debug.Log("UpdateUserProfileAsync Canceled");
-                    return;
-                }
-                else if ( task.IsFaulted )
-                {
-                    //panelController.ShowInfo($"UpdateUserProfileAsync failed : {task.Exception.Message}");
-                    Debug.LogException(task.Exception);
-                    return;
-                }
-                //panelController.ShowInfo("UpdateUserProfileAsync Success!");
-                Debug.Log("UpdateUserProfileAsync Success!");
-            });
-
-            //Database Update
-            UserData userData = new UserData(name);
-            string json = JsonUtility.ToJson(userData);
-            FirebaseManager.DB
-                .GetReference("UserData")
-                .Child(FirebaseManager.Auth.CurrentUser.UserId)
-                .SetRawJsonValueAsync(json).ContinueWithOnMainThread(task =>
-                {
-                    if ( task.IsFaulted )
-                    {
-                        Debug.Log($"DB SetValueAsync Faulted : {task.Exception}");
-                        return;
-                    }
-                    if ( task.IsCanceled )
-                    {
-                        Debug.Log("DB SetValueAsync Canceled");
-                        return;
-                    }
-                    Debug.Log("All Success");
-                    panelController.ShowInfo("SetValueAsync Success!");
-                });
-        }
-
 
         public void Cancel()
         {
@@ -138,5 +105,4 @@ namespace LoginSystem
             signUpButton.interactable = interactable;
         }
     }
-
 }

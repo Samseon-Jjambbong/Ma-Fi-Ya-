@@ -19,16 +19,12 @@ namespace LoginSystem
         [SerializeField] Button backButton;
         [SerializeField] Button deleteButton;
 
-
-        UserProfile profile;
         private void Awake()
         {
             nameApplyButton.onClick.AddListener(NameApply);
             passApplyButton.onClick.AddListener(PassApply);
             backButton.onClick.AddListener(Back);
             deleteButton.onClick.AddListener(Delete);
-
-            profile = new UserProfile();
         }
 
         private void OnDisable()
@@ -43,47 +39,16 @@ namespace LoginSystem
             SetInteractable(false);
 
             string name = nameInputField.text;
-            profile.DisplayName = name;
-
-            //Database Update 
-            FirebaseManager.DB
-                .GetReference("UserData")
-                .Child(FirebaseManager.Auth.CurrentUser.UserId)
-                .Child("Name")
-                .SetValueAsync(name).ContinueWithOnMainThread(task =>
-                {
-                    if ( task.IsFaulted )
-                    {
-                        Debug.Log($"DB SetValueAsync Faulted : {task.Exception}");
-                        return;
-                    }
-                    if ( task.IsCanceled )
-                    {
-                        Debug.Log("DB SetValueAsync Canceled");
-                        return;
-                    }
-                    Debug.Log("All Success");
-                    panelController.ShowInfo("SetValueAsync Success!");
-                });
-
-            FirebaseManager.Auth.CurrentUser.UpdateUserProfileAsync(profile).ContinueWithOnMainThread(task =>
+            if ( FirebaseManager.UpdateName(name) )
             {
-                if ( task.IsCanceled )
-                {
-                    panelController.ShowInfo("UpdateUserProfileAsync Canceled");
-                    SetInteractable(true);
-                    return;
-                }
-                else if ( task.IsFaulted )
-                {
-                    panelController.ShowInfo($"UpdateUserProfileAsync failed : {task.Exception.Message}");
-                    SetInteractable(true);
-                    return;
-                }
-
+                panelController.ShowInfo("Update NickName Success!");
                 SetInteractable(true);
-                panelController.ShowInfo("UpdateUserProfileAsync Success!");
-            });
+            }
+            else
+            {
+                panelController.ShowInfo("Update NickName Failed...");
+                SetInteractable(true);
+            }
         }
 
         private void PassApply()

@@ -19,24 +19,17 @@ namespace Tae
             transform.rotation = Quaternion.Euler(dayRotation);
         }
 
-        public void ChangePhase()
+        public IEnumerator ChangePhase(bool isDay)
         {
-            if ( isChanging )
-                return;
-            
-            if ( Manager.Mafia.IsDay )
-            {
-                StartCoroutine(ChangePhaseRoutine(dayRotation, nightRotation));
-            }
-            else
-            {
-                StartCoroutine(ChangePhaseRoutine(nightRotation, dayRotation));
-            }
+            return (isDay
+                ? ChangePhaseRoutine(dayRotation, nightRotation)
+                : ChangePhaseRoutine(nightRotation, dayRotation));
         }
 
         IEnumerator ChangePhaseRoutine(Vector3 startRot, Vector3 targetRot)
         {
             isChanging = true;
+            
             float t = 0;
             while ( t < phaseChangeDuration )
             {

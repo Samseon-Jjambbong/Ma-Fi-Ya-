@@ -12,6 +12,8 @@ public class HouseCreator : MonoBehaviour
 
     [SerializeField] int radius;    // 21이 가장 이상적
 
+    private List<House> houses;
+    
     private void Start()
     {
         CreateHouses();
@@ -19,6 +21,8 @@ public class HouseCreator : MonoBehaviour
 
     private void CreateHouses()
     {
+        houses = new List<House>();
+        
         int angle = 180 / (Manager.Mafia.PlayerCount - 1);    // 각 집의 간격의 각도
 
         int currentAngle = 0;
@@ -32,6 +36,10 @@ public class HouseCreator : MonoBehaviour
             house.rotation = look;
 
             currentAngle += angle;
+            
+            houses.Add(house.GetComponent<House>());
         }
+
+        MafiaGameFlow.Instance.Houses = houses;
     }
 }

@@ -84,7 +84,7 @@ namespace LoginSystem
                 }
                 else
                 {
-                    panelController.ShowInfo($"Firebase user created Failed : ");
+                    panelController.ShowInfo($"Firebase user created Failed");
                     SetInteractable(true);
                 }
             });

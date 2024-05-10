@@ -16,7 +16,7 @@ namespace LoginSystem
         [SerializeField] Button loginButton;
         [SerializeField] Button resetPasswordButton;
 
-        [SerializeField] bool isDebug; // debug flag for skip email Varify
+        [SerializeField] bool noVerify; // flag for skip email Verify
 
         private void Awake()
         {
@@ -58,7 +58,7 @@ namespace LoginSystem
                     return;
                 }
 
-                if ( isDebug )
+                if ( noVerify )
                 {
                     panelController.SetActivePanel(LoginManager.Panel.Main);
                     SetInteractable(true);

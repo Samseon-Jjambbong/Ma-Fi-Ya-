@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class TitleCanvas : MonoBehaviour
 {
-    [SerializeField] PanelController loginCanvas;
+    [SerializeField] LoginManager loginCanvas;
     [SerializeField] TMP_Text text;
     [SerializeField] Button buttonConnectAgain;
 

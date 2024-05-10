@@ -4,149 +4,153 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class EditPanel : MonoBehaviour
+namespace LoginSystem
 {
-    [SerializeField] PanelController panelController;
-
-    [SerializeField] TMP_InputField nameInputField;
-    [SerializeField] TMP_InputField passInputField;
-    [SerializeField] TMP_InputField confirmInputField;
-
-    [SerializeField] Button nameApplyButton;
-    [SerializeField] Button passApplyButton;
-    [SerializeField] Button backButton;
-    [SerializeField] Button deleteButton;
-
-
-    UserProfile profile;
-    private void Awake()
+    public class EditPanel : MonoBehaviour
     {
-        nameApplyButton.onClick.AddListener(NameApply);
-        passApplyButton.onClick.AddListener(PassApply);
-        backButton.onClick.AddListener(Back);
-        deleteButton.onClick.AddListener(Delete);
+        [SerializeField] LoginManager panelController;
 
-        profile = new UserProfile();
-    }
+        [SerializeField] TMP_InputField nameInputField;
+        [SerializeField] TMP_InputField passInputField;
+        [SerializeField] TMP_InputField confirmInputField;
 
-    private void NameApply()
-    {
-        SetInteractable(false);
+        [SerializeField] Button nameApplyButton;
+        [SerializeField] Button passApplyButton;
+        [SerializeField] Button backButton;
+        [SerializeField] Button deleteButton;
 
-        string name = nameInputField.text;
-        profile.DisplayName = name;
 
-        //Database Update 
-        FirebaseManager.DB
-            .GetReference("UserData")
-            .Child(FirebaseManager.Auth.CurrentUser.UserId)
-            .Child("Name")
-            .SetValueAsync(name).ContinueWithOnMainThread(task =>
-            {
-                if ( task.IsFaulted )
-                {
-                    Debug.Log($"DB SetValueAsync Faulted : {task.Exception}");
-                    return;
-                }
-                if ( task.IsCanceled )
-                {
-                    Debug.Log("DB SetValueAsync Canceled");
-                    return;
-                }
-                Debug.Log("All Success");
-                panelController.ShowInfo("SetValueAsync Success!");
-            });
-
-        FirebaseManager.Auth.CurrentUser.UpdateUserProfileAsync(profile).ContinueWithOnMainThread(task =>
+        UserProfile profile;
+        private void Awake()
         {
-            if ( task.IsCanceled )
-            {
-                panelController.ShowInfo("UpdateUserProfileAsync Canceled");
-                SetInteractable(true);
-                return;
-            }
-            else if ( task.IsFaulted )
-            {
-                panelController.ShowInfo($"UpdateUserProfileAsync failed : {task.Exception.Message}");
-                SetInteractable(true);
-                return;
-            }
+            nameApplyButton.onClick.AddListener(NameApply);
+            passApplyButton.onClick.AddListener(PassApply);
+            backButton.onClick.AddListener(Back);
+            deleteButton.onClick.AddListener(Delete);
 
-            SetInteractable(true);
-            panelController.ShowInfo("UpdateUserProfileAsync Success!");
-        });
-    }
-
-    private void PassApply()
-    {
-        SetInteractable(false);
-
-        if ( passInputField.text != confirmInputField.text )
-        {
-            panelController.ShowInfo("Password doesn't matched");
-            SetInteractable(true);
-            return;
+            profile = new UserProfile();
         }
 
-        string passWord = passInputField.text;
-
-        FirebaseManager.Auth.CurrentUser.UpdatePasswordAsync(passWord).ContinueWithOnMainThread(task =>
+        private void NameApply()
         {
-            if ( task.IsCanceled )
+            SetInteractable(false);
+
+            string name = nameInputField.text;
+            profile.DisplayName = name;
+
+            //Database Update 
+            FirebaseManager.DB
+                .GetReference("UserData")
+                .Child(FirebaseManager.Auth.CurrentUser.UserId)
+                .Child("Name")
+                .SetValueAsync(name).ContinueWithOnMainThread(task =>
+                {
+                    if ( task.IsFaulted )
+                    {
+                        Debug.Log($"DB SetValueAsync Faulted : {task.Exception}");
+                        return;
+                    }
+                    if ( task.IsCanceled )
+                    {
+                        Debug.Log("DB SetValueAsync Canceled");
+                        return;
+                    }
+                    Debug.Log("All Success");
+                    panelController.ShowInfo("SetValueAsync Success!");
+                });
+
+            FirebaseManager.Auth.CurrentUser.UpdateUserProfileAsync(profile).ContinueWithOnMainThread(task =>
             {
-                panelController.ShowInfo("UpdatePasswordAsync Canceled");
+                if ( task.IsCanceled )
+                {
+                    panelController.ShowInfo("UpdateUserProfileAsync Canceled");
+                    SetInteractable(true);
+                    return;
+                }
+                else if ( task.IsFaulted )
+                {
+                    panelController.ShowInfo($"UpdateUserProfileAsync failed : {task.Exception.Message}");
+                    SetInteractable(true);
+                    return;
+                }
+
                 SetInteractable(true);
-                return;
-            }
-            else if ( task.IsFaulted )
-            {
-                panelController.ShowInfo($"UpdatePasswordAsync failed : {task.Exception.Message}");
-                SetInteractable(true);
-                return;
-            }
+                panelController.ShowInfo("UpdateUserProfileAsync Success!");
+            });
+        }
 
-            SetInteractable(true);
-            panelController.ShowInfo("UpdatePasswordAsync Success!");
-        });
-    }
-
-    private void Back()
-    {
-        VCamController.Instance.RotateVCam(-1);
-        panelController.SetActivePanel(PanelController.Panel.Main);
-    }
-
-    private void Delete()
-    {
-        SetInteractable(false );
-        FirebaseManager.Auth.CurrentUser.DeleteAsync().ContinueWithOnMainThread(task =>
+        private void PassApply()
         {
-            if ( task.IsCanceled )
+            SetInteractable(false);
+
+            if ( passInputField.text != confirmInputField.text )
             {
-                panelController.ShowInfo("DeleteAsync Canceled");
-                SetInteractable(true);
-                return;
-            }
-            else if ( task.IsFaulted )
-            {
-                panelController.ShowInfo($"DeleteAsync failed : {task.Exception.Message}");
+                panelController.ShowInfo("Password doesn't matched");
                 SetInteractable(true);
                 return;
             }
 
-            SetInteractable(true);
-            panelController.ShowInfo("DeleteAsync Success!");
-        });
+            string passWord = passInputField.text;
+
+            FirebaseManager.Auth.CurrentUser.UpdatePasswordAsync(passWord).ContinueWithOnMainThread(task =>
+            {
+                if ( task.IsCanceled )
+                {
+                    panelController.ShowInfo("UpdatePasswordAsync Canceled");
+                    SetInteractable(true);
+                    return;
+                }
+                else if ( task.IsFaulted )
+                {
+                    panelController.ShowInfo($"UpdatePasswordAsync failed : {task.Exception.Message}");
+                    SetInteractable(true);
+                    return;
+                }
+
+                SetInteractable(true);
+                panelController.ShowInfo("UpdatePasswordAsync Success!");
+            });
+        }
+
+        private void Back()
+        {
+            VCamController.Instance.RotateVCam(-1);
+            panelController.SetActivePanel(LoginManager.Panel.Main);
+        }
+
+        private void Delete()
+        {
+            SetInteractable(false);
+            FirebaseManager.Auth.CurrentUser.DeleteAsync().ContinueWithOnMainThread(task =>
+            {
+                if ( task.IsCanceled )
+                {
+                    panelController.ShowInfo("DeleteAsync Canceled");
+                    SetInteractable(true);
+                    return;
+                }
+                else if ( task.IsFaulted )
+                {
+                    panelController.ShowInfo($"DeleteAsync failed : {task.Exception.Message}");
+                    SetInteractable(true);
+                    return;
+                }
+
+                SetInteractable(true);
+                panelController.ShowInfo("DeleteAsync Success!");
+            });
+        }
+
+        private void SetInteractable( bool interactable )
+        {
+            nameInputField.interactable = interactable;
+            passInputField.interactable = interactable;
+            confirmInputField.interactable = interactable;
+            nameApplyButton.interactable = interactable;
+            passApplyButton.interactable = interactable;
+            backButton.interactable = interactable;
+            deleteButton.interactable = interactable;
+        }
     }
 
-    private void SetInteractable( bool interactable )
-    {
-        nameInputField.interactable = interactable;
-        passInputField.interactable = interactable;
-        confirmInputField.interactable = interactable;
-        nameApplyButton.interactable = interactable;
-        passApplyButton.interactable = interactable;
-        backButton.interactable = interactable;
-        deleteButton.interactable = interactable;
-    }
 }

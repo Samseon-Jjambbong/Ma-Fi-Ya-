@@ -85,7 +85,7 @@ public class VCamController : MonoBehaviour
         while ( elapsedTime < rotateTime )
         {
             float t = Mathf.Clamp01(elapsedTime / rotateTime);
-            vCam.transform.rotation = Quaternion.Lerp(startRotation, targetRotation, t);
+            vCam.transform.rotation = Quaternion.Slerp(startRotation, targetRotation, t);
             elapsedTime += Time.deltaTime;
             yield return null;
         }

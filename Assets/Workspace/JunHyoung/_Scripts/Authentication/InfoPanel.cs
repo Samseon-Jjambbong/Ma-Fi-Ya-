@@ -2,24 +2,28 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class InfoPanel : MonoBehaviour
+namespace LoginSystem
 {
-    [SerializeField] TMP_Text infoText;
-    [SerializeField] Button closeButton;
-
-    private void Awake()
+    public class InfoPanel : MonoBehaviour
     {
-        closeButton.onClick.AddListener(Close);
-    }
+        [SerializeField] TMP_Text infoText;
+        [SerializeField] Button closeButton;
 
-    public void ShowInfo( string message )
-    {
-        gameObject.SetActive(true);
-        infoText.text = message;
-    }
+        private void Awake()
+        {
+            closeButton.onClick.AddListener(Close);
+        }
 
-    public void Close()
-    {
-        gameObject.SetActive(false);
+        public void ShowInfo( string message )
+        {
+            gameObject.SetActive(true);
+            infoText.text = message;
+        }
+
+        public void Close()
+        {
+            gameObject.SetActive(false);
+        }
     }
 }
+

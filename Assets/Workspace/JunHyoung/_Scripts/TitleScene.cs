@@ -6,7 +6,7 @@ public class TitleScene : MonoBehaviour
 {
     
     [SerializeField] TitleCanvas titleCanvas;
-    [SerializeField] PanelController loginCanvas;
+    [SerializeField] LoginManager loginCanvas;
     [SerializeField] GameObject lobbyCanvas; // replace this to LobbyManager when Merged
 
 

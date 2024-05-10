@@ -1,7 +1,9 @@
 using UnityEngine;
+using LoginSystem;
 
-public class PanelController : MonoBehaviour
+public class LoginManager : MonoBehaviour
 {
+     
     public enum Panel { Login, SignUp, Verify, Reset, Main, Edit }
 
     [SerializeField] InfoPanel infoPanel;

@@ -13,6 +13,7 @@ public class RoomPanel : MonoBehaviour
     [SerializeField] PlayerEntry playerEntryPrefab;
     [SerializeField] Button startButton;
     [SerializeField] private TextMeshProUGUI gameModeText;
+    [SerializeField] private TextMeshProUGUI playerCountText;
     
     private List<PlayerEntry> playerList;
 
@@ -38,9 +39,13 @@ public class RoomPanel : MonoBehaviour
         // Follow room owner on scene change (game start)
         PhotonNetwork.AutomaticallySyncScene = true;
         
-        // WIP: Display GameMode
+        // Display GameMode
         string gameMode = Enum.GetName(typeof(GameMode), PhotonNetwork.CurrentRoom.GetGameMode());
-        gameModeText.text = gameMode;
+        gameModeText.text = $"Game Mode: {gameMode}";
+        
+        // Display PlayerCount
+        playerCountText.text =
+            $"Player Count: {PhotonNetwork.CurrentRoom.PlayerCount}/{PhotonNetwork.CurrentRoom.MaxPlayers}";
     }
 
     private void OnDisable()
@@ -67,6 +72,10 @@ public class RoomPanel : MonoBehaviour
         playerList.Add(playerEntry);
         
         AllPlayersReadyCheck();
+        
+        // Display PlayerCount
+        playerCountText.text =
+            $"Player Count: {PhotonNetwork.CurrentRoom.PlayerCount}/{PhotonNetwork.CurrentRoom.MaxPlayers}";
     }
 
     public void PlayerLeftRoom(Player otherPlayer)

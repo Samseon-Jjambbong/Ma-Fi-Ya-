@@ -7,7 +7,7 @@ public class LoginManager : MonoBehaviour
     public enum Panel { Login, SignUp, Verify, Reset, Main, Edit }
 
     [SerializeField] InfoPanel infoPanel;
-    [SerializeField] LoginPanel loginPanel;
+    [SerializeField] LoginSystem.LoginPanel loginPanel;
     [SerializeField] SignUpPanel signUpPanel;
     [SerializeField] ResetPanel resetPanel;
     [SerializeField] VerifyPanel verifyPanel;

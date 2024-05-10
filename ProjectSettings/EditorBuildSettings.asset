@@ -11,4 +11,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/SampleScene.unity
     guid: 99c9720ab356a0642a771bea13969a05
+  - enabled: 1
+    path: Assets/Workspace/YeRin/Scene/UITest.unity
+    guid: 18a0c6add674143d0a508198a712c9bd
+  - enabled: 1
+    path: Assets/Scenes/MafiaTest.unity
+    guid: c6723536844824f31b5d0ac97d358740
   m_configObjects: {}

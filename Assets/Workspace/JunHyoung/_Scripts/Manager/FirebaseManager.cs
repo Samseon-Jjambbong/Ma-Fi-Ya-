@@ -126,7 +126,7 @@ public class FirebaseManager : MonoBehaviour
         UserData userData = new UserData(name);
         string json = JsonUtility.ToJson(userData);
         DB
-            .GetReference(PATH)
+            .GetReference(PATH).Push() // Push
             .Child(Auth.CurrentUser.UserId)
             .SetRawJsonValueAsync(json).ContinueWithOnMainThread(task =>
             {

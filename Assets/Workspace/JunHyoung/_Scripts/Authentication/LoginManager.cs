@@ -14,7 +14,7 @@ public class LoginManager : MonoBehaviour
     [SerializeField] MainPanel mainPanel;
     [SerializeField] EditPanel editPanel;
 
-    private void Start()
+    private void OnEnable()
     {
         SetActivePanel(Panel.Login);
     }

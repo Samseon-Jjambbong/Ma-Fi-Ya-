@@ -42,7 +42,7 @@ public class MafiaManager : Singleton<MafiaManager>
 
     private void OnTimerFinished()
     {
-        //light.ChangePhase();
+        // light.ChangePhase(); 
         isDay = !isDay;
         timer.StartTimer(roleUseTime);
     }

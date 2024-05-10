@@ -17,14 +17,14 @@ public class House : MonoBehaviour, IPointerClickHandler, IPointerExitHandler
     [SerializeField] private GameObject voteUI;
     [SerializeField] private Outlinable outline;
     
-    // What UI should be shown when a hosue is clicked
+    // What UI should be shown when a house is clicked
     public void OnPointerClick( PointerEventData eventData )
     {
-        // If Skill Use Phase
-        useSkillUI.gameObject.SetActive(true);
+        if ( !outline.enabled )
+            return;
         
-        // If Voting Phase
-        //voteUI.gameObject.SetActive(true);
+        voteUI.gameObject.SetActive(Manager.Mafia.IsDay);      // Day == vote
+        useSkillUI.gameObject.SetActive(!Manager.Mafia.IsDay); // Night == skill
     }
 
     // Hide UI if cursor exits house

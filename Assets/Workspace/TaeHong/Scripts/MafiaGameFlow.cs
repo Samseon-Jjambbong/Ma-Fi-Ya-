@@ -24,16 +24,32 @@ public class MafiaGameFlow : Singleton<MafiaGameFlow>
 
     IEnumerator GameFlow()
     {
+        // Delay
         yield return new WaitForSeconds(1);
-        yield return DisplayRoleRoutine();
-        yield return AllowChatRoutine();
-        yield return lightController.ChangePhase(isDay);
-        isDay = false;
-        //ChangeIntoNight();
-        yield return NightRoutine();
         
-        yield return lightController.ChangePhase(isDay);
-        isDay = true;
+        // Display Role for X seconds
+        yield return DisplayRoleRoutine();
+
+        // Loop
+        while (true)
+        {
+            // Allow Chat for X Seconds
+            yield return AllowChatRoutine();
+
+            // Day -> Night
+            yield return ChangeTimeOfDayRoutine();
+            
+            // Night Stuff
+            yield return NightRoutine();
+
+            // Night -> Day
+            yield return ChangeTimeOfDayRoutine();
+
+            //Day Stuff
+            yield return DayRoutine();
+        }
+        
+        //Show Results
     }
 
     // Display Role for X seconds
@@ -57,9 +73,9 @@ public class MafiaGameFlow : Singleton<MafiaGameFlow>
     }
     
     // Day -> Night
-    private void ChangeIntoNight()
+    private IEnumerator ChangeTimeOfDayRoutine()
     {
-        lightController.ChangePhase(isDay);
+        yield return lightController.ChangePhase(isDay);
         isDay = false;
     }
     
@@ -75,7 +91,7 @@ public class MafiaGameFlow : Singleton<MafiaGameFlow>
             house.ActivateOutline(true);
         }
 
-        yield return timer.StartTimer(chatDuration);
+        yield return timer.StartTimer(20);
         
         foreach ( var house in Houses )
         {
@@ -89,6 +105,24 @@ public class MafiaGameFlow : Singleton<MafiaGameFlow>
     // Allow Chat for X Seconds
     // Show role usage results
     // Show player death (if there was any)
-    
-    // Repeat
+    private IEnumerator DayRoutine()
+    {
+        // Allow chat for mafia
+        Debug.Log("Chat enabled");
+
+        // Allow skill usage for X Seconds
+        foreach ( var house in Houses )
+        {
+            house.ActivateOutline(true);
+        }
+
+        yield return timer.StartTimer(20);
+        
+        foreach ( var house in Houses )
+        {
+            house.ActivateOutline(false);
+        }
+        
+        Debug.Log("Chat disabled");
+    }
 }

@@ -21,6 +21,8 @@ public class MafiaManager : Singleton<MafiaManager>
     [SerializeField] private Tae.LightController light;
     [SerializeField] private int roleUseTime;
     [SerializeField] private int voteTime;
+    [SerializeField] private float skillTime;
+    public float SkillTime => skillTime;
 
     private void Start()
     {

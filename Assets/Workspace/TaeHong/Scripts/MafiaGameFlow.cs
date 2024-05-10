@@ -11,8 +11,8 @@ public class MafiaGameFlow : Singleton<MafiaGameFlow>
     [SerializeField] private GameTimer timer;
     [SerializeField] private LightController lightController;
     [SerializeField] private GameObject roleUI;
-    private float displayRoleDuration = 3f;
-    private float chatDuration = 3f;
+    private int displayRoleDuration = 3;
+    private int chatDuration = 3;
     private bool isDay;
     public List<House> Houses { get; set; }
 
@@ -40,7 +40,7 @@ public class MafiaGameFlow : Singleton<MafiaGameFlow>
     IEnumerator DisplayRoleRoutine()
     {
         roleUI.SetActive(true);
-        yield return new WaitForSeconds(displayRoleDuration);
+        yield return timer.StartTimer(displayRoleDuration);
         roleUI.SetActive(false);
     }
     
@@ -50,7 +50,7 @@ public class MafiaGameFlow : Singleton<MafiaGameFlow>
         // enable Chat
         Debug.Log("Chat enabled");
         
-        yield return new WaitForSeconds(chatDuration);
+        yield return timer.StartTimer(chatDuration);
         
         // disable Chat
         Debug.Log("Chat disabled");
@@ -75,7 +75,7 @@ public class MafiaGameFlow : Singleton<MafiaGameFlow>
             house.ActivateOutline(true);
         }
 
-        yield return new WaitForSeconds(chatDuration);
+        yield return timer.StartTimer(chatDuration);
         
         foreach ( var house in Houses )
         {

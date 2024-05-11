@@ -1,4 +1,5 @@
 using EPOOutline;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -16,7 +17,17 @@ public class House : MonoBehaviour, IPointerClickHandler, IPointerExitHandler
     [SerializeField] private GameObject useSkillUI;
     [SerializeField] private GameObject voteUI;
     [SerializeField] private Outlinable outline;
-    
+
+    public bool debugMode;
+
+    private void Start()
+    {
+        if ( debugMode )
+        {
+            ActivateOutline(true);
+        }
+    }
+
     // What UI should be shown when a house is clicked
     public void OnPointerClick( PointerEventData eventData )
     {

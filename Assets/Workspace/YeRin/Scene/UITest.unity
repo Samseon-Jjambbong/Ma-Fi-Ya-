@@ -1568,7 +1568,8 @@ MonoBehaviour:
   menuPanel: {fileID: 499028439}
   createRoomPanel: {fileID: 1479293293}
   roomNameInputField: {fileID: 70083095}
-  maxPlayerInputField: {fileID: 1524756166}
+  maxPlayerDropdown: {fileID: 0}
+  gameModeToggleGroup: {fileID: 0}
 --- !u!1 &419560039
 GameObject:
   m_ObjectHideFlags: 0
@@ -3722,7 +3723,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1507190522}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2048675610}
+        m_TargetAssemblyTypeName: RoomPanel, Assembly-CSharp
+        m_MethodName: StartGame
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1507190522
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4715,12 +4728,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce21c56270fed15468ca6ed908e5869f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pvCache: {fileID: 0}
   loginPanel: {fileID: 849642906}
   menuPanel: {fileID: 419288386}
   roomPanel: {fileID: 2048675610}
   lobbyPanel: {fileID: 1628383437}
-  state: 0
 --- !u!4 &1783147565
 Transform:
   m_ObjectHideFlags: 0
@@ -6159,7 +6170,8 @@ MonoBehaviour:
   playerEntryPrefab: {fileID: 3731023699572381743, guid: e6e87caa82c916447b533b2eb2185a63,
     type: 3}
   startButton: {fileID: 1507190521}
-  playerList: []
+  gameModeText: {fileID: 0}
+  playerCountText: {fileID: 0}
 --- !u!1 &2058487746
 GameObject:
   m_ObjectHideFlags: 0

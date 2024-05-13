@@ -8,6 +8,10 @@ using Photon.Pun;
 /// 
 /// Class for Mafia mode players
 /// </summary>
+
+public enum MafiaAction { Kill, Heal, Block }
+public enum MafiaRole { Mafia, Doctor, Insane, Police }
+
 public class MafiaPlayer : MonoBehaviourPun
 {
     // 플레이어 직업 진형
@@ -24,11 +28,20 @@ public class MafiaPlayer : MonoBehaviourPun
     private bool canUseSkill;
     public bool CanUseSkill { get { return canUseSkill; } set { canUseSkill = value; } }
 
+    private MafiaRole role;
+
+    private void Start()
+    {
+        // 플레이어 역할 받기
+        //role = MafiaManager.GetRole(PhotonNetwork.LocalPlayer.ActorNumber - 1);
+    }
+
     // 플레이어 각 역할에 따른 스킬
-    protected virtual void UseSkill( MafiaPlayer targetPlayer )
+    protected virtual void UseSkill( int targetPlayer )
     {
         if ( !canUseSkill )
         {
+            // Manager.Mafia.PlayerUsedSkill(PhotonNetwork.LocalPlayer.ActorNumber - 1, targetPlayer, MafiaAction);
             return;
         }
     }

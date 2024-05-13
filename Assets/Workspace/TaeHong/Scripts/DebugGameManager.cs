@@ -1,6 +1,7 @@
 using Photon.Pun;
 using Photon.Pun.UtilityScripts;
 using Photon.Realtime;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
@@ -17,6 +18,8 @@ namespace Tae
         private List<House> houses;
         [SerializeField] private int playerCount = 4;
         [SerializeField] private GameObject housePrefab;
+
+        [SerializeField] MafiaRolesSO mafiaRoles;
         
         private void Start()
         {
@@ -74,9 +77,23 @@ namespace Tae
             DebugGameStart();
         }
 
-        private void RandomizeRoles()
+        private void RandomizeRoles(int numPlayers)
         {
-            // TODO: Implement this
+            // Get role list
+            MafiaRole[] roles = mafiaRoles.GetRoles(numPlayers);
+
+            // Shuffle list algorithm
+            int n = roles.Length;
+            for ( int i = n - 1; i > 0; i-- )
+            {
+                // Generate a random index j such that 0 <= j <= i
+                int j = Random.Range(0, i + 1);
+
+                // Swap array[i] with array[j]
+                var temp = roles[i];
+                roles[i] = roles[j];
+                roles[j] = temp;
+            }
         }
         
         private void DebugGameStart()
@@ -84,7 +101,7 @@ namespace Tae
             // Master Client Responsibilities
             if ( PhotonNetwork.IsMasterClient )
             {
-                RandomizeRoles(); // Decide which roles each player shoudl
+                RandomizeRoles(PhotonNetwork.CurrentRoom.PlayerCount); // Create and randomize roles
                 SpawnHouses(); // Spawn {PlayerCount} Houses
                 //SpawnPlayers();
                 SpawnPlayer();

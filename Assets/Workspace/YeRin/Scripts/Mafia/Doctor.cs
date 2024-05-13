@@ -10,10 +10,12 @@ public class Doctor : MafiaPlayer
     {
         IsMafia = false;
     }
-    protected override void UseSkill( MafiaPlayer targetPlayer )
+
+    protected override void UseSkill( int targetPlayer )
     {
         base.UseSkill(targetPlayer);
 
+        // Manager.Mafia.PlayerUsedSkill(player, targetPlayer, MafiaAction.Heal);
         photonView.RPC("Heal", RpcTarget.All, targetPlayer);
         CanUseSkill = false;
     }

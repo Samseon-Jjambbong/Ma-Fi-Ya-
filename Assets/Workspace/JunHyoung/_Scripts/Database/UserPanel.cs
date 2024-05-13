@@ -4,6 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+// Legacy
 public class UserPanel : MonoBehaviour
 {
     [SerializeField] TMP_Text nickNameText;

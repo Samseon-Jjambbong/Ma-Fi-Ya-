@@ -1,10 +1,19 @@
 using Firebase.Database;
 using Firebase.Extensions;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class LeaderBoard : MonoBehaviour
 {
-    // Start is called before the first frame update
+    [SerializeField] Transform contents;
+    [SerializeField] UserRank prefab;
+
+    [SerializeField] Button activeButton;
+
+    const string ROOTPATH = "UserData";
+    //const string DATA = "score";
+    const string DATA = "winCount";
+
     void Start()
     {
         GetScoreBoard();
@@ -12,45 +21,52 @@ public class LeaderBoard : MonoBehaviour
 
     private void OnEnable()
     {
-        FirebaseManager.DB.GetReference("SocreBoard")
-           .OrderByChild("Score")
-           .LimitToFirst(3)
+        FirebaseManager.DB.GetReference(ROOTPATH)
+           .OrderByChild(DATA)
+           .LimitToFirst(10)
            .ValueChanged += ScoreBoardChanged; //변경시 호출될 함수를 ValueChanged에 델리게이트체인을 걸어 사용
     }
 
     private void OnDisable()
     {
-        FirebaseManager.DB.GetReference("SocreBoard")
-           .OrderByChild("Score")
-           .LimitToFirst(3)
+        FirebaseManager.DB.GetReference(ROOTPATH)
+           .OrderByChild(DATA)
+           .LimitToFirst(10)
            .ValueChanged -= ScoreBoardChanged;
     }
 
     void GetScoreBoard()
     {
         FirebaseManager.DB
-             .GetReference("ScoreBoard")
-             .OrderByChild("Score")
+             .GetReference(ROOTPATH)
+             .OrderByChild(DATA)
              .GetValueAsync()
              .ContinueWithOnMainThread(task =>
              {
                  if ( task.IsFaulted )
                  {
+                     Debug.Log($"Get LeaderBoard data Faulted : {task.Exception.Message}");
                      return;
                  }
                  else if ( task.IsCanceled )
-                 { return; }
+                 {
+                     Debug.Log("Get LeaderBoard data Canceled");
+                     return; 
+                 }
 
                  DataSnapshot snapshot = task.Result;
+                 int rank = (int)snapshot.ChildrenCount;
+                 Debug.Log(rank);
                  foreach ( var item in snapshot.Children )
                  {
-                     // string json = item.GetRawJsonValue();
-                     // ScoreData data = JsonUtility.FromJson<ScoreData>(json);
-                     // data.nickName;
-
-                     string nickName = ( string ) item.Child("nickName").Value;
-                     int score = ( int ) item.Child("Score").Value;
-                     Debug.Log($"{nickName} : {score}");
+                     string json = item.GetRawJsonValue();
+                     UserData data = JsonUtility.FromJson<UserData>(json);
+                     string name = data.Name;
+                     int score = data.winCount;
+                     //Debug.Log($"{name} : {score}");
+                     var userRank = Instantiate(prefab, contents);
+                     userRank.Set(rank, name ,score);
+                     rank--;
                  }
              });
     }

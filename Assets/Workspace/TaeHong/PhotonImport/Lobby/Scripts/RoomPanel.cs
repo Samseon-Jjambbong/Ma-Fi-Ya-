@@ -91,7 +91,10 @@ public class RoomPanel : MonoBehaviour
         
         Destroy(playerEntry.gameObject);
         playerList.Remove(playerEntry);
-        
+
+        playerCountText.text =
+            $"Player Count: {PhotonNetwork.CurrentRoom.PlayerCount}/{PhotonNetwork.CurrentRoom.MaxPlayers}";
+
         AllPlayersReadyCheck();
     }
 

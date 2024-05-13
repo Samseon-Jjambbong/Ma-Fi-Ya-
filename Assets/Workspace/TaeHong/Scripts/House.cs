@@ -58,6 +58,6 @@ public class House : MonoBehaviourPun, IPointerClickHandler, IPointerExitHandler
 
     public void OnPhotonSerializeView( PhotonStream stream, PhotonMessageInfo info )
     {
-        throw new NotImplementedException();
+        
     }
 }

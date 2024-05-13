@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-using Unity.VisualScripting;
 
 public class GameTimer : MonoBehaviour
 {
@@ -16,9 +15,9 @@ public class GameTimer : MonoBehaviour
         //StartTimer(10);
     }
 
-    public void StartTimer(int duration)
+    public IEnumerator StartTimer(int duration)
     {
-        StartCoroutine(TimerRoutine(duration));
+        return TimerRoutine(duration);
     }
 
     IEnumerator TimerRoutine(int duration)

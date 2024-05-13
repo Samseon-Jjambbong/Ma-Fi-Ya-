@@ -1,4 +1,6 @@
 using EPOOutline;
+using Photon.Pun;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,20 +13,30 @@ using UnityEngine.UI;
 /// The House class handles onClick events made by the player on the house.
 /// Click events should only happen in specific phases.
 /// </summary>
-public class House : MonoBehaviour, IPointerClickHandler, IPointerExitHandler
+public class House : MonoBehaviourPun, IPointerClickHandler, IPointerExitHandler, IPunObservable
 {
     [SerializeField] private GameObject useSkillUI;
     [SerializeField] private GameObject voteUI;
     [SerializeField] private Outlinable outline;
-    
-    // What UI should be shown when a hosue is clicked
+
+    public bool debugMode;
+
+    private void Start()
+    {
+        if ( debugMode )
+        {
+            ActivateOutline(true);
+        }
+    }
+
+    // What UI should be shown when a house is clicked
     public void OnPointerClick( PointerEventData eventData )
     {
-        // If Skill Use Phase
-        useSkillUI.gameObject.SetActive(true);
+        if ( !outline.enabled )
+            return;
         
-        // If Voting Phase
-        //voteUI.gameObject.SetActive(true);
+        voteUI.gameObject.SetActive(Manager.Mafia.IsDay);      // Day == vote
+        useSkillUI.gameObject.SetActive(!Manager.Mafia.IsDay); // Night == skill
     }
 
     // Hide UI if cursor exits house
@@ -42,5 +54,10 @@ public class House : MonoBehaviour, IPointerClickHandler, IPointerExitHandler
     public void ActivateOutline( bool activate )
     {
         outline.enabled = activate;
+    }
+
+    public void OnPhotonSerializeView( PhotonStream stream, PhotonMessageInfo info )
+    {
+        throw new NotImplementedException();
     }
 }

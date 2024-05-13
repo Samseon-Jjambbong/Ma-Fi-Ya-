@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Tae;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -11,8 +10,8 @@ public class MafiaGameFlow : Singleton<MafiaGameFlow>
     [SerializeField] private GameTimer timer;
     [SerializeField] private LightController lightController;
     [SerializeField] private GameObject roleUI;
-    private float displayRoleDuration = 3f;
-    private float chatDuration = 3f;
+    private int displayRoleDuration = 3;
+    private int chatDuration = 3;
     private bool isDay;
     public List<House> Houses { get; set; }
 
@@ -24,23 +23,39 @@ public class MafiaGameFlow : Singleton<MafiaGameFlow>
 
     IEnumerator GameFlow()
     {
+        // Delay
         yield return new WaitForSeconds(1);
-        yield return DisplayRoleRoutine();
-        yield return AllowChatRoutine();
-        yield return lightController.ChangePhase(isDay);
-        isDay = false;
-        //ChangeIntoNight();
-        yield return NightRoutine();
         
-        yield return lightController.ChangePhase(isDay);
-        isDay = true;
+        // Display Role for X seconds
+        yield return DisplayRoleRoutine();
+
+        // Loop
+        while (true)
+        {
+            // Allow Chat for X Seconds
+            yield return AllowChatRoutine();
+
+            // Day -> Night
+            yield return ChangeTimeOfDayRoutine();
+            
+            // Night Stuff
+            yield return NightRoutine();
+
+            // Night -> Day
+            yield return ChangeTimeOfDayRoutine();
+
+            //Day Stuff
+            yield return DayRoutine();
+        }
+        
+        //Show Results
     }
 
     // Display Role for X seconds
     IEnumerator DisplayRoleRoutine()
     {
         roleUI.SetActive(true);
-        yield return new WaitForSeconds(displayRoleDuration);
+        yield return timer.StartTimer(displayRoleDuration);
         roleUI.SetActive(false);
     }
     
@@ -50,16 +65,16 @@ public class MafiaGameFlow : Singleton<MafiaGameFlow>
         // enable Chat
         Debug.Log("Chat enabled");
         
-        yield return new WaitForSeconds(chatDuration);
+        yield return timer.StartTimer(chatDuration);
         
         // disable Chat
         Debug.Log("Chat disabled");
     }
     
     // Day -> Night
-    private void ChangeIntoNight()
+    private IEnumerator ChangeTimeOfDayRoutine()
     {
-        lightController.ChangePhase(isDay);
+        yield return lightController.ChangePhase(isDay);
         isDay = false;
     }
     
@@ -75,7 +90,7 @@ public class MafiaGameFlow : Singleton<MafiaGameFlow>
             house.ActivateOutline(true);
         }
 
-        yield return new WaitForSeconds(chatDuration);
+        yield return timer.StartTimer(20);
         
         foreach ( var house in Houses )
         {
@@ -89,6 +104,24 @@ public class MafiaGameFlow : Singleton<MafiaGameFlow>
     // Allow Chat for X Seconds
     // Show role usage results
     // Show player death (if there was any)
-    
-    // Repeat
+    private IEnumerator DayRoutine()
+    {
+        // Allow chat for mafia
+        Debug.Log("Chat enabled");
+
+        // Allow skill usage for X Seconds
+        foreach ( var house in Houses )
+        {
+            house.ActivateOutline(true);
+        }
+
+        yield return timer.StartTimer(20);
+        
+        foreach ( var house in Houses )
+        {
+            house.ActivateOutline(false);
+        }
+        
+        Debug.Log("Chat disabled");
+    }
 }

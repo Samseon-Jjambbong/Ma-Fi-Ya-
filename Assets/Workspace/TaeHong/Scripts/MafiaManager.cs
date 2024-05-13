@@ -26,8 +26,11 @@ public class MafiaManager : Singleton<MafiaManager>
 
     private void Start()
     {
+        Debug.Log("In");
+
         isDay = true;
-        timer.StartTimer(roleUseTime);
+        // timer.StartTimer(roleUseTime);
+        Debug.Log(PhotonNetwork.CurrentRoom.Players.Count);
         playerCount = PhotonNetwork.CurrentRoom.Players.Count;
     }
     

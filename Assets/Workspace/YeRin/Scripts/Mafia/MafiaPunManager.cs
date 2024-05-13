@@ -6,12 +6,15 @@ using Photon.Realtime;
 using PhotonHashTable = ExitGames.Client.Photon.Hashtable;
 using TMPro;
 using Photon.Pun.UtilityScripts;
+using UnityEngine.InputSystem;
 
 public class MafiaPunManager : MonoBehaviourPunCallbacks
 {
     [SerializeField] TMP_Text infoText;
     [SerializeField] float CountDownTime;
 
+    [SerializeField] int palyerRadius;
+    [SerializeField] int houseRadius;
     private Dictionary<int, Player> playerDic;
 
     private void Start()
@@ -50,6 +53,11 @@ public class MafiaPunManager : MonoBehaviourPunCallbacks
 
     IEnumerator StartTime()
     {
+        if ( PhotonNetwork.IsMasterClient )
+        {
+            SpawnHouses(); // Spawn {PlayerCount} Houses
+        }
+
         double loadTime = PhotonNetwork.CurrentRoom.GetGameStartTime();
         while ( PhotonNetwork.Time - loadTime < CountDownTime )
         {
@@ -84,8 +92,6 @@ public class MafiaPunManager : MonoBehaviourPunCallbacks
         CreatePlayer();
     }
 
-    [SerializeField] int radius;
-
     private void CreatePlayer()
     {
         int angle = 180 / ( Manager.Mafia.PlayerCount - 1 );    // 각 플레이어의 간격의 각도
@@ -110,9 +116,22 @@ public class MafiaPunManager : MonoBehaviourPunCallbacks
         int currentAngle = 180 - angle * playerNumber;
 
         // 순번에 맞는 플레이어의 위치 설정
-        Vector3 pos = new Vector3(Mathf.Cos(currentAngle * Mathf.Deg2Rad) * radius, 2.22f, Mathf.Sin(currentAngle * Mathf.Deg2Rad) * radius);
+        Vector3 pos = new Vector3(Mathf.Cos(currentAngle * Mathf.Deg2Rad) * palyerRadius, 2.22f, Mathf.Sin(currentAngle * Mathf.Deg2Rad) * palyerRadius);
         // PhotonNetwork.Instantiate를 통해 각 플레이어 캐릭터 생성, 센터를 바라보도록 rotation 설정
         Transform player = PhotonNetwork.Instantiate("TestPlayer", pos, Quaternion.LookRotation(pos)).transform;
+    }
+
+    private void SpawnHouses()
+    {
+        int angle = 180 / ( Manager.Mafia.PlayerCount - 1 );    // 각 집의 간격의 각도
+
+        int currentAngle = 180;
+        for ( int i = 0; i < Manager.Mafia.PlayerCount; i++ )
+        {
+            Vector3 pos = new Vector3(Mathf.Cos(currentAngle * Mathf.Deg2Rad) * houseRadius, 1.8f, Mathf.Sin(currentAngle * Mathf.Deg2Rad) * houseRadius);
+            GameObject houseGO = PhotonNetwork.InstantiateRoomObject("House", pos, Quaternion.LookRotation(pos));
+            currentAngle -= angle;
+        }
     }
 }
 

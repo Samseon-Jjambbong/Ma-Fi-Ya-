@@ -96,7 +96,11 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         if (cause == DisconnectCause.ApplicationQuit)
             return;
 
+        if(cause == DisconnectCause.None )
+            return;
+
         Debug.Log($"OnDisconnected : {cause}");
+        VCamController.Instance.SetVCam(VCamController.VCam.Login);
         SetActivePanel(Panel.Login);
     }
 

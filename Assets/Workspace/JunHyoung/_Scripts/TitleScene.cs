@@ -10,8 +10,7 @@ public class TitleScene : MonoBehaviour
     
     [SerializeField] TitleCanvas titleCanvas;
     [SerializeField] LoginManager loginCanvas;
-    [SerializeField] GameObject lobbyCanvas; // replace this to LobbyManager when Merged
-
+    [SerializeField] LobbyManager lobbyCanvas; 
     private void Awake()
     {
         //ClientState curState = PhotonNetwork.NetworkClientState;

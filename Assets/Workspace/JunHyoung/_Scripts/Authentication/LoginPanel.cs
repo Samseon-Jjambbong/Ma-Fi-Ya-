@@ -66,6 +66,7 @@ namespace LoginSystem
 
                 if ( noVerify )
                 {
+                    VCamController.Instance.SetVCam(VCamController.VCam.Lobby);
                     panelController.SetActivePanel(LoginManager.Panel.Main);
                     SetInteractable(true);
                 }

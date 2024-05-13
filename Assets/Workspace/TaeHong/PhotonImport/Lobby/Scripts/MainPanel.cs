@@ -1,4 +1,5 @@
 using System;
+using ExitGames.Client.Photon;
 using Photon.Pun;
 using Photon.Pun.Demo.Cockpit;
 using Photon.Realtime;
@@ -65,6 +66,9 @@ public class MainPanel : MonoBehaviour
 
     public void Login()
     {
+        if ( PhotonNetwork.NetworkingClient.LoadBalancingPeer.PeerState != PeerStateValue.Disconnected ) // 접속중이 아닐 때만 로그인
+            return;
+
         PhotonNetwork.LocalPlayer.NickName = FirebaseManager.GetName();
         PhotonNetwork.ConnectUsingSettings();
     }

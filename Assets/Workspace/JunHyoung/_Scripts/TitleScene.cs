@@ -19,7 +19,7 @@ public class TitleScene : MonoBehaviour
             return;
         }
 
-        if( PhotonNetwork.NetworkClientState != ClientState.Disconnected )
+        if( PhotonNetwork.NetworkClientState == ClientState.ConnectedToMasterServer )
         {
             ActiveLobby();
             return;

@@ -1073,6 +1073,7 @@ MonoBehaviour:
   OwnershipTransfer: 0
   observableSearch: 2
   ObservedComponents:
+  - {fileID: 7581854576598528016}
   - {fileID: -5599283105170608970}
   sceneViewId: 0
   InstantiationId: 0
@@ -1181,7 +1182,7 @@ GameObject:
   - component: {fileID: 5889749261015138432}
   - component: {fileID: 8521736090039701671}
   m_Layer: 5
-  m_Name: Button
+  m_Name: IconButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -12,7 +12,6 @@ namespace Tae
     public class DebugGameManager : MonoBehaviourPunCallbacks
     {
         [SerializeField] private string debugRoomName;
-        private HouseCreator houseCreator;
         [SerializeField] int radius;    // 21이 가장 이상적
 
         private List<House> houses;
@@ -23,15 +22,12 @@ namespace Tae
             PhotonNetwork.ConnectUsingSettings();
         }
 
-        private void SpawnHouses()
+        private void AssignRoles()
         {
-            if ( PhotonNetwork.IsMasterClient )
-            {
-                CreateHouses();
-            }
+            
         }
         
-        private void CreateHouses()
+        private void SpawnHouses()
         {
             int playerCount = 4;
             houses = new List<House>();
@@ -41,14 +37,8 @@ namespace Tae
             int currentAngle = 0;
             for (int i = 0; i < playerCount; i++)
             {
-                GameObject houseGO = PhotonNetwork.Instantiate("House", Vector3.zero, Quaternion.identity);
                 Vector3 pos = new Vector3(Mathf.Cos(currentAngle * Mathf.Deg2Rad) * radius, 1.8f, Mathf.Sin(currentAngle * Mathf.Deg2Rad) * radius);
-
-                Transform house = houseGO.transform;
-                house.position = pos;
-
-                Quaternion look = Quaternion.LookRotation(-pos); // 센터를 바라보도록 rotation 조절
-                house.rotation = look;
+                GameObject houseGO = PhotonNetwork.InstantiateRoomObject("House", pos, Quaternion.LookRotation(pos));
 
                 currentAngle += angle;
             
@@ -72,18 +62,27 @@ namespace Tae
             yield return new WaitForSeconds(1f);
             DebugGameStart();
         }
+
+        private void RandomizeRoles()
+        {
+            // TODO: Implement this
+        }
         
         private void DebugGameStart()
         {
-            // Spawn {PlayerCount} Houses
-            SpawnHouses();
+            // Master Client Responsibilities
+            if ( PhotonNetwork.IsMasterClient )
+            {
+                RandomizeRoles(); // Decide which roles each player shoudl
+                SpawnHouses(); // Spawn {PlayerCount} Houses
+            }
             
             // Spawn Player in front of respective house
             Debug.Log(PhotonNetwork.LocalPlayer.ActorNumber);
             
             House house = houses[PhotonNetwork.LocalPlayer.ActorNumber - 1]; // TODO: Fix this
-            Vector3 spawnPos = house.transform.position + house.transform.forward * 5;
-            Quaternion spawnRot = Quaternion.LookRotation(-spawnPos);
+            Vector3 spawnPos = house.transform.position + house.transform.forward * -5;
+            Quaternion spawnRot = Quaternion.LookRotation(spawnPos);
             
             PhotonNetwork.Instantiate("Player", spawnPos, spawnRot, 0);
         }

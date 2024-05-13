@@ -19,6 +19,9 @@ public class House : MonoBehaviourPun, IPointerClickHandler, IPointerExitHandler
     [SerializeField] private GameObject voteUI;
     [SerializeField] private Outlinable outline;
 
+    private MafiaPlayer houseOwner;
+    public MafiaPlayer HouswOwner { get { return houseOwner; } set { houseOwner = value; } }
+
     public bool debugMode;
 
     private void Start()
@@ -26,6 +29,11 @@ public class House : MonoBehaviourPun, IPointerClickHandler, IPointerExitHandler
         if ( debugMode )
         {
             ActivateOutline(true);
+        }
+
+        if (PhotonNetwork.IsMasterClient)
+        {
+            photonView.RPC("AddList", RpcTarget.All);
         }
     }
 
@@ -54,6 +62,12 @@ public class House : MonoBehaviourPun, IPointerClickHandler, IPointerExitHandler
     public void ActivateOutline( bool activate )
     {
         outline.enabled = activate;
+    }
+
+    [PunRPC]
+    private void AddList()
+    {
+        Manager.Mafia.Houses.Add(this);
     }
 
     public void OnPhotonSerializeView( PhotonStream stream, PhotonMessageInfo info )

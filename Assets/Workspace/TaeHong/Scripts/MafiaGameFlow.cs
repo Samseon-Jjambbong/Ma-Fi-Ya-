@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -5,17 +6,51 @@ using Tae;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-public class MafiaGameFlow : Singleton<MafiaGameFlow>
+public class MafiaGameFlow : MonoBehaviourPun
 {
     [SerializeField] private GameTimer timer;
     [SerializeField] private LightController lightController;
     [SerializeField] private GameObject roleUI;
-    private int displayRoleDuration = 3;
-    private int chatDuration = 3;
     private bool isDay;
-    public List<House> Houses { get; set; }
 
-    private void Start()
+    // private void Start()
+    // {
+    //     isDay = true;
+    //     StartCoroutine(GameFlow());
+    // }
+
+    [PunRPC]
+    public void DisplayRole(int time)
+    {
+        StartCoroutine(DisplayRoleRoutine(time));
+    }
+    
+    [PunRPC]
+    public void AllowActions(int time)
+    {
+        StartCoroutine(NightRoutine(time));
+    }
+
+    [PunRPC]
+    public void ChangeTime()
+    {
+        isDay = false;;
+        StartCoroutine(ChangeTimeOfDayRoutine());
+    }
+
+    [PunRPC]
+    public void EnableChat()
+    {
+        // Implement later
+    }
+    
+    [PunRPC]
+    public void DisableChat()
+    {
+        // Implement later
+    }
+
+    public void StartGameFlow()
     {
         isDay = true;
         StartCoroutine(GameFlow());
@@ -27,7 +62,7 @@ public class MafiaGameFlow : Singleton<MafiaGameFlow>
         yield return new WaitForSeconds(1);
         
         // Display Role for X seconds
-        yield return DisplayRoleRoutine();
+        yield return DisplayRoleRoutine(3);
 
         // Loop
         while (true)
@@ -39,7 +74,7 @@ public class MafiaGameFlow : Singleton<MafiaGameFlow>
             yield return ChangeTimeOfDayRoutine();
             
             // Night Stuff
-            yield return NightRoutine();
+            yield return NightRoutine(5);
 
             // Night -> Day
             yield return ChangeTimeOfDayRoutine();
@@ -52,10 +87,10 @@ public class MafiaGameFlow : Singleton<MafiaGameFlow>
     }
 
     // Display Role for X seconds
-    IEnumerator DisplayRoleRoutine()
+    IEnumerator DisplayRoleRoutine(int time)
     {
         roleUI.SetActive(true);
-        yield return timer.StartTimer(displayRoleDuration);
+        yield return timer.StartTimer(time);
         roleUI.SetActive(false);
     }
     
@@ -65,7 +100,7 @@ public class MafiaGameFlow : Singleton<MafiaGameFlow>
         // enable Chat
         Debug.Log("Chat enabled");
         
-        yield return timer.StartTimer(chatDuration);
+        yield return timer.StartTimer(3);
         
         // disable Chat
         Debug.Log("Chat disabled");
@@ -79,20 +114,23 @@ public class MafiaGameFlow : Singleton<MafiaGameFlow>
     }
     
     // Night Stuff
-    private IEnumerator NightRoutine()
+    private IEnumerator NightRoutine(int time)
     {
         // Allow chat for mafia
         Debug.Log("Mafia Chat enabled");
 
         // Allow skill usage for X Seconds
-        foreach ( var house in Houses )
+        for ( int i = 0; i < PhotonNetwork.PlayerList.Length; i++ )
         {
-            house.ActivateOutline(true);
+            if ( i == (PhotonNetwork.LocalPlayer.ActorNumber - 1) )
+                continue;
+            
+            Manager.Mafia.Houses[i].ActivateOutline(true);
         }
 
-        yield return timer.StartTimer(20);
-        
-        foreach ( var house in Houses )
+        yield return timer.StartTimer(time);
+
+        foreach ( var house in Manager.Mafia.Houses )
         {
             house.ActivateOutline(false);
         }
@@ -110,14 +148,17 @@ public class MafiaGameFlow : Singleton<MafiaGameFlow>
         Debug.Log("Chat enabled");
 
         // Allow skill usage for X Seconds
-        foreach ( var house in Houses )
+        for ( int i = 0; i < PhotonNetwork.PlayerList.Length; i++ )
         {
-            house.ActivateOutline(true);
+            if ( i == (PhotonNetwork.LocalPlayer.ActorNumber - 1) )
+                continue;
+            
+            Manager.Mafia.Houses[i].ActivateOutline(true);
         }
 
         yield return timer.StartTimer(20);
         
-        foreach ( var house in Houses )
+        foreach ( var house in Manager.Mafia.Houses )
         {
             house.ActivateOutline(false);
         }

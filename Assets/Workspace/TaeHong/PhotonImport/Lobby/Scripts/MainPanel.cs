@@ -1,5 +1,6 @@
 using System;
 using Photon.Pun;
+using Photon.Pun.Demo.Cockpit;
 using Photon.Realtime;
 using TMPro;
 using UnityEngine;
@@ -18,6 +19,7 @@ public class MainPanel : MonoBehaviour
     private void OnEnable()
     {
         createRoomPanel.SetActive(false);
+        Login();
     }
 
     public void CreateRoomMenu()
@@ -59,5 +61,11 @@ public class MainPanel : MonoBehaviour
     public void Logout()
     {
         PhotonNetwork.Disconnect();
+    }
+
+    public void Login()
+    {
+        PhotonNetwork.LocalPlayer.NickName = FirebaseManager.GetName();
+        PhotonNetwork.ConnectUsingSettings();
     }
 }

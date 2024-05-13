@@ -213,7 +213,7 @@ public class FirebaseManager : MonoBehaviour
         if ( !isValid )
             return VALIDFAIL;
 
-        return profile.DisplayName;
+        return Auth.CurrentUser.DisplayName;
     }
 
     public static UserData GetUserData()

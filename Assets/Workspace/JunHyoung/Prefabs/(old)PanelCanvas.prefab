@@ -12062,7 +12062,7 @@ GameObject:
   - component: {fileID: 3656215941853999955}
   - component: {fileID: 2149605313361881817}
   m_Layer: 5
-  m_Name: PanelCanvas
+  m_Name: (old)PanelCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

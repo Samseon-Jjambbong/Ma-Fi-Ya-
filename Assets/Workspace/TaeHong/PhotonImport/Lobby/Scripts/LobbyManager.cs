@@ -9,7 +9,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
 {
     public enum Panel { Login, Menu, Lobby, Room }
 
-    [SerializeField] LoginPanel loginPanel;
+    [SerializeField] LoginSystem.LoginManager loginPanel;
     [SerializeField] MainPanel menuPanel;
     [SerializeField] RoomPanel roomPanel;
     [SerializeField] LobbyPanel lobbyPanel;
@@ -18,7 +18,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     
     private void Start()
     {
-        SetActivePanel(Panel.Login);
+        SetActivePanel(Panel.Menu);
     }
 
     private void Update()
@@ -95,7 +95,8 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     {
         if (cause == DisconnectCause.ApplicationQuit)
             return;
-        
+
+        Debug.Log($"OnDisconnected : {cause}");
         SetActivePanel(Panel.Login);
     }
 

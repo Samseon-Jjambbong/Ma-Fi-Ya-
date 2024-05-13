@@ -14,7 +14,6 @@ namespace LoginSystem
         [SerializeField] ResetPanel resetPanel;
         [SerializeField] VerifyPanel verifyPanel;
         [SerializeField] LobbyManager mainPanel;
-        [SerializeField] EditPanel editPanel;
 
         private void OnEnable()
         {
@@ -27,7 +26,6 @@ namespace LoginSystem
             signUpPanel.gameObject.SetActive(panel == Panel.SignUp);
             resetPanel.gameObject.SetActive(panel == Panel.Reset);
             mainPanel.gameObject.SetActive(panel == Panel.Main);
-            editPanel.gameObject.SetActive(panel == Panel.Edit);
             verifyPanel.gameObject.SetActive(panel == Panel.Verify);
         }
 

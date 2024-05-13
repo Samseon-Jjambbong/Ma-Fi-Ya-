@@ -33,7 +33,6 @@ public class LobbyManager : MonoBehaviourPunCallbacks
 
     public override void OnConnected()
     {
-        Debug.Log("OnConnected");
         SetActivePanel(Panel.Menu);
     }
 

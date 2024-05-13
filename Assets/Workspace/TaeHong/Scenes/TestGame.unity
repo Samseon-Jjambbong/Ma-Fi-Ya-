@@ -2516,6 +2516,7 @@ GameObject:
   - component: {fileID: 1424524245}
   - component: {fileID: 1424524247}
   - component: {fileID: 1424524248}
+  - component: {fileID: 1424524249}
   m_Layer: 0
   m_Name: manager
   m_TagString: Untagged
@@ -2565,7 +2566,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01b066014f9dc4725bab194fdf11253c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerCount: 0
   timer: {fileID: 0}
   light: {fileID: 0}
   roleUseTime: 0
@@ -2585,6 +2585,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   debugRoomName: DebugRoom
   radius: 21
+--- !u!114 &1424524249
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1424524244}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89ee81f86d2f008459a7606a9fd372b9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  infoText: {fileID: 421478241}
+  CountDownTime: 3
+  radius: 15
 --- !u!1001 &1442032950
 PrefabInstance:
   m_ObjectHideFlags: 0

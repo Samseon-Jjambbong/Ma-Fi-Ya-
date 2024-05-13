@@ -721,6 +721,21 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1197534598591258992, guid: ddcc1c73dffb2e442b4407237b8779eb,
+        type: 3}
+      propertyPath: m_UiScaleMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1197534598591258992, guid: ddcc1c73dffb2e442b4407237b8779eb,
+        type: 3}
+      propertyPath: m_ReferenceResolution.x
+      value: 1920
+      objectReference: {fileID: 0}
+    - target: {fileID: 1197534598591258992, guid: ddcc1c73dffb2e442b4407237b8779eb,
+        type: 3}
+      propertyPath: m_ReferenceResolution.y
+      value: 1080
+      objectReference: {fileID: 0}
     - target: {fileID: 6314982267643962460, guid: ddcc1c73dffb2e442b4407237b8779eb,
         type: 3}
       propertyPath: m_AnchorMax.x

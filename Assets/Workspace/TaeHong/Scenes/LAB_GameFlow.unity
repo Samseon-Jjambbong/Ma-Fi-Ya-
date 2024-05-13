@@ -246,8 +246,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7eee0b7cb8469004ba26ab4b121c7522, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerPrefab: {fileID: 8492271994209432676, guid: b079fcfeae06299498566315846f5d66,
-    type: 3}
   radius: 15
 --- !u!4 &41385844
 Transform:
@@ -331,6 +329,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3325174113018091285, guid: a83049f32d3e34d39a0a68aea11e2e63,
+        type: 3}
+      propertyPath: sceneViewId
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7400318162097117840, guid: a83049f32d3e34d39a0a68aea11e2e63,
         type: 3}
@@ -1665,7 +1668,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01b066014f9dc4725bab194fdf11253c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerCount: 4
   timer: {fileID: 287919190}
   light: {fileID: 410087043}
   roleUseTime: 3

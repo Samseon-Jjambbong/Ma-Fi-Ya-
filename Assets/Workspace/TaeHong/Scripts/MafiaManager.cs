@@ -12,7 +12,7 @@ using UnityEngine;
 
 public class MafiaManager : Singleton<MafiaManager>
 {
-    [SerializeField] private int playerCount;
+    private int playerCount;
     public int PlayerCount => playerCount;
 
     private bool isDay;
@@ -28,6 +28,7 @@ public class MafiaManager : Singleton<MafiaManager>
     {
         isDay = true;
         timer.StartTimer(roleUseTime);
+        playerCount = PhotonNetwork.CurrentRoom.Players.Count;
     }
     
     private void OnEnable()

@@ -33,6 +33,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
 
     public override void OnConnected()
     {
+        Debug.Log("OnConnected");
         SetActivePanel(Panel.Menu);
     }
 
@@ -109,7 +110,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         roomPanel.PlayerPropertiesUpdate(targetPlayer, changedProps);
     }
 
-    private void SetActivePanel(Panel panel)
+    public void SetActivePanel(Panel panel)
     {
         loginPanel.gameObject.SetActive(panel == Panel.Login);
         menuPanel.gameObject.SetActive(panel == Panel.Menu);

@@ -39,7 +39,7 @@ namespace LoginSystem
 
         private void ResetPassword()
         {
-            VCamController.Instance.RotateVCam(-1);
+            VCamController.Instance.RotateVCam();
             panelController.SetActivePanel(LoginManager.Panel.Reset);
         }
 

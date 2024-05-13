@@ -7,18 +7,48 @@ using UnityEngine;
 
 public class TitleScene : MonoBehaviour
 {
-    
     [SerializeField] TitleCanvas titleCanvas;
     [SerializeField] LoginManager loginCanvas;
     [SerializeField] LobbyManager lobbyCanvas; 
     private void Awake()
     {
-        //ClientState curState = PhotonNetwork.NetworkClientState;
-        //이후 게임 종료 후 씬으로 돌아왔을 때,  Photon 상태에 따라 Lobby - main을 띄워줄지 Room 을 띄워줄지 작업할 것.
+        //Debug.Log(PhotonNetwork.NetworkClientState);
+        if(PhotonNetwork.NetworkClientState == ClientState.Joined ) //해당 상태가 맞는지 테스트하면서 작업할것.
+        {
+            ActiveRoom();
+            return;
+        }
 
+        if( PhotonNetwork.NetworkClientState != ClientState.Disconnected )
+        {
+            ActiveLobby();
+            return;
+        }
+
+        InitTitleScene();
+    }
+
+    private void InitTitleScene()
+    {
         titleCanvas.gameObject.SetActive(true);
         loginCanvas.gameObject.SetActive(false);
         lobbyCanvas.gameObject.SetActive(false);
     }
+
+    private void ActiveLobby()
+    {
+        titleCanvas.gameObject.SetActive(false);
+        loginCanvas.gameObject.SetActive(false);
+        lobbyCanvas.gameObject.SetActive(true);
+    }
+
+    private void ActiveRoom()
+    {
+        titleCanvas.gameObject.SetActive(false);
+        loginCanvas.gameObject.SetActive(false);
+        lobbyCanvas.gameObject.SetActive(true);
+        lobbyCanvas.SetActivePanel(LobbyManager.Panel.Room);
+    }
+
 
 }

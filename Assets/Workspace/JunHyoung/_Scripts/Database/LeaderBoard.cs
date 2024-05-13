@@ -9,23 +9,25 @@ public class LeaderBoard : MonoBehaviour
     [SerializeField] Transform contents;
     [SerializeField] UserRank prefab;
 
+    [SerializeField] GameObject ledaerBoardPanel;
     [SerializeField] Button activeButton;
+    private bool isActive=false;
 
     List<UserRank> userRanks = new List<UserRank>(MAXCOUNT);
 
     const int MAXCOUNT = 10;
-    const string ROOTPATH = "UserData";
-    //const string DATA = "score";
-    const string DATA = "winCount";
+    const string DATA = "winCount"; //"score"
+
 
     void Start()
     {
         //InitLeaderBoard();
+        activeButton.onClick.AddListener(ActivePanel);
     }
 
     private void OnEnable()
     {
-        FirebaseManager.DB.GetReference(ROOTPATH)
+        FirebaseManager.DB.GetReference(FirebaseManager.PATH)
            .OrderByChild(DATA)
            .LimitToFirst(MAXCOUNT)
            .ValueChanged += UpdateLeaderBoard; //변경시 호출될 함수를 ValueChanged에 델리게이트체인을 걸어 사용
@@ -33,7 +35,7 @@ public class LeaderBoard : MonoBehaviour
 
     private void OnDisable()
     {
-        FirebaseManager.DB.GetReference(ROOTPATH)
+        FirebaseManager.DB.GetReference(FirebaseManager.PATH)
            .OrderByChild(DATA)
            .LimitToFirst(MAXCOUNT)
            .ValueChanged -= UpdateLeaderBoard;
@@ -42,7 +44,7 @@ public class LeaderBoard : MonoBehaviour
     void InitLeaderBoard()
     {
         FirebaseManager.DB
-             .GetReference(ROOTPATH)
+             .GetReference(FirebaseManager.PATH)
              .OrderByChild(DATA)
              .GetValueAsync()
              .ContinueWithOnMainThread(task =>
@@ -79,7 +81,7 @@ public class LeaderBoard : MonoBehaviour
     private void UpdateLeaderBoard(object sendor, ValueChangedEventArgs args)
     {
         FirebaseManager.DB
-             .GetReference(ROOTPATH)
+             .GetReference(FirebaseManager.PATH)
              .OrderByChild(DATA)
              .GetValueAsync()
              .ContinueWithOnMainThread(task =>
@@ -104,7 +106,6 @@ public class LeaderBoard : MonoBehaviour
                  }
 
                  int rank = ( int ) snapshot.ChildrenCount;
-                 Debug.Log(rank);
                  foreach ( var item in snapshot.Children )
                  {
                      string json = item.GetRawJsonValue();
@@ -119,13 +120,9 @@ public class LeaderBoard : MonoBehaviour
              });
     }
 
-}
-
-
-[SerializeField]
-
-public class ScoreData
-{
-    public string nickName;
-    public int winCount;
+    private void ActivePanel()
+    {
+        isActive = !isActive;
+        ledaerBoardPanel.SetActive(isActive);
+    }
 }

@@ -2,8 +2,8 @@ using Firebase;
 using Firebase.Auth;
 using Firebase.Database;
 using Firebase.Extensions;
-using Google.MiniJSON;
-using System.IO;
+using System.Collections;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class FirebaseManager : MonoBehaviour
@@ -19,7 +19,7 @@ public class FirebaseManager : MonoBehaviour
 
     private static FirebaseDatabase db;
 
-    public static FirebaseDatabase DB { get { return db; } } 
+    public static FirebaseDatabase DB { get { return db; } }
 
     private static bool isValid;
     public static bool IsValid { get { return isValid; } }
@@ -37,7 +37,7 @@ public class FirebaseManager : MonoBehaviour
 
     private void CreateInstance()
     {
-        if (instance == null)
+        if ( instance == null )
         {
             instance = this;
             profile = new UserProfile();
@@ -53,13 +53,13 @@ public class FirebaseManager : MonoBehaviour
     private async void CheckDependency()
     {
         DependencyStatus dependencyStatus = await FirebaseApp.CheckAndFixDependenciesAsync();
-        if (dependencyStatus == DependencyStatus.Available)
+        if ( dependencyStatus == DependencyStatus.Available )
         {
             // Create and hold a reference to your FirebaseApp,
             // where app is a Firebase.FirebaseApp property of your application class.
             app = FirebaseApp.DefaultInstance;
             auth = FirebaseAuth.DefaultInstance;
-            db= FirebaseDatabase.DefaultInstance;
+            db = FirebaseDatabase.DefaultInstance;
 
             // Set a flag here to indicate whether Firebase is ready to use by your app.
             Debug.Log("Firebase Check and FixDependencies success");
@@ -83,9 +83,10 @@ public class FirebaseManager : MonoBehaviour
     ******************************************************/
     private static UserProfile profile;
     private static UserData userData;
+    public static UserData UserData { get { return userData; } }
 
     private const string VALIDFAIL = "Instance is not Valid";
-    private const string PATH = "UserData";
+    public const string PATH = "UserData";
 
     //bool 반환대신 구조체 만들어서 작업 로그와 성공 여부를 함께 넘기는거 좀더 고려해볼것.
     /// <summary>
@@ -94,9 +95,10 @@ public class FirebaseManager : MonoBehaviour
     /// </summary>
     /// <param name="name"></param>
     /// <returns></returns>
-    public static bool SetName(string name )
+    public static bool SetName( string name )
     {
-        if ( !isValid ) {
+        if ( !isValid )
+        {
             Debug.Log(VALIDFAIL);
             return isValid;
         }
@@ -144,7 +146,7 @@ public class FirebaseManager : MonoBehaviour
                 }
             });
         Debug.Log($"SetName Work Finished : {workFlag}");
-        return workFlag;    
+        return workFlag;
     }
 
     /// <summary>
@@ -152,7 +154,7 @@ public class FirebaseManager : MonoBehaviour
     /// </summary>
     /// <param name="name"></param>
     /// <returns></returns>
-    public static bool UpdateName(string name)
+    public static bool UpdateName( string name )
     {
         if ( !isValid )
         {
@@ -214,12 +216,42 @@ public class FirebaseManager : MonoBehaviour
         return profile.DisplayName;
     }
 
+    public static UserData GetUserData()
+    {
+        DB
+          .GetReference(PATH).Child(Auth.CurrentUser.UserId)
+          .GetValueAsync().ContinueWithOnMainThread(task =>
+          {
+              if ( task.IsFaulted )
+              {
+                  Debug.LogError($"DB GetValueAsync Faulted : {task.Exception}");
+                  return;
+              }
+              if ( task.IsCanceled )
+              {
+                  Debug.LogError($"DB SetValueAsync Canceled");
+                  return;
+              }
+
+              DataSnapshot snapshot = task.Result;
+              if ( snapshot.Exists )
+              {
+                  string json = snapshot.GetRawJsonValue();
+                  userData = JsonUtility.FromJson<UserData>(json);
+                  return;
+              }
+          });
+
+        return userData;
+    }
+
+
     /// <summary>
-    /// Update User Recoord
+    /// Update User Recoord, winCount and score
     /// </summary>
     /// <param name="isWin"> true = win game , false or empty  = lose game  </param>
     /// <returns></returns>
-    public static bool UpdateRecord(bool isWin = false )
+    public static bool UpdateRecord( int score = 0, bool isWin = false )
     {
         if ( !isValid )
         {
@@ -260,10 +292,11 @@ public class FirebaseManager : MonoBehaviour
 
         //Update UserData Value
 
-        if( isWin )
+        if ( isWin )
             userData.winCount++;
-        
+
         userData.playCount++;
+        userData.score += score;
 
         //Update Database
         string json = JsonUtility.ToJson(userData);

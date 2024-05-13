@@ -15,8 +15,11 @@ public class TitleScene : MonoBehaviour
         //Debug.Log(PhotonNetwork.NetworkClientState);
         if(PhotonNetwork.NetworkClientState == ClientState.Joined ) //해당 상태가 맞는지 테스트하면서 작업할것.
         {
-            ActiveRoom();
-            return;
+           // Room room = PhotonNetwork.CurrentRoom; if( room != null )
+            {
+                ActiveRoom();
+                return;
+            }
         }
 
         if( PhotonNetwork.NetworkClientState == ClientState.ConnectedToMasterServer )

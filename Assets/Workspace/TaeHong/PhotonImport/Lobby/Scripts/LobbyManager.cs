@@ -40,6 +40,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     {
         Debug.Log($"Create room success");
     }
+    
 
     public override void OnJoinedRoom()
     {
@@ -96,7 +97,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         if (cause == DisconnectCause.ApplicationQuit)
             return;
 
-        if(cause == DisconnectCause.None )
+        if (cause == DisconnectCause.None )
             return;
 
         Debug.Log($"OnDisconnected : {cause}");

@@ -92,6 +92,7 @@ public class MafiaPunManager : MonoBehaviourPunCallbacks
 
         int playerNumber = -1;
 
+        // 플레이어의 게임 입장 순번 찾아내기
         for (int i = 1; i <= playerDic.Count; i++)
         {
             if ( playerDic [i] == PhotonNetwork.LocalPlayer)
@@ -108,11 +109,10 @@ public class MafiaPunManager : MonoBehaviourPunCallbacks
 
         int currentAngle = 180 - angle * playerNumber;
 
+        // 순번에 맞는 플레이어의 위치 설정
         Vector3 pos = new Vector3(Mathf.Cos(currentAngle * Mathf.Deg2Rad) * radius, 2.22f, Mathf.Sin(currentAngle * Mathf.Deg2Rad) * radius);
-        Transform player = PhotonNetwork.Instantiate("TestPlayer", pos, Quaternion.identity).transform;
-
-        Quaternion look = Quaternion.LookRotation(pos); // 센터를 바라보도록 rotation 조절
-        player.rotation = look;
+        // PhotonNetwork.Instantiate를 통해 각 플레이어 캐릭터 생성, 센터를 바라보도록 rotation 설정
+        Transform player = PhotonNetwork.Instantiate("TestPlayer", pos, Quaternion.LookRotation(pos)).transform;
     }
 }
 

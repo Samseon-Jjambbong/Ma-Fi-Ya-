@@ -19,7 +19,7 @@ public class House : MonoBehaviourPun, IPointerClickHandler, IPointerExitHandler
     [SerializeField] private GameObject voteUI;
     [SerializeField] private Outlinable outline;
 
-    private MafiaPlayer houseOwner;
+    [SerializeField] private MafiaPlayer houseOwner;
     public MafiaPlayer HouswOwner { get { return houseOwner; } set { houseOwner = value; } }
 
     public bool debugMode;
@@ -40,7 +40,7 @@ public class House : MonoBehaviourPun, IPointerClickHandler, IPointerExitHandler
     // What UI should be shown when a house is clicked
     public void OnPointerClick( PointerEventData eventData )
     {
-        if ( !outline.enabled )
+        if ( !outline.enabled || outline.OutlineParameters.Color == Color.red )
             return;
         
         voteUI.gameObject.SetActive(Manager.Mafia.IsDay);      // Day == vote
@@ -61,7 +61,27 @@ public class House : MonoBehaviourPun, IPointerClickHandler, IPointerExitHandler
 
     public void ActivateOutline( bool activate )
     {
+        if ( outline.OutlineParameters.Color == Color.red )
+        {
+            outline.OutlineParameters.Color = Color.green;
+        }
+
         outline.enabled = activate;
+    }
+
+    public void ClickedUseSkillUI()
+    {
+        foreach ( House house in Manager.Mafia.Houses )
+        {
+            if (house.HouswOwner == houseOwner)
+            {
+                useSkillUI.gameObject.SetActive(false);
+                outline.OutlineParameters.Color = Color.red;
+                continue;
+            }
+
+            house.ActivateOutline(false);
+        }
     }
 
     [PunRPC]

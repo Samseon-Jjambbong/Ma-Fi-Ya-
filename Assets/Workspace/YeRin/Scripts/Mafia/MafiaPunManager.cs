@@ -89,7 +89,7 @@ public class MafiaPunManager : MonoBehaviourPunCallbacks
 
     public void GameStart()
     {
-        CreatePlayer();
+        SpawnPlayer();
 
         if (PhotonNetwork.IsMasterClient ) 
         {
@@ -97,7 +97,7 @@ public class MafiaPunManager : MonoBehaviourPunCallbacks
         }
     }
 
-    private void CreatePlayer()
+    private void SpawnPlayer()
     {
         int angle = 180 / ( Manager.Mafia.PlayerCount - 1 );    // 각 플레이어의 간격의 각도
 
@@ -108,6 +108,7 @@ public class MafiaPunManager : MonoBehaviourPunCallbacks
         {
             if ( playerDic [i] == PhotonNetwork.LocalPlayer)
             {
+                Debug.Log($"i: {i}");
                 playerNumber = i - 1;
             }
         }
@@ -123,8 +124,9 @@ public class MafiaPunManager : MonoBehaviourPunCallbacks
         // 순번에 맞는 플레이어의 위치 설정
         Vector3 pos = new Vector3(Mathf.Cos(currentAngle * Mathf.Deg2Rad) * palyerRadius, 2.22f, Mathf.Sin(currentAngle * Mathf.Deg2Rad) * palyerRadius);
         // PhotonNetwork.Instantiate를 통해 각 플레이어 캐릭터 생성, 센터를 바라보도록 rotation 설정
-        GameObject player = PhotonNetwork.Instantiate("TestBoy", pos, Quaternion.LookRotation(-pos));
+        GameObject player = PhotonNetwork.Instantiate("Mafia", pos, Quaternion.LookRotation(-pos));
         player.GetComponent<MafiaPlayer>().SetPlayerHouse(playerNumber);
+        player.GetComponent<MafiaPlayer>().SetNickName(PhotonNetwork.PlayerList [playerNumber].NickName);
     }
 
     private void SpawnHouses()

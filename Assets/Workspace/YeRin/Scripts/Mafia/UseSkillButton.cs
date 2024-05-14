@@ -15,7 +15,7 @@ public class UseSkillButton : MonoBehaviourPun
     public void SetTarget()
     {
         NightMafiaMove [] players =  FindObjectsOfType<NightMafiaMove>();
-        Debug.Log(players.Length);
+
         foreach ( NightMafiaMove player in players)
         {
             if ( player.ISActive )

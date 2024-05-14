@@ -2347,7 +2347,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1424524246}
-  - component: {fileID: 1424524245}
   - component: {fileID: 1424524247}
   - component: {fileID: 1424524248}
   - component: {fileID: 1424524250}
@@ -2358,21 +2357,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1424524245
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1424524244}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 758d8adc7e01a471f920fc06ff870fdf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  timer: {fileID: 0}
-  lightController: {fileID: 0}
-  roleUI: {fileID: 0}
 --- !u!4 &1424524246
 Transform:
   m_ObjectHideFlags: 0
@@ -2402,6 +2386,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   timer: {fileID: 0}
   light: {fileID: 0}
+  displayRoleTime: 0
   roleUseTime: 0
   voteTime: 0
   skillTime: 0
@@ -2423,6 +2408,7 @@ MonoBehaviour:
   playerCount: 4
   housePrefab: {fileID: 2692393707275323574, guid: 80f27672f81317e4c9afed7b9f03f8e4,
     type: 3}
+  mafiaRolesSO: {fileID: 11400000, guid: a837e1b57ca4442d582f6071f3a7fbde, type: 2}
 --- !u!114 &1424524250
 MonoBehaviour:
   m_ObjectHideFlags: 0

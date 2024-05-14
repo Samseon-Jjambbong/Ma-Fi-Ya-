@@ -14,13 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mafiaData:
     roleIcon: {fileID: 0}
-    roleName: 
+    roleName: Mafia
   doctorData:
     roleIcon: {fileID: 0}
-    roleName: 
+    roleName: Doctor
   policeData:
     roleIcon: {fileID: 0}
-    roleName: 
+    roleName: Police
   insaneData:
     roleIcon: {fileID: 0}
-    roleName: 
+    roleName: Insane

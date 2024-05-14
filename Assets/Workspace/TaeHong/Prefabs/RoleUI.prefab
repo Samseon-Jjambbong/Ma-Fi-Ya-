@@ -543,6 +543,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6956658299598324719}
   - component: {fileID: 417641353660427840}
+  - component: {fileID: 8076335370264643342}
   m_Layer: 5
   m_Name: RoleUI
   m_TagString: Untagged
@@ -578,3 +579,16 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8925477530032483283}
   m_CullTransparentMesh: 1
+--- !u!114 &8076335370264643342
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8925477530032483283}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ce95007c4170497fbd5128379efb989, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dataSO: {fileID: 11400000, guid: bdddeb253d6534c5ba32cbb2c14dfa9b, type: 2}

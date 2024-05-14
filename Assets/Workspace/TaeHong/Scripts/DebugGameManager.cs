@@ -19,7 +19,9 @@ namespace Tae
         [SerializeField] private int playerCount = 4;
         [SerializeField] private GameObject housePrefab;
 
-        [SerializeField] MafiaRolesSO mafiaRoles;
+        [SerializeField] MafiaRolesSO mafiaRolesSO;
+        private MafiaRole[] roles;
+        private MafiaGame game = new MafiaGame();
         
         private void Start()
         {
@@ -80,7 +82,7 @@ namespace Tae
         private void RandomizeRoles(int numPlayers)
         {
             // Get role list
-            MafiaRole[] roles = mafiaRoles.GetRoles(numPlayers);
+            roles = mafiaRolesSO.GetRoles(numPlayers);
 
             // Shuffle list algorithm
             int n = roles.Length;
@@ -95,16 +97,29 @@ namespace Tae
                 roles[j] = temp;
             }
         }
+
+        private void AssignRole()
+        {
+            MafiaRole role = roles[PhotonNetwork.LocalPlayer.ActorNumber - 1];
+            Debug.Log(role);
+            PhotonNetwork.LocalPlayer.SetPlayerRole(role);
+            game.AddPlayer(role);
+        }
         
         private void DebugGameStart()
         {
             // Master Client Responsibilities
             if ( PhotonNetwork.IsMasterClient )
             {
-                RandomizeRoles(PhotonNetwork.CurrentRoom.PlayerCount); // Create and randomize roles
+                //RandomizeRoles(PhotonNetwork.CurrentRoom.PlayerCount); // Create and randomize roles
+                RandomizeRoles(4);
+                AssignRole();
+
                 SpawnHouses(); // Spawn {PlayerCount} Houses
                 //SpawnPlayers();
                 SpawnPlayer();
+
+                GetComponent<MafiaGameFlow>().TestGameFlow();
             }
         }
 
@@ -120,4 +135,40 @@ namespace Tae
             PhotonNetwork.Instantiate("Player", spawnPos, spawnRot, 0);
         }
     }
+
+    public class MafiaGame
+    {
+        private int numMafias;
+        private int numCivilians;
+
+        public void AddPlayer(MafiaRole role)
+        {
+            if(role == MafiaRole.Mafia)
+                numMafias++;
+            numCivilians++;
+        }
+
+        public bool RemovePlayer(MafiaRole removedRole) // True == Civilian Win, False == Mafia Win
+        {
+            if(removedRole == MafiaRole.Mafia)
+            {
+                numMafias--;
+                if(numMafias == 0)
+                {
+                    return true;
+                }
+                return false;
+            }
+            else
+            {
+                numCivilians--;
+                if(numMafias == numCivilians)
+                {
+                    return false;
+                }
+                return true;
+            }
+        }
+    }
 }
+

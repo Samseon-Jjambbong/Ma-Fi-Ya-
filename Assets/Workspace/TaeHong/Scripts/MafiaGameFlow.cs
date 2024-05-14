@@ -19,6 +19,12 @@ public class MafiaGameFlow : MonoBehaviourPun
     //     StartCoroutine(GameFlow());
     // }
 
+    public void TestGameFlow()
+    {
+        isDay = true;
+        StartCoroutine(GameFlow());
+    }
+
     [PunRPC]
     public void DisplayRole(int time)
     {

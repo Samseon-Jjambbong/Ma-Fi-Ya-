@@ -95,8 +95,8 @@ public static class CustomProperty
     public static MafiaRole GetPlayerRole(this Player player)
     {
         PhotonHashtable properties = player.CustomProperties;
-        if ( properties.ContainsKey(PLAYERROLE) )
-            return ( MafiaRole ) properties [PLAYERROLE];
+        if (properties.ContainsKey(PLAYERROLE))
+            return (MafiaRole)properties[PLAYERROLE];
         return 0;
     }
 

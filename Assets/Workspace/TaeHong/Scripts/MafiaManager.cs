@@ -23,13 +23,16 @@ public class MafiaManager : Singleton<MafiaManager>
     [SerializeField] private int roleUseTime;
     [SerializeField] private int voteTime;
     [SerializeField] private float skillTime;
+
+    [SerializeField] List<House> houses;
+    public List<House> Houses { get { return houses; } set { houses = value; } }
     public float SkillTime => skillTime;
     [SerializeField] private List<House> houses;
     public List<House> Houses { get { return houses; } set { houses = value; } }
 
     private void Start()
     {
-        isDay = true;
+        isDay = false;
         // timer.StartTimer(roleUseTime);
         Debug.Log(PhotonNetwork.CurrentRoom.Players.Count);
         playerCount = PhotonNetwork.CurrentRoom.Players.Count;

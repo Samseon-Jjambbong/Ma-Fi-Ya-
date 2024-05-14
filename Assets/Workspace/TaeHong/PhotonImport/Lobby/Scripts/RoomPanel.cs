@@ -62,7 +62,7 @@ public class RoomPanel : MonoBehaviour
     {
         PhotonNetwork.CurrentRoom.IsOpen = false;
         PhotonNetwork.CurrentRoom.IsVisible = false;
-        PhotonNetwork.LoadLevel("TestGame");
+        PhotonNetwork.LoadLevel("TestGame_Ye");
     }
 
     public void PlayerEnterRoom(Player newPlayer)
@@ -91,7 +91,10 @@ public class RoomPanel : MonoBehaviour
         
         Destroy(playerEntry.gameObject);
         playerList.Remove(playerEntry);
-        
+
+        playerCountText.text =
+            $"Player Count: {PhotonNetwork.CurrentRoom.PlayerCount}/{PhotonNetwork.CurrentRoom.MaxPlayers}";
+
         AllPlayersReadyCheck();
     }
 

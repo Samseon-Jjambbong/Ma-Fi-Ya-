@@ -7,20 +7,16 @@ using PhotonHashTable = ExitGames.Client.Photon.Hashtable;
 using TMPro;
 using Photon.Pun.UtilityScripts;
 using UnityEngine.InputSystem;
-using UnityEngine.Serialization;
 
 public class MafiaPunManager : MonoBehaviourPunCallbacks
 {
     [SerializeField] TMP_Text infoText;
-    [SerializeField] float countDownTime;
-    [SerializeField] private MafiaGameFlow gameFlow;
-    [SerializeField] private GameObject housePrefab;
-    
-    [SerializeField] int playerRadius;
+    [SerializeField] float CountDownTime;
+
+    [SerializeField] int palyerRadius;
     [SerializeField] int houseRadius;
     private Dictionary<int, Player> playerDic;
-    private bool isDay;
-    
+
     private void Start()
     {
         PhotonNetwork.LocalPlayer.SetLoaded(true);
@@ -57,19 +53,21 @@ public class MafiaPunManager : MonoBehaviourPunCallbacks
 
     IEnumerator StartTime()
     {
-        SpawnHouses();
+        if ( PhotonNetwork.IsMasterClient )
+        {
+            SpawnHouses(); // Spawn {PlayerCount} Houses
+        }
 
         double loadTime = PhotonNetwork.CurrentRoom.GetGameStartTime();
-        while ( PhotonNetwork.Time - loadTime < countDownTime )
+        while ( PhotonNetwork.Time - loadTime < CountDownTime )
         {
-            int remainTime = ( int ) ( countDownTime - ( PhotonNetwork.Time - loadTime ) );
+            int remainTime = ( int ) ( CountDownTime - ( PhotonNetwork.Time - loadTime ) );
             infoText.text = ( remainTime + 1 ).ToString();
             yield return null;
         }
 
         infoText.text = "Game Start";
         GameStart();
-        
         yield return new WaitForSeconds(3f);
 
         infoText.text = "";
@@ -92,8 +90,11 @@ public class MafiaPunManager : MonoBehaviourPunCallbacks
     public void GameStart()
     {
         CreatePlayer();
-        //gameFlow.StartGameFlow();
-        Manager.Mafia.StartGame();
+
+        if (PhotonNetwork.IsMasterClient ) 
+        {
+
+        }
     }
 
     private void CreatePlayer()
@@ -120,9 +121,10 @@ public class MafiaPunManager : MonoBehaviourPunCallbacks
         int currentAngle = 180 - angle * playerNumber;
 
         // 순번에 맞는 플레이어의 위치 설정
-        Vector3 pos = new Vector3(Mathf.Cos(currentAngle * Mathf.Deg2Rad) * playerRadius, 2.22f, Mathf.Sin(currentAngle * Mathf.Deg2Rad) * playerRadius);
+        Vector3 pos = new Vector3(Mathf.Cos(currentAngle * Mathf.Deg2Rad) * palyerRadius, 2.22f, Mathf.Sin(currentAngle * Mathf.Deg2Rad) * palyerRadius);
         // PhotonNetwork.Instantiate를 통해 각 플레이어 캐릭터 생성, 센터를 바라보도록 rotation 설정
-        Transform player = PhotonNetwork.Instantiate("TestPlayer", pos, Quaternion.LookRotation(pos)).transform;
+        GameObject player = PhotonNetwork.Instantiate("TestBoy", pos, Quaternion.LookRotation(-pos));
+        player.GetComponent<MafiaPlayer>().SetPlayerHouse(playerNumber);
     }
 
     private void SpawnHouses()
@@ -133,13 +135,10 @@ public class MafiaPunManager : MonoBehaviourPunCallbacks
         for ( int i = 0; i < Manager.Mafia.PlayerCount; i++ )
         {
             Vector3 pos = new Vector3(Mathf.Cos(currentAngle * Mathf.Deg2Rad) * houseRadius, 1.8f, Mathf.Sin(currentAngle * Mathf.Deg2Rad) * houseRadius);
-            House house = Instantiate(housePrefab, pos, Quaternion.LookRotation(pos)).GetComponent<House>();
-            
-            Manager.Mafia.Houses.Add(house);
+            GameObject houseGO = PhotonNetwork.InstantiateRoomObject("House", pos, Quaternion.LookRotation(pos));
+
             currentAngle -= angle;
         }
     }
-    
-    
 }
 

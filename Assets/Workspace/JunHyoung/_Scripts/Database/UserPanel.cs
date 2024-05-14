@@ -35,8 +35,8 @@ public class UserPanel : MonoBehaviour
 
     private void ActivePanel()
     {
-        isActive = !isActive;
-        editPanel.gameObject.SetActive(isActive);
+         //isActive = !isActive;
+        editPanel.gameObject.SetActive(true);
     }
 
     private void UpdateInfo( object sendor, ValueChangedEventArgs args )

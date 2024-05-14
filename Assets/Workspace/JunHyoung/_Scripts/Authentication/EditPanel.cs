@@ -86,8 +86,7 @@ namespace LoginSystem
 
         private void Back()
         {
-            VCamController.Instance.RotateVCam(-1);
-            panelController.SetActivePanel(LoginManager.Panel.Main);
+            gameObject.SetActive(false);
         }
 
         private void Delete()
@@ -97,7 +96,7 @@ namespace LoginSystem
             {
                 if ( task.IsCanceled )
                 {
-                    panelController.ShowInfo("DeleteAsync Canceled");
+                    //panelController.ShowInfo("DeleteAsync Canceled");
                     SetInteractable(true);
                     return;
                 }
@@ -109,7 +108,7 @@ namespace LoginSystem
                 }
 
                 SetInteractable(true);
-                panelController.ShowInfo("DeleteAsync Success!");
+                //panelController.ShowInfo("DeleteAsync Success!");
             });
         }
 

@@ -2,7 +2,7 @@ using Photon.Pun;
 using TMPro;
 using UnityEngine;
 
-public class LoginPanel : MonoBehaviour
+public class LoginMannager : MonoBehaviour
 {
     [SerializeField] TMP_InputField idInputField;
 

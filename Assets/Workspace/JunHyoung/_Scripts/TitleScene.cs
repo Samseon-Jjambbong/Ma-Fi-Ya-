@@ -12,17 +12,7 @@ public class TitleScene : MonoBehaviour
     [SerializeField] LobbyManager lobbyCanvas; 
     private void Awake()
     {
-        //Debug.Log(PhotonNetwork.NetworkClientState);
-        if(PhotonNetwork.NetworkClientState == ClientState.Joined ) //해당 상태가 맞는지 테스트하면서 작업할것.
-        {
-           // Room room = PhotonNetwork.CurrentRoom; if( room != null )
-            {
-                ActiveRoom();
-                return;
-            }
-        }
-
-        if( PhotonNetwork.NetworkClientState == ClientState.ConnectedToMasterServer )
+        if( PhotonNetwork.NetworkClientState == ClientState.Leaving || PhotonNetwork.NetworkClientState == ClientState.Joined )
         {
             ActiveLobby();
             return;
@@ -44,14 +34,5 @@ public class TitleScene : MonoBehaviour
         loginCanvas.gameObject.SetActive(false);
         lobbyCanvas.gameObject.SetActive(true);
     }
-
-    private void ActiveRoom()
-    {
-        titleCanvas.gameObject.SetActive(false);
-        loginCanvas.gameObject.SetActive(false);
-        lobbyCanvas.gameObject.SetActive(true);
-        lobbyCanvas.SetActivePanel(LobbyManager.Panel.Room);
-    }
-
 
 }

@@ -18,6 +18,11 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     
     private void Start()
     {
+        if ( PhotonNetwork.NetworkClientState == ClientState.Joined )
+        {
+            SetActivePanel(Panel.Room);
+            return;
+        }
         SetActivePanel(Panel.Menu);
     }
 
@@ -110,7 +115,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         roomPanel.PlayerPropertiesUpdate(targetPlayer, changedProps);
     }
 
-    public void SetActivePanel(Panel panel)
+    private void SetActivePanel(Panel panel)
     {
         loginPanel.gameObject.SetActive(panel == Panel.Login);
         menuPanel.gameObject.SetActive(panel == Panel.Menu);

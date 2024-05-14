@@ -28,9 +28,6 @@ public class DebugSceneChangeTest : MonoBehaviour
     private void ChangeSceneLeaveRoom()
     {
         PhotonNetwork.LeaveRoom();
-
-        Room curRoom = PhotonNetwork.CurrentRoom;
-        Debug.Log(curRoom.Name);
         PhotonNetwork.LoadLevel(sceneName);
     }
 }

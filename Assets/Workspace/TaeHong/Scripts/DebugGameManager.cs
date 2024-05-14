@@ -135,40 +135,5 @@ namespace Tae
             PhotonNetwork.Instantiate("Player", spawnPos, spawnRot, 0);
         }
     }
-
-    public class MafiaGame
-    {
-        private int numMafias;
-        private int numCivilians;
-
-        public void AddPlayer(MafiaRole role)
-        {
-            if(role == MafiaRole.Mafia)
-                numMafias++;
-            numCivilians++;
-        }
-
-        public bool RemovePlayer(MafiaRole removedRole) // True == Civilian Win, False == Mafia Win
-        {
-            if(removedRole == MafiaRole.Mafia)
-            {
-                numMafias--;
-                if(numMafias == 0)
-                {
-                    return true;
-                }
-                return false;
-            }
-            else
-            {
-                numCivilians--;
-                if(numMafias == numCivilians)
-                {
-                    return false;
-                }
-                return true;
-            }
-        }
-    }
 }
 

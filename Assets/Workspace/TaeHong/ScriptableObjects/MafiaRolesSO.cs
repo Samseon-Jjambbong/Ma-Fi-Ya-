@@ -1,8 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "MafiaRoles", fileName = "MafiaRoles")]
+[CreateAssetMenu(menuName = "Mafia/MafiaRoles", fileName = "MafiaRoles")]
 public class MafiaRolesSO : ScriptableObject
 {
     public MafiaRole[] pool4 = new MafiaRole [4];
@@ -26,8 +24,7 @@ public class MafiaRolesSO : ScriptableObject
             case 8:
                 return pool8;
             default:
-                break;
+                return null;
         }
-        return null;
     }
 }

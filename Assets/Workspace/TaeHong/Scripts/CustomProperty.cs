@@ -11,6 +11,7 @@ public static class CustomProperty
     public const string GAMESTART = "GameStart";
     public const string GAMESTARTTIME = "GameStartTime";
     public const string GAMEMODE = "GameMode";
+    public const string PLAYERROLE = "PlayerRole";
     
     public static bool GetReady(this Player player)
     {
@@ -88,5 +89,20 @@ public static class CustomProperty
         
         if ( setPropertyToLobby )
             room.CustomRoomPropertiesForLobby = new string [] { GAMEMODE };
+    }
+
+    // Player Role
+    public static MafiaRole GetPlayerRole(this Player player)
+    {
+        PhotonHashtable properties = player.CustomProperties;
+        if ( properties.ContainsKey(PLAYERROLE) )
+            return ( MafiaRole ) properties [PLAYERROLE];
+        return 0;
+    }
+
+    public static void SetPlayerRole(this Player player, MafiaRole value)
+    {
+        PhotonHashtable properties = new PhotonHashtable { { PLAYERROLE, value } };
+        player.SetCustomProperties(properties);
     }
 }

@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
+using Photon.Pun.Demo.PunBasics;
+using Photon.Realtime;
 
 /// <summary>
 /// programmer : Yerin, TaeHong
@@ -24,6 +26,13 @@ public class MafiaPlayer : MonoBehaviourPun
     private bool canUseSkill;
     public bool CanUseSkill { get { return canUseSkill; } set { canUseSkill = value; } }
 
+    private Dictionary<int, Player> playerDic;
+
+    private void Start()
+    {
+        playerDic = PhotonNetwork.CurrentRoom.Players;
+    }
+
     // 플레이어 각 역할에 따른 스킬
     protected virtual void UseSkill( MafiaPlayer targetPlayer )
     {
@@ -38,5 +47,20 @@ public class MafiaPlayer : MonoBehaviourPun
         canUseSkill = true;
         yield return new WaitForSeconds(Manager.Mafia.SkillTime);
         canUseSkill = false;
+    }
+
+    public void SetPlayerHouse( int playerNumber )
+    {
+        if (PhotonNetwork.IsMasterClient)
+        {
+            photonView.RPC("AddHouseList", RpcTarget.All, playerNumber);
+        }
+        Manager.Mafia.Houses [playerNumber].ActivateOutline(false);
+    }
+
+    [PunRPC]
+    private void AddHouseList( int playerNumber )
+    {
+        Manager.Mafia.Houses [playerNumber].HouswOwner = this;
     }
 }

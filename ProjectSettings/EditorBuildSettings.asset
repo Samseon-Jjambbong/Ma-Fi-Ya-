@@ -17,7 +17,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Workspace/TaeHong/Scenes/MenuSceneWithUI.unity
     guid: ad074e3a48617314792692a31d3acdce
-  - enabled: 1
+  - enabled: 0
     path: Assets/Workspace/TaeHong/Scenes/TestGame.unity
     guid: 779fd75875e294847a3c91cdbf31cc50
+  - enabled: 1
+    path: Assets/Workspace/YeRin/Scene/TestGame_Ye.unity
+    guid: fa08fc38f57be74489eeac2e9c7ddac9
   m_configObjects: {}

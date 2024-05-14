@@ -329,7 +329,7 @@ GameObject:
   m_Component:
   - component: {fileID: 639232963517509923}
   - component: {fileID: 1620853073517711642}
-  - component: {fileID: 1200111535228480331}
+  - component: {fileID: 3148520119798468431}
   - component: {fileID: 5896712377539139787}
   m_Layer: 0
   m_Name: NightMafia
@@ -376,7 +376,7 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &1200111535228480331
+--- !u!114 &3148520119798468431
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -385,12 +385,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 3129244768410552692}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 54d2f34e9b0e7964aaea000da0445438, type: 3}
+  m_Script: {fileID: 11500000, guid: 8c557fcd0fe8c134b8139417e6ff5e15, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 0.03
   target: {fileID: 0}
-  animator: {fileID: 0}
+  animator: {fileID: 1620853073517711642}
 --- !u!114 &5896712377539139787
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -51,10 +51,7 @@ public class MafiaPlayer : MonoBehaviourPun
 
     public void SetPlayerHouse( int playerNumber )
     {
-        if (PhotonNetwork.IsMasterClient)
-        {
-            photonView.RPC("AddHouseList", RpcTarget.All, playerNumber);
-        }
+        photonView.RPC("AddHouseList", RpcTarget.All, playerNumber);
         Manager.Mafia.Houses [playerNumber].ActivateOutline(false);
     }
 

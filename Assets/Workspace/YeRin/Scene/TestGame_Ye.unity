@@ -2659,6 +2659,7 @@ MonoBehaviour:
   debugRoomName: DebugRoom
   radius: 21
   playerCount: 4
+  housePrefab: {fileID: 0}
 --- !u!114 &1424524249
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2704,6 +2705,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   timer: {fileID: 0}
   light: {fileID: 0}
+  displayRoleTime: 0
   roleUseTime: 0
   voteTime: 0
   skillTime: 0
@@ -3567,12 +3569,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 2141810866}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &266598167256657253 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3129244768410552692, guid: 7e1376be4a3f8da4e8439649cc4f8237,
-    type: 3}
-  m_PrefabInstance: {fileID: 6010615310766972042}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &6010615310766972042
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3631,11 +3627,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1200111535228480331, guid: 7e1376be4a3f8da4e8439649cc4f8237,
-        type: 3}
-      propertyPath: animator
-      value: 
-      objectReference: {fileID: 0}
     - target: {fileID: 3129244768410552692, guid: 7e1376be4a3f8da4e8439649cc4f8237,
         type: 3}
       propertyPath: m_Name
@@ -3646,15 +3637,10 @@ PrefabInstance:
       propertyPath: sceneViewId
       value: 1
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 1200111535228480331, guid: 7e1376be4a3f8da4e8439649cc4f8237, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 3129244768410552692, guid: 7e1376be4a3f8da4e8439649cc4f8237,
-        type: 3}
-      insertIndex: 2
-      addedObject: {fileID: 8341506684531857352}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7e1376be4a3f8da4e8439649cc4f8237, type: 3}
 --- !u!1001 &6251424295150824623
 PrefabInstance:
@@ -3734,27 +3720,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a83049f32d3e34d39a0a68aea11e2e63, type: 3}
---- !u!95 &8055985401453346894 stripped
-Animator:
-  m_CorrespondingSourceObject: {fileID: 1620853073517711642, guid: 7e1376be4a3f8da4e8439649cc4f8237,
-    type: 3}
-  m_PrefabInstance: {fileID: 6010615310766972042}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &8341506684531857352
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 266598167256657253}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8c557fcd0fe8c134b8139417e6ff5e15, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  moveSpeed: 0.03
-  target: {fileID: 0}
-  animator: {fileID: 8055985401453346894}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

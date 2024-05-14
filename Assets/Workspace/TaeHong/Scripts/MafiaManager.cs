@@ -32,7 +32,6 @@ public class MafiaManager : Singleton<MafiaManager>
     {
         isDay = false;
         // timer.StartTimer(roleUseTime);
-        Debug.Log(PhotonNetwork.CurrentRoom.Players.Count);
         playerCount = PhotonNetwork.CurrentRoom.Players.Count;
     }
     

@@ -4,6 +4,7 @@ using UnityEngine;
 using Photon.Pun;
 using Photon.Pun.Demo.PunBasics;
 using Photon.Realtime;
+using TMPro;
 
 /// <summary>
 /// programmer : Yerin, TaeHong
@@ -12,6 +13,8 @@ using Photon.Realtime;
 /// </summary>
 public class MafiaPlayer : MonoBehaviourPun
 {
+    [SerializeField] TMP_Text nickNameText;
+
     // 플레이어 직업 진형
     private bool isMafia;
     public bool IsMafia { get { return isMafia; } set { isMafia = value; } }
@@ -59,5 +62,16 @@ public class MafiaPlayer : MonoBehaviourPun
     private void AddHouseList( int playerNumber )
     {
         Manager.Mafia.Houses [playerNumber].HouswOwner = this;
+    }
+
+    public void SetNickName(string nickName)
+    {
+        photonView.RPC("NickName", RpcTarget.All, nickName);
+    }
+
+    [PunRPC]
+    private void NickName( string nickName )
+    {
+        nickNameText.text = nickName;
     }
 }

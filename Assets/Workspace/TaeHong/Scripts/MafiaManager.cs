@@ -19,6 +19,7 @@ public class MafiaManager : Singleton<MafiaManager>
     public bool IsDay => isDay;
     [SerializeField] private GameTimer timer;
     [SerializeField] private Tae.LightController light;
+    [SerializeField] private int displayRoleTime;
     [SerializeField] private int roleUseTime;
     [SerializeField] private int voteTime;
     [SerializeField] private float skillTime;
@@ -26,6 +27,8 @@ public class MafiaManager : Singleton<MafiaManager>
     [SerializeField] List<House> houses;
     public List<House> Houses { get { return houses; } set { houses = value; } }
     public float SkillTime => skillTime;
+    [SerializeField] private List<House> houses;
+    public List<House> Houses { get { return houses; } set { houses = value; } }
 
     private void Start()
     {
@@ -35,26 +38,66 @@ public class MafiaManager : Singleton<MafiaManager>
         playerCount = PhotonNetwork.CurrentRoom.Players.Count;
     }
     
-    private void OnEnable()
+    // private void OnEnable()
+    // {
+    //     timer.TimerFinished += OnTimerFinished;
+    // }
+    //
+    // private void OnDisable()
+    // {
+    //     timer.TimerFinished += OnTimerFinished;
+    // }
+    //
+    // private void OnTimerFinished()
+    // {
+    //     // light.ChangePhase(); 
+    //     isDay = !isDay;
+    //     timer.StartTimer(roleUseTime);
+    // }
+    //
+    // public void SetTimes( int roleUseTime, int voteTime )
+    // {
+    //     this.roleUseTime = roleUseTime;
+    //     this.voteTime = voteTime;
+    // }
+    
+    // TIME MANAGER:
+    private PhotonView photonView;
+    public void StartGame()
     {
-        timer.TimerFinished += OnTimerFinished;
+        if ( !PhotonNetwork.IsMasterClient )
+            return;
+        
+        photonView = GetComponent<PhotonView>();
+        StartCoroutine(GameLoop());
     }
 
-    private void OnDisable()
+    private IEnumerator GameLoop()
     {
-        timer.TimerFinished += OnTimerFinished;
-    }
+        // Delay
+        yield return new WaitForSeconds(1);
+        
+        // Display role
+        photonView.RPC("DisplayRole", RpcTarget.All, displayRoleTime);
+        yield return new WaitForSeconds(displayRoleTime);
 
-    private void OnTimerFinished()
-    {
-        // light.ChangePhase(); 
-        isDay = !isDay;
-        timer.StartTimer(roleUseTime);
-    }
-
-    public void SetTimes( int roleUseTime, int voteTime )
-    {
-        this.roleUseTime = roleUseTime;
-        this.voteTime = voteTime;
+        // Delay
+        yield return new WaitForSeconds(1);
+        
+        // Day Phase
+        photonView.RPC("EnableChat", RpcTarget.All); // Enable Chat
+        yield return new WaitForSeconds(voteTime);
+        timer.StartTimer(voteTime);
+        
+        // Delay
+        yield return new WaitForSeconds(1);
+        
+        // Change to night
+        photonView.RPC("ChangeTime", RpcTarget.All);
+        yield return new WaitForSeconds(1);
+        
+        // Allow role usage
+        photonView.RPC("ChangeTime", RpcTarget.All, skillTime);
+        photonView.RPC("EnableChat", RpcTarget.All);
     }
 }

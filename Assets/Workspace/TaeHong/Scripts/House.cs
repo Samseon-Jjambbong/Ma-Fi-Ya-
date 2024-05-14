@@ -20,9 +20,19 @@ public class House : MonoBehaviourPun, IPointerClickHandler, IPointerExitHandler
     [SerializeField] private Outlinable outline;
 
     [SerializeField] private MafiaPlayer houseOwner;
-    public MafiaPlayer HouswOwner { get { return houseOwner; } set { houseOwner = value; } }
+    public MafiaPlayer HouseOwner { get { return houseOwner; } set { houseOwner = value; } }
+
+    public int houseOwnerId;
 
     public bool debugMode;
+
+    public void OnClicked()
+    {
+        // Send information about who clicked on who's house
+        int sender = PhotonNetwork.LocalPlayer.ActorNumber;
+        int receiver = houseOwnerId;
+        Manager.Event.pairEventDic["useSkill"].RaiseEvent((sender, receiver));
+    }
 
     private void Start()
     {
@@ -73,7 +83,7 @@ public class House : MonoBehaviourPun, IPointerClickHandler, IPointerExitHandler
     {
         foreach ( House house in Manager.Mafia.Houses )
         {
-            if (house.HouswOwner == houseOwner)
+            if (house.HouseOwner == houseOwner)
             {
                 useSkillUI.gameObject.SetActive(false);
                 outline.OutlineParameters.Color = Color.red;

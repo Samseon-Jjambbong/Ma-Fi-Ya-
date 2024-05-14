@@ -11,8 +11,6 @@ namespace Tae
         [SerializeField] private Vector3 nightRotation;
         [SerializeField] private float phaseChangeDuration;
 
-        private bool isChanging;
-
         private void Start()
         {
             transform.rotation = Quaternion.Euler(dayRotation);
@@ -27,8 +25,6 @@ namespace Tae
 
         IEnumerator ChangePhaseRoutine(Vector3 startRot, Vector3 targetRot)
         {
-            isChanging = true;
-            
             float t = 0;
             while ( t < phaseChangeDuration )
             {
@@ -36,8 +32,6 @@ namespace Tae
                 t += Time.deltaTime;
                 yield return null;
             }
-
-            isChanging = false;
         }
     }
 }

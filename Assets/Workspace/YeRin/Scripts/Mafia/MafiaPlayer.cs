@@ -15,43 +15,36 @@ public class MafiaPlayer : MonoBehaviourPun
 {
     [SerializeField] TMP_Text nickNameText;
 
-    // 플레이어 직업 진형
-    private bool isMafia;
-    public bool IsMafia { get { return isMafia; } set { isMafia = value; } }
-
     // 플레이어의 생존 여부
     private bool isAlive = true;
     public bool IsAlive { get { return isAlive; } }
 
-    private bool isHealed;
-    public bool IsHealed { get { return isHealed; } set { isHealed = value; } }
-
-    private bool canUseSkill;
-    public bool CanUseSkill { get { return canUseSkill; } set { canUseSkill = value; } }
-
     private Dictionary<int, Player> playerDic;
 
-    private void Start()
+    protected MafiaRole role;
+    protected MafiaActionType actionType;
+    private MafiaActionPQ actionsToShow = new MafiaActionPQ();
+
+    protected virtual void Start()
     {
+        // 플레이어 역할 받기
+        role = PhotonNetwork.LocalPlayer.GetPlayerRole();
         playerDic = PhotonNetwork.CurrentRoom.Players;
     }
 
-    // 플레이어 각 역할에 따른 스킬
-    protected virtual void UseSkill( MafiaPlayer targetPlayer )
+    #region Game Logic
+    private void OnEnable()
     {
-        if ( !canUseSkill )
-        {
-            return;
-        }
+        Manager.Event.pairEventDic["useSkill"].OnEventRaised += UseSkill;
     }
 
-    IEnumerator SKillTime()
+    protected virtual void UseSkill((int, int) info)
     {
-        canUseSkill = true;
-        yield return new WaitForSeconds(Manager.Mafia.SkillTime);
-        canUseSkill = false;
+        //MafiaAction action = new MafiaAction(info.Item1, info.Item2, mafiaActionType);
     }
+    #endregion
 
+    #region Photon
     public void SetPlayerHouse( int playerNumber )
     {
         photonView.RPC("AddHouseList", RpcTarget.All, playerNumber);
@@ -61,7 +54,7 @@ public class MafiaPlayer : MonoBehaviourPun
     [PunRPC]
     private void AddHouseList( int playerNumber )
     {
-        Manager.Mafia.Houses [playerNumber].HouswOwner = this;
+        Manager.Mafia.Houses [playerNumber].HouseOwner = this;
     }
 
     public void SetNickName(string nickName)
@@ -74,4 +67,5 @@ public class MafiaPlayer : MonoBehaviourPun
     {
         nickNameText.text = nickName;
     }
+    #endregion
 }

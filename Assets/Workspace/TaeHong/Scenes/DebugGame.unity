@@ -1309,7 +1309,8 @@ MonoBehaviour:
   Synchronization: 3
   OwnershipTransfer: 0
   observableSearch: 2
-  ObservedComponents: []
+  ObservedComponents:
+  - {fileID: 421478242}
   sceneViewId: 5
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -2406,7 +2407,7 @@ MonoBehaviour:
   debugRoomName: DebugRoom
   radius: 21
   playerCount: 4
-  housePrefab: {fileID: 2692393707275323574, guid: 80f27672f81317e4c9afed7b9f03f8e4,
+  housePrefab: {fileID: 2692393707275323574, guid: a83049f32d3e34d39a0a68aea11e2e63,
     type: 3}
   mafiaRolesSO: {fileID: 11400000, guid: a837e1b57ca4442d582f6071f3a7fbde, type: 2}
 --- !u!114 &1424524250

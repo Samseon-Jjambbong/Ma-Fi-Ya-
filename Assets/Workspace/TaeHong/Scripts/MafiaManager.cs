@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Tae;
 
 /// <summary>
 /// programmer : Yerin, TaeHong
@@ -18,7 +19,7 @@ public class MafiaManager : Singleton<MafiaManager>
     private bool isDay;
     public bool IsDay => isDay;
     [SerializeField] private GameTimer timer;
-    [SerializeField] private Tae.LightController light;
+    [SerializeField] private LightController lightController;
     [SerializeField] private int displayRoleTime;
     [SerializeField] private int roleUseTime;
     [SerializeField] private int voteTime;

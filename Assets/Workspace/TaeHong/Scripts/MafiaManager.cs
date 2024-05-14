@@ -27,8 +27,6 @@ public class MafiaManager : Singleton<MafiaManager>
     [SerializeField] List<House> houses;
     public List<House> Houses { get { return houses; } set { houses = value; } }
     public float SkillTime => skillTime;
-    [SerializeField] private List<House> houses;
-    public List<House> Houses { get { return houses; } set { houses = value; } }
 
     private void Start()
     {

@@ -8,6 +8,63 @@ using Unity.Mathematics;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
+public struct MafiaAction
+{
+    private int sender;
+    private int receiver;
+    private MafiaActionType actionType;
+
+    public MafiaAction(int sender, int receiver, MafiaActionType action)
+    {
+        this.sender = sender;
+        this.receiver = receiver;
+        this.actionType = action;
+    }
+
+    public int GetActionPrio()
+    {
+        return (int) actionType;
+    }
+}
+
+public class MafiaActionPQ
+{
+    List<MafiaAction> actions;
+
+    public void Enqueue(MafiaAction action)
+    {
+        actions.Add(action);
+    }
+
+    public MafiaAction Dequeue()
+    {
+        int prioIndex = 0;
+        for(int i = 0; i < actions.Count; i++)
+        {
+            if(actions[i].GetActionPrio() < actions[prioIndex].GetActionPrio())
+            {
+                prioIndex = i;
+            }
+        }
+        MafiaAction action = actions[prioIndex];
+        actions.RemoveAt(prioIndex);
+        return action;
+    }
+
+    public MafiaAction Peek()
+    {
+        int prioIndex = 0;
+        for(int i = 0; i < actions.Count; i++)
+        {
+            if(actions[i].GetActionPrio() < actions[prioIndex].GetActionPrio())
+            {
+                prioIndex = i;
+            }
+        }
+        return actions[prioIndex];
+    }
+}
+
 namespace Tae
 {
     public class DebugGameManager : MonoBehaviourPunCallbacks

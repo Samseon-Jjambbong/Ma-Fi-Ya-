@@ -27,11 +27,14 @@ public class ChatTest : MonoBehaviour, IChatClientListener
     {
         chatClient = new ChatClient(this);  
         curChannelName = PhotonNetwork.CurrentRoom.Name; //채팅 채널을 로비-룸 상태랑 게임중일 때 상태랑 구분지어야 하는지 확인해 볼것.
+        //chatClient.Connect("AppID","AppVersion", new AuthenticationValues(PhotonNetwork.LocalPlayer.NickName));
         chatClient.Subscribe(curChannelName);
     }
 
     void Update()
     {
+        if ( chatClient == null )
+            return;
         chatClient.Service();
     }
 

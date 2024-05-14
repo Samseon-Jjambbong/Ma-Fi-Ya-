@@ -267,7 +267,7 @@ GameObject:
   - component: {fileID: 7950682004202643415}
   - component: {fileID: 717013478436565512}
   m_Layer: 5
-  m_Name: UserRankInfo
+  m_Name: UserRankEntry
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

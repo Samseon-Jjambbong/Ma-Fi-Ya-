@@ -87,6 +87,7 @@ public class MafiaPlayer : MonoBehaviourPun
             GetComponentInChildren<Renderer>().material.color = new Color(Random.value, Random.value, Random.value, 1f);
             Color color = GetComponentInChildren<Renderer>().material.color;
             photonView.RPC("SetColor", RpcTarget.Others, color.r, color.g, color.b);
+            return;
         }
         GetComponentInChildren<Renderer>().material.color = new Color(r, g, b, 1f);
     }

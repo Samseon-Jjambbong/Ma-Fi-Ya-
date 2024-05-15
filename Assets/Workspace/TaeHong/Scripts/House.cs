@@ -26,14 +26,6 @@ public class House : MonoBehaviourPun, IPointerClickHandler, IPointerExitHandler
 
     public bool debugMode;
 
-    public void OnClicked()
-    {
-        // Send information about who clicked on who's house
-        int sender = PhotonNetwork.LocalPlayer.ActorNumber;
-        int receiver = houseOwnerId;
-        Manager.Event.pairEventDic["useSkill"].RaiseEvent((sender, receiver));
-    }
-
     private void Start()
     {
         if ( debugMode )
@@ -45,6 +37,14 @@ public class House : MonoBehaviourPun, IPointerClickHandler, IPointerExitHandler
         {
             photonView.RPC("AddList", RpcTarget.All);
         }
+    }
+
+    public void ChooseTarget()
+    {
+        // Send information about who clicked on who's house
+        int sender = PhotonNetwork.LocalPlayer.ActorNumber;
+        int receiver = houseOwnerId;
+        Manager.Event.pairEventDic["useSkill"].RaiseEvent((sender, receiver));
     }
 
     // What UI should be shown when a house is clicked

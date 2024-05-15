@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028326, g: 0.22571333, b: 0.30692202, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -2043,9 +2043,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1424524246}
-  - component: {fileID: 1424524245}
   - component: {fileID: 1424524247}
-  - component: {fileID: 1424524248}
   - component: {fileID: 1424524249}
   - component: {fileID: 1424524250}
   - component: {fileID: 1424524251}
@@ -2056,21 +2054,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1424524245
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1424524244}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 758d8adc7e01a471f920fc06ff870fdf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  timer: {fileID: 0}
-  lightController: {fileID: 0}
-  roleUI: {fileID: 0}
 --- !u!4 &1424524246
 Transform:
   m_ObjectHideFlags: 0
@@ -2098,29 +2081,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01b066014f9dc4725bab194fdf11253c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timer: {fileID: 0}
-  light: {fileID: 0}
-  displayRoleTime: 0
-  roleUseTime: 0
-  voteTime: 0
-  skillTime: 0
+  displayRoleTime: 5
+  roleUseTime: 10
+  voteTime: 10
+  skillTime: 10
   houses: []
---- !u!114 &1424524248
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1424524244}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5e38100e0d550fe47b76844f61488a0f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  debugRoomName: DebugRoom
-  radius: 21
-  playerCount: 4
-  housePrefab: {fileID: 0}
 --- !u!114 &1424524249
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2134,12 +2099,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   infoText: {fileID: 421478241}
-  countDownTime: 0
-  gameFlow: {fileID: 1424524250}
-  housePrefab: {fileID: 2692393707275323574, guid: 80f27672f81317e4c9afed7b9f03f8e4,
-    type: 3}
+  CountDownTime: 3
   playerRadius: 15
   houseRadius: 21
+  displayRoleTime: 5
+  roleUseTime: 7
+  voteTime: 7
+  skillTime: 7
+  mafiaRolesSO: {fileID: 11400000, guid: a837e1b57ca4442d582f6071f3a7fbde, type: 2}
 --- !u!114 &1424524250
 MonoBehaviour:
   m_ObjectHideFlags: 0

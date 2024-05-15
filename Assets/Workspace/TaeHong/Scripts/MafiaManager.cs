@@ -11,15 +11,13 @@ using Tae;
 /// Manager for Mafia game mode.
 /// </summary>
 
-public class MafiaManager : Singleton<MafiaManager>
+public class MafiaManager : Singleton<MafiaManager>, IPunObservable
 {
     private int playerCount;
     public int PlayerCount => playerCount;
 
     private bool isDay;
-    public bool IsDay => isDay;
-    [SerializeField] private GameTimer timer;
-    [SerializeField] private LightController lightController;
+    public bool IsDay { get; set; }
     [SerializeField] private int displayRoleTime;
     [SerializeField] private int roleUseTime;
     [SerializeField] private int voteTime;
@@ -31,36 +29,25 @@ public class MafiaManager : Singleton<MafiaManager>
 
     private void Start()
     {
-        isDay = false;
+        isDay = true;
         // timer.StartTimer(roleUseTime);
         playerCount = PhotonNetwork.CurrentRoom.Players.Count;
     }
-    
-    // private void OnEnable()
-    // {
-    //     timer.TimerFinished += OnTimerFinished;
-    // }
-    //
-    // private void OnDisable()
-    // {
-    //     timer.TimerFinished += OnTimerFinished;
-    // }
-    //
-    // private void OnTimerFinished()
-    // {
-    //     // light.ChangePhase(); 
-    //     isDay = !isDay;
-    //     timer.StartTimer(roleUseTime);
-    // }
-    //
-    // public void SetTimes( int roleUseTime, int voteTime )
-    // {
-    //     this.roleUseTime = roleUseTime;
-    //     this.voteTime = voteTime;
-    // }
-    
+
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        if (stream.IsWriting)
+        {
+            stream.SendNext(isDay);
+        }
+        else
+        {
+            isDay = (bool)stream.ReceiveNext();
+        }
+    }
+
     // TIME MANAGER:
-    private PhotonView photonView;
+    /*private PhotonView photonView;
     public void StartGame()
     {
         if ( !PhotonNetwork.IsMasterClient )
@@ -85,7 +72,6 @@ public class MafiaManager : Singleton<MafiaManager>
         // Day Phase
         photonView.RPC("EnableChat", RpcTarget.All); // Enable Chat
         yield return new WaitForSeconds(voteTime);
-        timer.StartTimer(voteTime);
         
         // Delay
         yield return new WaitForSeconds(1);
@@ -97,5 +83,5 @@ public class MafiaManager : Singleton<MafiaManager>
         // Allow role usage
         photonView.RPC("ChangeTime", RpcTarget.All, skillTime);
         photonView.RPC("EnableChat", RpcTarget.All);
-    }
+    }*/
 }

@@ -16,6 +16,7 @@ public static class Manager
     private static void Initialize()
     {
         GameManager.ReleaseInstance();
+        EventManager.ReleaseInstance();
         DataManager.ReleaseInstance();
         PoolManager.ReleaseInstance();
         ResourceManager.ReleaseInstance();
@@ -24,6 +25,7 @@ public static class Manager
         UIManager.ReleaseInstance();
 
         GameManager.CreateInstance();
+        EventManager.CreateInstance();
         DataManager.CreateInstance();
         PoolManager.CreateInstance();
         ResourceManager.CreateInstance();

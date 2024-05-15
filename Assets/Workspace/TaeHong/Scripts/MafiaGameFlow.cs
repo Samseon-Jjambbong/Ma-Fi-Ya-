@@ -11,17 +11,16 @@ public class MafiaGameFlow : MonoBehaviourPun
     [SerializeField] private GameTimer timer;
     [SerializeField] private LightController lightController;
     [SerializeField] private GameObject roleUI;
-    private bool isDay;
 
-    // private void Start()
-    // {
-    //     isDay = true;
-    //     StartCoroutine(GameFlow());
-    // }
+    private void Start()
+    {
+        Manager.Mafia.IsDay = true;
+        //StartCoroutine(GameFlow());
+    }
 
     public void TestGameFlow()
     {
-        isDay = true;
+        Manager.Mafia.IsDay = true;
         StartCoroutine(GameFlow());
     }
 
@@ -40,25 +39,31 @@ public class MafiaGameFlow : MonoBehaviourPun
     [PunRPC]
     public void ChangeTime()
     {
-        isDay = false;;
         StartCoroutine(ChangeTimeOfDayRoutine());
     }
 
     [PunRPC]
-    public void EnableChat()
+    public void EnableChat(bool enable)
     {
-        // Implement later
+        if (enable)
+        {
+            Debug.Log("Enabled Chat");
+        }
+        else
+        {
+            Debug.Log("Disabled Chat");
+        }
     }
-    
+
     [PunRPC]
-    public void DisableChat()
+    public void EnableVoting(int time)
     {
-        // Implement later
+        StartCoroutine(DayRoutine(time));
     }
 
     public void StartGameFlow()
     {
-        isDay = true;
+        Manager.Mafia.IsDay = true;
         StartCoroutine(GameFlow());
     }
 
@@ -86,7 +91,7 @@ public class MafiaGameFlow : MonoBehaviourPun
             yield return ChangeTimeOfDayRoutine();
 
             //Day Stuff
-            yield return DayRoutine();
+            yield return DayRoutine(5);
         }
         
         //Show Results
@@ -104,19 +109,19 @@ public class MafiaGameFlow : MonoBehaviourPun
     IEnumerator AllowChatRoutine()
     {
         // enable Chat
-        Debug.Log("Chat enabled");
+        Debug.Log("All Chat enabled");
         
         yield return timer.StartTimer(3);
         
         // disable Chat
-        Debug.Log("Chat disabled");
+        Debug.Log("All Chat disabled");
     }
     
     // Day -> Night
     private IEnumerator ChangeTimeOfDayRoutine()
     {
-        yield return lightController.ChangePhase(isDay);
-        isDay = false;
+        yield return lightController.ChangePhase();
+        Manager.Mafia.IsDay = !Manager.Mafia.IsDay;
     }
     
     // Night Stuff
@@ -148,10 +153,10 @@ public class MafiaGameFlow : MonoBehaviourPun
     // Allow Chat for X Seconds
     // Show role usage results
     // Show player death (if there was any)
-    private IEnumerator DayRoutine()
+    private IEnumerator DayRoutine(int time)
     {
         // Allow chat for mafia
-        Debug.Log("Chat enabled");
+        EnableChat(true);
 
         // Allow skill usage for X Seconds
         for ( int i = 0; i < PhotonNetwork.PlayerList.Length; i++ )
@@ -162,13 +167,13 @@ public class MafiaGameFlow : MonoBehaviourPun
             Manager.Mafia.Houses[i].ActivateOutline(true);
         }
 
-        yield return timer.StartTimer(20);
+        yield return timer.StartTimer(time);
         
         foreach ( var house in Manager.Mafia.Houses )
         {
             house.ActivateOutline(false);
         }
-        
-        Debug.Log("Chat disabled");
+
+        EnableChat(false);
     }
 }

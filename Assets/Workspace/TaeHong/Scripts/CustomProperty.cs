@@ -12,6 +12,7 @@ public static class CustomProperty
     public const string GAMESTARTTIME = "GameStartTime";
     public const string GAMEMODE = "GameMode";
     public const string PLAYERROLE = "PlayerRole";
+    public const string MAFIAROLELIST = "MafiaRoleList";
     
     public static bool GetReady(this Player player)
     {
@@ -89,6 +90,21 @@ public static class CustomProperty
         
         if ( setPropertyToLobby )
             room.CustomRoomPropertiesForLobby = new string [] { GAMEMODE };
+    }
+
+    // Mafia Player Role List
+    public static int[] GetMafiaRoleList(this Room room)
+    {
+        PhotonHashtable properties = room.CustomProperties;
+        if (properties.ContainsKey(MAFIAROLELIST))
+            return (int[]) properties[MAFIAROLELIST];
+        return null;
+    }
+
+    public static void SetMafiaRoleList(this Room room, int[] value)
+    {
+        PhotonHashtable properties = new PhotonHashtable { { MAFIAROLELIST, value } };
+        room.SetCustomProperties(properties);
     }
 
     // Player Role

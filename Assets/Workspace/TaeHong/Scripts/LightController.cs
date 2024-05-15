@@ -16,9 +16,9 @@ namespace Tae
             transform.rotation = Quaternion.Euler(dayRotation);
         }
 
-        public IEnumerator ChangePhase(bool isDay)
+        public IEnumerator ChangePhase()
         {
-            return (isDay
+            return (Manager.Mafia.IsDay
                 ? ChangePhaseRoutine(dayRotation, nightRotation)
                 : ChangePhaseRoutine(nightRotation, dayRotation));
         }

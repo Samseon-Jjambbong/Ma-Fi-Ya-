@@ -90,11 +90,6 @@ public class MafiaPunManager : MonoBehaviourPunCallbacks
     public void GameStart()
     {
         SpawnPlayer();
-
-        if (PhotonNetwork.IsMasterClient ) 
-        {
-
-        }
     }
 
     private void SpawnPlayer()

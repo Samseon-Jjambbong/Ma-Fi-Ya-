@@ -37,7 +37,7 @@ public class MafiaPlayer : MonoBehaviourPun
     }
 
     // 플레이어 각 역할에 따른 스킬
-    protected virtual void UseSkill( MafiaPlayer targetPlayer )
+    protected virtual void UseSkill( int targetPlayer )
     {
         if ( !canUseSkill )
         {

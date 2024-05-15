@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Tae;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -11,6 +12,7 @@ public class MafiaGameFlow : MonoBehaviourPun
     [SerializeField] private GameTimer timer;
     [SerializeField] private LightController lightController;
     [SerializeField] private GameObject roleUI;
+    [SerializeField] private TextMeshProUGUI resultsText;
 
     private void Start()
     {
@@ -21,9 +23,11 @@ public class MafiaGameFlow : MonoBehaviourPun
     public void TestGameFlow()
     {
         Manager.Mafia.IsDay = true;
-        StartCoroutine(GameFlow());
+        StartCoroutine(DebugGameFlow());
     }
 
+    #region RPCs
+    // 1. Display roles to each player
     [PunRPC]
     public void DisplayRole(int time)
     {
@@ -61,13 +65,16 @@ public class MafiaGameFlow : MonoBehaviourPun
         StartCoroutine(DayRoutine(time));
     }
 
-    public void StartGameFlow()
+    [PunRPC]
+    public void ShowResults()
     {
-        Manager.Mafia.IsDay = true;
-        StartCoroutine(GameFlow());
+        StartCoroutine(ShowResultsRoutine());
     }
 
-    IEnumerator GameFlow()
+    #endregion
+
+    #region Coroutines
+    IEnumerator DebugGameFlow()
     {
         // Delay
         yield return new WaitForSeconds(1);
@@ -176,4 +183,10 @@ public class MafiaGameFlow : MonoBehaviourPun
 
         EnableChat(false);
     }
+
+    private IEnumerator ShowResultsRoutine()
+    {
+        yield return null;
+    }
+    #endregion
 }

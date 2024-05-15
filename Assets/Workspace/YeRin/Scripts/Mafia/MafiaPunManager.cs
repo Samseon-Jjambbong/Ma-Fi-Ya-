@@ -121,36 +121,29 @@ public class MafiaPunManager : MonoBehaviourPunCallbacks
         photonView.RPC("DisplayRole", RpcTarget.All, displayRoleTime);
         yield return new WaitForSeconds(displayRoleTime);
 
-        // Delay
-        yield return new WaitForSeconds(1);
 
-        // Day Phase
-        photonView.RPC("EnableChat", RpcTarget.All, true);
-        yield return new WaitForSeconds(voteTime);
-        photonView.RPC("EnableChat", RpcTarget.All, false);
+        while (true)
+        {
+            // Day Phase
+            photonView.RPC("EnableChat", RpcTarget.All, true);
+            yield return new WaitForSeconds(voteTime);
+            photonView.RPC("EnableChat", RpcTarget.All, false);
 
-        // Delay
-        yield return new WaitForSeconds(1);
+            // Change to night
+            photonView.RPC("ChangeTime", RpcTarget.All);
+            yield return new WaitForSeconds(1);
 
-        // Change to night
-        photonView.RPC("ChangeTime", RpcTarget.All);
-        yield return new WaitForSeconds(1);
+            // Allow role usage
+            photonView.RPC("AllowActions", RpcTarget.All, skillTime);
+            yield return new WaitForSeconds(skillTime);
 
-        // Allow role usage
-        photonView.RPC("AllowActions", RpcTarget.All, skillTime);
-        yield return new WaitForSeconds(skillTime);
+            // Change to day
+            photonView.RPC("ChangeTime", RpcTarget.All);
 
-        // Delay
-        yield return new WaitForSeconds(1);
-
-        // Change to day
-        photonView.RPC("ChangeTime", RpcTarget.All);
-
-        // Delay
-        yield return new WaitForSeconds(1);
-
-        // Voting Phase
-        photonView.RPC("EnableVoting", RpcTarget.All, voteTime);
+            // Voting Phase
+            photonView.RPC("EnableVoting", RpcTarget.All, voteTime);
+        }
+        
     }
 
     private void SpawnPlayer()

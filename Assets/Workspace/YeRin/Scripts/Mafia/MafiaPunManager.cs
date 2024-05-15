@@ -15,12 +15,19 @@ public class MafiaPunManager : MonoBehaviourPunCallbacks
 
     [SerializeField] int palyerRadius;
     [SerializeField] int houseRadius;
+    [SerializeField] List<Color> colorList;
+
     private Dictionary<int, Player> playerDic;
 
     private void Start()
     {
         PhotonNetwork.LocalPlayer.SetLoaded(true);
         playerDic = PhotonNetwork.CurrentRoom.Players;
+
+        for (int i = 0; i < playerDic.Count; i++) 
+        {
+            colorList.Add(new Color(Random.value, Random.value, Random.value, 1f));
+        }
     }
 
     public override void OnPlayerPropertiesUpdate( Player targetPlayer, PhotonHashTable changedProps )

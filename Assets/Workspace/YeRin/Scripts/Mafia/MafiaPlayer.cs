@@ -34,6 +34,11 @@ public class MafiaPlayer : MonoBehaviourPun
     private void Start()
     {
         playerDic = PhotonNetwork.CurrentRoom.Players;
+
+        if ( PhotonNetwork.IsMasterClient )
+        {
+            photonView.RPC("SetColor", RpcTarget.MasterClient, Color.black.r, Color.black.g, Color.black.b);
+        }
     }
 
     // 플레이어 각 역할에 따른 스킬
@@ -73,5 +78,16 @@ public class MafiaPlayer : MonoBehaviourPun
     private void NickName( string nickName )
     {
         nickNameText.text = nickName;
+    }
+    [PunRPC]
+    private void SetColor(float r, float g, float b)
+    {
+        if (PhotonNetwork.IsMasterClient)
+        {
+            GetComponentInChildren<Renderer>().material.color = new Color(Random.value, Random.value, Random.value, 1f);
+            Color color = GetComponentInChildren<Renderer>().material.color;
+            photonView.RPC("SetColor", RpcTarget.Others, color.r, color.g, color.b);
+        }
+        GetComponentInChildren<Renderer>().material.color = new Color(r, g, b, 1f);
     }
 }

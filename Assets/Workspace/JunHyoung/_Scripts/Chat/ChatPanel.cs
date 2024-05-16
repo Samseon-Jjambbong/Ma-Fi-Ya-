@@ -8,21 +8,21 @@ using UnityEngine.UI;
 
 public class ChatPanel : MonoBehaviour, IChatClientListener
 {
-    [SerializeField] ChatEntry chatEntry;
-    [SerializeField] Transform contents;
+    [SerializeField] protected ChatEntry chatEntry;
+    [SerializeField] protected Transform contents;
 
-    [SerializeField] TMP_InputField inputField;
-    [SerializeField] Button buttonSend;
+    [SerializeField] protected TMP_InputField inputField;
+    [SerializeField] protected Button buttonSend;
 
-    ChatClient chatClient;
-    string curChannelName;
+    protected ChatClient chatClient;
+    protected string curChannelName;
 
 
     /******************************************************
     *                    Unity Events
     ******************************************************/
     #region Unity Events
-    void Start()
+    protected virtual void  Start()
     {
         PhotonPeer.RegisterType(typeof(ChatData), 100, ChatData.Serialize, ChatData.Deserialize);
 
@@ -30,7 +30,7 @@ public class ChatPanel : MonoBehaviour, IChatClientListener
         inputField.onSubmit.AddListener(SendMessage);
     }
 
-    void OnEnable()
+    protected virtual void OnEnable()
     {
         chatClient = new ChatClient(this);
         chatClient.AuthValues = new AuthenticationValues(PhotonNetwork.LocalPlayer.NickName);
@@ -80,7 +80,7 @@ public class ChatPanel : MonoBehaviour, IChatClientListener
         inputField.ActivateInputField();
     }
 
-    private new void SendMessage( string message ) // InputField 에서 Enter 시
+    protected new virtual void SendMessage( string message ) // InputField 에서 Enter 시
     {
         if ( string.IsNullOrEmpty(message) )
             return;

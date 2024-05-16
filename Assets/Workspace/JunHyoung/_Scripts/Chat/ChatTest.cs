@@ -1,6 +1,7 @@
 using ExitGames.Client.Photon;
 using ExitGames.Client.Photon.StructWrapping;
 using Photon.Chat;
+using Photon.Chat.Demo;
 using Photon.Pun;
 using TMPro;
 using UnityEngine;
@@ -21,14 +22,23 @@ public class ChatTest : MonoBehaviour, IChatClientListener
     void Start()
     {
         buttonSend.onClick.AddListener(SendMessage);
+        inputField.onSubmit.AddListener(SendMessage);
     }
 
     void OnEnable()
     {
-        chatClient = new ChatClient(this);  
+       // ChatAppSettings.Instance.AppID;
+        chatClient = new ChatClient(this);
+        chatClient.AuthValues = new AuthenticationValues(PhotonNetwork.LocalPlayer.NickName);
+        chatClient.ConnectUsingSettings(PhotonNetwork.PhotonServerSettings.AppSettings.GetChatSettings());
         curChannelName = PhotonNetwork.CurrentRoom.Name; //채팅 채널을 로비-룸 상태랑 게임중일 때 상태랑 구분지어야 하는지 확인해 볼것.
-        //chatClient.Connect("AppID","AppVersion", new AuthenticationValues(PhotonNetwork.LocalPlayer.NickName));
-        chatClient.Subscribe(curChannelName);
+    }
+
+    void OnDisable()
+    {
+        if ( chatClient == null )
+            return;
+        chatClient.Disconnect();
     }
 
     void Update()
@@ -38,33 +48,44 @@ public class ChatTest : MonoBehaviour, IChatClientListener
         chatClient.Service();
     }
 
-    void SendMessage()
+    private void SendMessage()
     {
         if ( string.IsNullOrEmpty(inputField.text) )
             return;
 
         chatClient.PublishMessage(curChannelName, inputField.text);
         inputField.text = "";
+        inputField.ActivateInputField();
+    }
+
+    private new void SendMessage(string message )
+    {
+        if ( string.IsNullOrEmpty(message) )
+            return;
+
+        chatClient.PublishMessage(curChannelName, message);
+        inputField.text = "";
+        inputField.ActivateInputField();
     }
 
     void IChatClientListener.DebugReturn( DebugLevel level, string message )
     {
-        throw new System.NotImplementedException();
+        Debug.Log(message);
     }
 
     void IChatClientListener.OnChatStateChange( ChatState state )
     {
-        throw new System.NotImplementedException();
+        Debug.Log($"[ChatState : {state}]");
     }
 
     void IChatClientListener.OnConnected()
     {
-        throw new System.NotImplementedException();
+        chatClient.Subscribe(curChannelName);
     }
 
     void IChatClientListener.OnDisconnected()
     {
-        throw new System.NotImplementedException();
+        Debug.Log("Chat Disconnected");
     }
 
     void IChatClientListener.OnGetMessages( string channelName, string [] senders, object [] messages )
@@ -97,7 +118,8 @@ public class ChatTest : MonoBehaviour, IChatClientListener
     void IChatClientListener.OnSubscribed( string [] channels, bool [] results )
     {
         //내가 채널 입장시
-        throw new System.NotImplementedException();
+
+        Debug.Log("Subscribed Channels");
     }
 
     void IChatClientListener.OnUnsubscribed( string [] channels )

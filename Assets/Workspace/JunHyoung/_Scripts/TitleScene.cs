@@ -1,18 +1,16 @@
 using LoginSystem;
 using Photon.Pun;
 using Photon.Realtime;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class TitleScene : MonoBehaviour
 {
     [SerializeField] TitleCanvas titleCanvas;
     [SerializeField] LoginManager loginCanvas;
-    [SerializeField] LobbyManager lobbyCanvas; 
+    [SerializeField] LobbyManager lobbyCanvas;
     private void Awake()
     {
-        if( PhotonNetwork.NetworkClientState == ClientState.Leaving || PhotonNetwork.NetworkClientState == ClientState.Joined )
+        if ( PhotonNetwork.NetworkClientState == ClientState.Leaving || PhotonNetwork.NetworkClientState == ClientState.Joined )
         {
             ActiveLobby();
             return;
@@ -30,6 +28,7 @@ public class TitleScene : MonoBehaviour
 
     private void ActiveLobby()
     {
+        VCamController.Instance.SetVCam(VCamController.VCam.Lobby);
         titleCanvas.gameObject.SetActive(false);
         loginCanvas.gameObject.SetActive(false);
         lobbyCanvas.gameObject.SetActive(true);

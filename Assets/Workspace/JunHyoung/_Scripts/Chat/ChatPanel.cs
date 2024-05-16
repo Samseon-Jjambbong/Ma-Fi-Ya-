@@ -109,7 +109,8 @@ public class ChatPanel : MonoBehaviour, IChatClientListener
     void IChatClientListener.OnConnected()
     {
         // PublishSubscribers = true 가 아니면 OnuserSubscribe 가 콜백되지 않음
-        chatClient.Subscribe(curChannelName, 0, -1, new ChannelCreationOptions() { PublishSubscribers = true, MaxSubscribers = PhotonNetwork.CurrentRoom.MaxPlayers });
+        chatClient.Subscribe(curChannelName, 0, -1, 
+            new ChannelCreationOptions() { PublishSubscribers = true, MaxSubscribers = PhotonNetwork.CurrentRoom.MaxPlayers });
     }
 
     void IChatClientListener.OnDisconnected()

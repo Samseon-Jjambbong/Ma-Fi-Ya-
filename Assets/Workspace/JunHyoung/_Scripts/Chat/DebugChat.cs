@@ -11,7 +11,7 @@ public class DebugChat : MonoBehaviourPunCallbacks
     [SerializeField]  string USERNAME ;
     [SerializeField]  string ROOMNAME ;
 
-    [SerializeField] ChatTest test;
+   
     private void Awake()
     {
         if ( PhotonNetwork.NetworkingClient.LoadBalancingPeer.PeerState != PeerStateValue.Disconnected ) // 접속중이 아닐 때만 로그인
@@ -26,11 +26,6 @@ public class DebugChat : MonoBehaviourPunCallbacks
     {
         RoomOptions options = new RoomOptions { MaxPlayers = 8 };
         options.SetGameMode(GameMode.Mafia, true);
-        PhotonNetwork.JoinRandomOrCreateRoom(roomName: ROOMNAME, roomOptions: options);
-    }
-
-    public override void OnJoinedRoom()
-    {
-        test.enabled= true;
+        PhotonNetwork.CreateRoom(roomName: ROOMNAME, roomOptions: options);
     }
 }

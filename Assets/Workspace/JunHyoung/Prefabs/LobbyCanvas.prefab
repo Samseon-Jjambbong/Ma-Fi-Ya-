@@ -5904,6 +5904,7 @@ GameObject:
   - component: {fileID: 173353676447567623}
   - component: {fileID: 7511864499882437175}
   - component: {fileID: 3532157039295171916}
+  - component: {fileID: 6061106131226853951}
   m_Layer: 5
   m_Name: Chat Panel
   m_TagString: Untagged
@@ -5997,6 +5998,23 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &6061106131226853951
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3931103145355190778}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54d3246cbd837d84c905df7dcfed3afc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  chatEntry: {fileID: 5421346314347557905, guid: a998f93255ee6a9419a173a6a5388b1e,
+    type: 3}
+  contents: {fileID: 6494479598673729112}
+  inputField: {fileID: 2168991631922776364}
+  buttonSend: {fileID: 8194538974548368567}
 --- !u!1 &3978297197859127432
 GameObject:
   m_ObjectHideFlags: 0

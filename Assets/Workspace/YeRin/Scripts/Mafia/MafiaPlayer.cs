@@ -19,6 +19,8 @@ public class MafiaPlayer : MonoBehaviourPun
     [SerializeField] Rigidbody rigid;
     [SerializeField] Animator animator;
 
+    [SerializeField] AudioSource walkAudio;
+
     [SerializeField] float movePower;
     [SerializeField] float maxSpeed;
     [SerializeField] float rotateSpeed;
@@ -48,10 +50,12 @@ public class MafiaPlayer : MonoBehaviourPun
     {
         playerDic = PhotonNetwork.CurrentRoom.Players;
 
+
         if ( PhotonNetwork.IsMasterClient )
         {
             photonView.RPC("SetColor", RpcTarget.MasterClient, Color.black.r, Color.black.g, Color.black.b);
         }
+        walkAudio.Stop();
     }
 
     private void FixedUpdate()
@@ -158,11 +162,15 @@ public class MafiaPlayer : MonoBehaviourPun
         {
             animator.Play("Walk");
             isWalking = true;
+
+            walkAudio.Play();
         }
         else
         {
             animator.Play("Idle");
             isWalking = false;
+
+            walkAudio.Stop();
         }
     }
 

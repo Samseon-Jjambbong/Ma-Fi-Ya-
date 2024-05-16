@@ -9,12 +9,14 @@ public class RoleUI : BaseUI
 {
     [SerializeField] MafiaRoleDataSO dataSO;
 
+
     private void OnEnable()
     {
         MafiaRole playerRole = PhotonNetwork.LocalPlayer.GetPlayerRole();
         MafiaRoleData data = dataSO.GetData(playerRole);
         Debug.Log(playerRole);
+
         GetUI<Image>("RoleIcon").sprite = data.roleIcon;
-        GetUI<TextMeshProUGUI>("RoleName").text = $"Your Role Is : {data.roleName}";
+        GetUI<TextMeshProUGUI>("RoleName").text = data.roleName;
     }
 }

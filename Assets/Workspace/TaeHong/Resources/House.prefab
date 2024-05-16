@@ -979,7 +979,8 @@ MonoBehaviour:
   voteUI: {fileID: 965939242096875593}
   outline: {fileID: 7400318162097117840}
   houseOwner: {fileID: 0}
-  debugMode: 1
+  houseOwnerId: 0
+  debugMode: 0
 --- !u!114 &7400318162097117840
 MonoBehaviour:
   m_ObjectHideFlags: 0

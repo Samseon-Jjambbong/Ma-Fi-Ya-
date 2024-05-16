@@ -25,29 +25,25 @@ public class MafiaPlayer : MonoBehaviourPun
     [SerializeField] float maxSpeed;
     [SerializeField] float rotateSpeed;
 
-    // 플레이어 직업 진형
-    private bool isMafia;
-    public bool IsMafia { get { return isMafia; } set { isMafia = value; } }
-
     // 플레이어의 생존 여부
     private bool isAlive = true;
     public bool IsAlive { get { return isAlive; } }
 
-    private bool isHealed;
-    public bool IsHealed { get { return isHealed; } set { isHealed = value; } }
-
-    private bool canUseSkill;
-    public bool CanUseSkill { get { return canUseSkill; } set { canUseSkill = value; } }
-
     private Dictionary<int, Player> playerDic;
 
+    // Tae Player Logic
+    public MafiaActionType actionType;
+    public int targetPlayerID;
+    public MafiaActionPQ actionsOnThisPlayer = new MafiaActionPQ();
+    
     private Vector3 moveDir;
     private float currentSpeed;
 
     private bool isWalking;
 
-    private void Start()
+    protected virtual void Start()
     {
+        // 플레이어 역할 받기
         playerDic = PhotonNetwork.CurrentRoom.Players;
 
 
@@ -74,22 +70,46 @@ public class MafiaPlayer : MonoBehaviourPun
         }
     }
 
-    // 플레이어 각 역할에 따른 스킬
-    protected virtual void UseSkill( int targetPlayer )
+    public MafiaRole GetRole()
     {
-        if ( !canUseSkill )
+        return PhotonNetwork.LocalPlayer.GetPlayerRole();
+    }
+
+    [PunRPC]
+    public void ShowNightResults()
+    {
+        Debug.Log($"Player{PhotonNetwork.LocalPlayer.ActorNumber} Results. Count: {actionsOnThisPlayer.Count}");
+        while(actionsOnThisPlayer.Count > 0)
         {
-            return;
+            MafiaAction action = actionsOnThisPlayer.Dequeue();
+            Debug.Log($"Action on this player: {action.actionType}");
         }
     }
 
-    IEnumerator SKillTime()
+    #region Game Logic
+    [PunRPC]
+    public void OnChooseTarget(int[] serialized)
     {
-        canUseSkill = true;
-        yield return new WaitForSeconds(Manager.Mafia.SkillTime);
-        canUseSkill = false;
-    }
+        // Deserialize Action
+        MafiaAction action = new MafiaAction(serialized);
+        Debug.Log($"sender: {action.sender}");
+        Debug.Log($"receiver: {action.receiver}");
+        Debug.Log($"action: {action.actionType}");
 
+        if(PhotonNetwork.LocalPlayer.ActorNumber == action.sender)
+        {
+            targetPlayerID = action.receiver;
+            Debug.Log($"{GetRole()} targeted Player{targetPlayerID}");
+        }
+        if(PhotonNetwork.LocalPlayer.ActorNumber == action.receiver)
+        {
+            actionsOnThisPlayer.Enqueue(action);
+            Debug.Log($"{action.receiver} got {action.actionType}ed");
+        }
+    }
+    #endregion
+
+    #region Photon
     public void SetPlayerHouse( int playerNumber )
     {
         photonView.RPC("AddHouseList", RpcTarget.All, playerNumber);
@@ -195,7 +215,7 @@ public class MafiaPlayer : MonoBehaviourPun
     [PunRPC]
     private void AddHouseList( int playerNumber )
     {
-        Manager.Mafia.Houses [playerNumber].HouswOwner = this;
+        Manager.Mafia.Houses [playerNumber].HouseOwner = this;
     }
 
     public void SetNickName(string nickName)
@@ -208,6 +228,8 @@ public class MafiaPlayer : MonoBehaviourPun
     {
         nickNameText.text = nickName;
     }
+    #endregion
+    
     [PunRPC]
     private void SetColor(float r, float g, float b)
     {

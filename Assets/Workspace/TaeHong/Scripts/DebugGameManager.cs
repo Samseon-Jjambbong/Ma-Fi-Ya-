@@ -13,16 +13,19 @@ namespace Tae
     public class DebugGameManager : MonoBehaviourPunCallbacks
     {
         [SerializeField] private string debugRoomName;
-        [SerializeField] int radius;    // 21이 가장 이상적
-        
+        [SerializeField] int radius = 21;
+
+        [Header("Scene Setup")]
         private List<House> houses;
         [SerializeField] private int playerCount = 4;
         [SerializeField] private GameObject housePrefab;
 
+        [Header("Game Logic")]
         [SerializeField] MafiaRolesSO mafiaRolesSO;
         private MafiaRole[] roles;
         private MafiaGame game = new MafiaGame();
         
+
         private void Start()
         {
             PhotonNetwork.LocalPlayer.NickName = $"TestPlayer {Random.Range(1000, 10000)}";
@@ -118,8 +121,6 @@ namespace Tae
                 SpawnHouses(); // Spawn {PlayerCount} Houses
                 //SpawnPlayers();
                 SpawnPlayer();
-
-                GetComponent<MafiaGameFlow>().TestGameFlow();
             }
         }
 

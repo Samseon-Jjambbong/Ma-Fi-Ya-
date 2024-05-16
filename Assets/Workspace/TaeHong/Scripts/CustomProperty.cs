@@ -12,6 +12,8 @@ public static class CustomProperty
     public const string GAMESTARTTIME = "GameStartTime";
     public const string GAMEMODE = "GameMode";
     public const string PLAYERROLE = "PlayerRole";
+    public const string MAFIAROLELIST = "MafiaRoleList";
+    public const string PLAYERCOLOR = "PlayerColor";
     
     public static bool GetReady(this Player player)
     {
@@ -91,6 +93,21 @@ public static class CustomProperty
             room.CustomRoomPropertiesForLobby = new string [] { GAMEMODE };
     }
 
+    // Mafia Player Role List
+    public static int[] GetMafiaRoleList(this Room room)
+    {
+        PhotonHashtable properties = room.CustomProperties;
+        if (properties.ContainsKey(MAFIAROLELIST))
+            return (int[]) properties[MAFIAROLELIST];
+        return null;
+    }
+
+    public static void SetMafiaRoleList(this Room room, int[] value)
+    {
+        PhotonHashtable properties = new PhotonHashtable { { MAFIAROLELIST, value } };
+        room.SetCustomProperties(properties);
+    }
+
     // Player Role
     public static MafiaRole GetPlayerRole(this Player player)
     {
@@ -103,6 +120,21 @@ public static class CustomProperty
     public static void SetPlayerRole(this Player player, MafiaRole value)
     {
         PhotonHashtable properties = new PhotonHashtable { { PLAYERROLE, value } };
+        player.SetCustomProperties(properties);
+    }
+
+    // Player Color
+    public static Color GetPlayerColor(this Player player)
+    {
+        PhotonHashtable properties = player.CustomProperties;
+        if (properties.ContainsKey(PLAYERCOLOR))
+            return (Color) properties[PLAYERCOLOR];
+        return Color.white;
+    }
+
+    public static void SetPlayerColor(this Player player, Color value)
+    {
+        PhotonHashtable properties = new PhotonHashtable { { PLAYERCOLOR, value } };
         player.SetCustomProperties(properties);
     }
 }

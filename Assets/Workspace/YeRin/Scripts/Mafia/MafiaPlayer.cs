@@ -5,6 +5,7 @@ using Photon.Pun;
 using Photon.Pun.Demo.PunBasics;
 using Photon.Realtime;
 using TMPro;
+using UnityEngine.InputSystem;
 
 /// <summary>
 /// programmer : Yerin, TaeHong
@@ -14,6 +15,12 @@ using TMPro;
 public class MafiaPlayer : MonoBehaviourPun
 {
     [SerializeField] TMP_Text nickNameText;
+    [SerializeField] Rigidbody rigid;
+    [SerializeField] Animator animator;
+
+    [SerializeField] float movePower;
+    [SerializeField] float maxSpeed;
+    [SerializeField] float rotateSpeed;
 
     // 플레이어 직업 진형
     private bool isMafia;
@@ -31,6 +38,11 @@ public class MafiaPlayer : MonoBehaviourPun
 
     private Dictionary<int, Player> playerDic;
 
+    private Vector3 moveDir;
+    private float currentSpeed;
+
+    private bool isWalking;
+
     private void Start()
     {
         playerDic = PhotonNetwork.CurrentRoom.Players;
@@ -38,6 +50,22 @@ public class MafiaPlayer : MonoBehaviourPun
         if ( PhotonNetwork.IsMasterClient )
         {
             photonView.RPC("SetColor", RpcTarget.MasterClient, Color.black.r, Color.black.g, Color.black.b);
+        }
+    }
+
+    private void FixedUpdate()
+    {
+        if (photonView.IsMine)
+        {
+            Accelate();
+        }
+    }
+
+    private void Update()
+    {
+        if (photonView.IsMine)
+        {
+            Rotate();
         }
     }
 
@@ -61,6 +89,46 @@ public class MafiaPlayer : MonoBehaviourPun
     {
         photonView.RPC("AddHouseList", RpcTarget.All, playerNumber);
         Manager.Mafia.Houses [playerNumber].ActivateOutline(false);
+    }
+
+    private void OnMove( InputValue value )
+    {
+        moveDir.x = value.Get<Vector2>().x;
+        moveDir.z = value.Get<Vector2>().y;
+
+        if (photonView.IsMine)
+        {
+            animator.Play("Walk");
+        }
+
+    }
+
+    private void Accelate()
+    {
+        if ( moveDir.x == 0 && moveDir.z == 0 )
+        {
+            animator.Play("Idle");
+        }
+
+        if (moveDir.z < 0)
+        {
+            rigid.AddForce(moveDir.z * transform.forward * (movePower + 100f), ForceMode.Force);
+        }
+        else
+        {
+            rigid.AddForce(moveDir.z * transform.forward * movePower, ForceMode.Force);
+        }
+
+        if ( rigid.velocity.sqrMagnitude > maxSpeed * maxSpeed )
+        {
+            rigid.velocity = rigid.velocity.normalized * maxSpeed;
+        }
+        currentSpeed = rigid.velocity.magnitude;
+    }
+
+    private void Rotate()
+    {
+        transform.Rotate(Vector3.up, moveDir.x * rotateSpeed * Time.deltaTime);
     }
 
     [PunRPC]

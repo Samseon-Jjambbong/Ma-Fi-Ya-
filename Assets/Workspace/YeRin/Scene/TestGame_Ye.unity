@@ -2667,6 +2667,7 @@ MonoBehaviour:
   CountDownTime: 3
   palyerRadius: 15
   houseRadius: 21
+  colorList: []
 --- !u!114 &1424524250
 MonoBehaviour:
   m_ObjectHideFlags: 0

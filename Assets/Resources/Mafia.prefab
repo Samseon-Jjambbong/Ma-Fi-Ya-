@@ -779,6 +779,7 @@ GameObject:
   - component: {fileID: 7305491169462980883}
   - component: {fileID: 6894020868629885600}
   - component: {fileID: 6834158331033250613}
+  - component: {fileID: -3842724560825231083}
   m_Layer: 0
   m_Name: Mafia
   m_TagString: Untagged
@@ -864,6 +865,7 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 6894020868629885600}
   - {fileID: 6834158331033250613}
+  - {fileID: -3842724560825231083}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -957,6 +959,36 @@ MonoBehaviour:
   m_SynchronizeAngularVelocity: 0
   m_TeleportEnabled: 0
   m_TeleportIfDistanceGreaterThan: 3
+--- !u!114 &-3842724560825231083
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5130084855338310416}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b8c4a61274f60b4ea5fb4299cfdbf14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowLayerWeightsInspector: 1
+  ShowParameterInspector: 1
+  m_SynchronizeParameters:
+  - Type: 9
+    SynchronizeType: 1
+    Name: hipHop
+  - Type: 9
+    SynchronizeType: 1
+    Name: silly
+  - Type: 9
+    SynchronizeType: 1
+    Name: rumba
+  - Type: 9
+    SynchronizeType: 1
+    Name: walk
+  m_SynchronizeLayers:
+  - SynchronizeType: 0
+    LayerIndex: 0
 --- !u!1 &5507819949779788475
 GameObject:
   m_ObjectHideFlags: 0

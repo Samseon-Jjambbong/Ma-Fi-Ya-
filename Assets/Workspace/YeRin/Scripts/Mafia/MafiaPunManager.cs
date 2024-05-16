@@ -123,6 +123,11 @@ public class MafiaPunManager : MonoBehaviourPunCallbacks
 
         int currentAngle = 180 - angle * playerNumber;
 
+        if (playerNumber == playerDic.Count - 1)
+        {
+            currentAngle = 0;
+        }
+
         // 순번에 맞는 플레이어의 위치 설정
         Vector3 pos = new Vector3(Mathf.Cos(currentAngle * Mathf.Deg2Rad) * palyerRadius, 2.22f, Mathf.Sin(currentAngle * Mathf.Deg2Rad) * palyerRadius);
         // PhotonNetwork.Instantiate를 통해 각 플레이어 캐릭터 생성, 센터를 바라보도록 rotation 설정
@@ -138,6 +143,11 @@ public class MafiaPunManager : MonoBehaviourPunCallbacks
         int currentAngle = 180;
         for ( int i = 0; i < Manager.Mafia.PlayerCount; i++ )
         {
+            if (i == Manager.Mafia.PlayerCount - 1)
+            {
+                currentAngle = 0;
+            }
+
             Vector3 pos = new Vector3(Mathf.Cos(currentAngle * Mathf.Deg2Rad) * houseRadius, 1.8f, Mathf.Sin(currentAngle * Mathf.Deg2Rad) * houseRadius);
             GameObject houseGO = PhotonNetwork.InstantiateRoomObject("House", pos, Quaternion.LookRotation(pos));
 

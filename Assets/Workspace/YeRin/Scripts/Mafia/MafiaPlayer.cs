@@ -6,6 +6,7 @@ using Photon.Pun.Demo.PunBasics;
 using Photon.Realtime;
 using TMPro;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 /// <summary>
 /// programmer : Yerin, TaeHong
@@ -55,7 +56,7 @@ public class MafiaPlayer : MonoBehaviourPun
 
     private void FixedUpdate()
     {
-        if (photonView.IsMine)
+        if ( photonView.IsMine )
         {
             Accelate();
         }
@@ -63,7 +64,7 @@ public class MafiaPlayer : MonoBehaviourPun
 
     private void Update()
     {
-        if (photonView.IsMine)
+        if ( photonView.IsMine )
         {
             Rotate();
         }
@@ -96,18 +97,17 @@ public class MafiaPlayer : MonoBehaviourPun
         moveDir.x = value.Get<Vector2>().x;
         moveDir.z = value.Get<Vector2>().y;
 
-        if (photonView.IsMine)
+        if ( photonView.IsMine )
         {
-            animator.Play("Walk");
+            photonView.RPC("Walk", RpcTarget.All);
         }
-
     }
 
     private void Accelate()
     {
-        if ( moveDir.x == 0 && moveDir.z == 0 )
+        if ( moveDir.x == 0 && moveDir.z == 0 && isWalking )
         {
-            animator.Play("Idle");
+            photonView.RPC("Walk", RpcTarget.All);
         }
 
         if (moveDir.z < 0)
@@ -129,6 +129,59 @@ public class MafiaPlayer : MonoBehaviourPun
     private void Rotate()
     {
         transform.Rotate(Vector3.up, moveDir.x * rotateSpeed * Time.deltaTime);
+    }
+
+    [PunRPC]
+    private void OnHipHopDance( InputValue value)
+    {
+        if ( photonView.IsMine )
+            photonView.RPC("HipHop", RpcTarget.All);
+    }
+
+    [PunRPC]
+    private void OnRumbaDance( InputValue value )
+    {
+        if ( photonView.IsMine )
+            photonView.RPC("Rumba", RpcTarget.All);
+    }
+
+    private void OnSillyDance( InputValue value )
+    {
+        if ( photonView.IsMine )
+            photonView.RPC("Silly", RpcTarget.All);
+    }
+
+    [PunRPC]
+    private void Walk()
+    {
+        if (!isWalking)
+        {
+            animator.Play("Walk");
+            isWalking = true;
+        }
+        else
+        {
+            animator.Play("Idle");
+            isWalking = false;
+        }
+    }
+
+    [PunRPC]
+    private void HipHop()
+    {
+        animator.SetTrigger("hipHop");
+    }
+
+    [PunRPC]
+    private void Rumba()
+    {
+        animator.SetTrigger("rumba");
+    }
+
+    [PunRPC]
+    private void Silly()
+    {
+        animator.SetTrigger("silly");
     }
 
     [PunRPC]

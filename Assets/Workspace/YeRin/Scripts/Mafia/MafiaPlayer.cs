@@ -75,6 +75,11 @@ public class MafiaPlayer : MonoBehaviourPun
         return PhotonNetwork.LocalPlayer.GetPlayerRole();
     }
 
+    public int GetPlayerId()
+    {
+        return PhotonNetwork.LocalPlayer.ActorNumber;
+    }
+
     [PunRPC]
     public void ShowNightResults()
     {

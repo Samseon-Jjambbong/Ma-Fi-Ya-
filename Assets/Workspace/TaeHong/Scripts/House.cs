@@ -33,10 +33,10 @@ public class House : MonoBehaviourPun, IPointerClickHandler, IPointerExitHandler
             ActivateOutline(true);
         }
 
-        if (PhotonNetwork.IsMasterClient)
-        {
-            photonView.RPC("AddList", RpcTarget.All);
-        }
+        //if (PhotonNetwork.IsMasterClient)
+        //{
+        //    photonView.RPC("AddList", RpcTarget.All);
+        //}
     }
 
     public void ChooseTarget()
@@ -100,8 +100,9 @@ public class House : MonoBehaviourPun, IPointerClickHandler, IPointerExitHandler
     }
 
     [PunRPC]
-    private void AddList()
+    private void AddHouse(int id)
     {
+        houseOwnerId = id;
         Manager.Mafia.Houses.Add(this);
     }
 

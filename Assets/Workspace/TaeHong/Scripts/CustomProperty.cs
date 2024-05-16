@@ -34,7 +34,6 @@ public static class CustomProperty
         PhotonHashtable properties = player.CustomProperties;
         if (properties.ContainsKey(LOAD))
         {
-            Debug.Log((bool)properties[LOAD]);
             return (bool)properties[LOAD];
         }
             

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 
 /// <summary>
@@ -12,12 +13,19 @@ public class NightMafiaMove : MonoBehaviour
 {
     [SerializeField] float moveSpeed;
     [SerializeField] GameObject target;
+
+    [SerializeField] AudioSource walkAudio;
     public GameObject Target { get { return target; } set { target = value; } }
 
     [SerializeField] Animator animator;
 
     private bool isActive;
-    public bool ISActive => isActive;
+    public bool IsActive => isActive;
+
+    private void Start()
+    {
+        walkAudio.Stop();
+    }
 
 
     Vector3 targetPos;
@@ -39,6 +47,7 @@ public class NightMafiaMove : MonoBehaviour
         transform.rotation = Quaternion.LookRotation(target.transform.position - transform.position).normalized;
 
         animator.Play("Walk");
+        walkAudio.Play();
 
         while ( transform.position != targetPos )
         {
@@ -47,6 +56,7 @@ public class NightMafiaMove : MonoBehaviour
         }
 
         animator.Play("Idle");
+        walkAudio.Stop();
     }
 
     public void MoveToTarget()

@@ -1508,6 +1508,18 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 07150abbb3b808b448a8c0c5f5a8dd63, type: 3}
+--- !u!114 &488533919 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3510769328292948240, guid: 07150abbb3b808b448a8c0c5f5a8dd63,
+    type: 3}
+  m_PrefabInstance: {fileID: 488533918}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &532383035
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2638,6 +2650,7 @@ MonoBehaviour:
   radius: 21
   playerCount: 4
   housePrefab: {fileID: 0}
+  mafiaRolesSO: {fileID: 0}
 --- !u!114 &1424524249
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2654,6 +2667,7 @@ MonoBehaviour:
   CountDownTime: 3
   palyerRadius: 15
   houseRadius: 21
+  colorList: []
 --- !u!114 &1424524250
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3547,6 +3561,84 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 2141810866}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &51632592581077148
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1431149641445412417, guid: 65d4b57782f2ec34cad60f4970171dc9,
+        type: 3}
+      propertyPath: m_Name
+      value: NightMafia
+      objectReference: {fileID: 0}
+    - target: {fileID: 1431149641445412417, guid: 65d4b57782f2ec34cad60f4970171dc9,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1565044775069587853, guid: 65d4b57782f2ec34cad60f4970171dc9,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 1565044775069587853, guid: 65d4b57782f2ec34cad60f4970171dc9,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.8652331
+      objectReference: {fileID: 0}
+    - target: {fileID: 1565044775069587853, guid: 65d4b57782f2ec34cad60f4970171dc9,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -1.02
+      objectReference: {fileID: 0}
+    - target: {fileID: 1565044775069587853, guid: 65d4b57782f2ec34cad60f4970171dc9,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1565044775069587853, guid: 65d4b57782f2ec34cad60f4970171dc9,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1565044775069587853, guid: 65d4b57782f2ec34cad60f4970171dc9,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1565044775069587853, guid: 65d4b57782f2ec34cad60f4970171dc9,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1565044775069587853, guid: 65d4b57782f2ec34cad60f4970171dc9,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1565044775069587853, guid: 65d4b57782f2ec34cad60f4970171dc9,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1565044775069587853, guid: 65d4b57782f2ec34cad60f4970171dc9,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5225641673451008545, guid: 65d4b57782f2ec34cad60f4970171dc9,
+        type: 3}
+      propertyPath: sceneViewId
+      value: 5
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 65d4b57782f2ec34cad60f4970171dc9, type: 3}
 --- !u!1001 &6010615310766972042
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3609,6 +3701,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: NightMafia
+      objectReference: {fileID: 0}
+    - target: {fileID: 3129244768410552692, guid: 7e1376be4a3f8da4e8439649cc4f8237,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5896712377539139787, guid: 7e1376be4a3f8da4e8439649cc4f8237,
         type: 3}
@@ -3698,6 +3795,89 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a83049f32d3e34d39a0a68aea11e2e63, type: 3}
+--- !u!1001 &7958754221121133303
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 3021741001469477318, guid: ed07dce0ff7f7b44688d78541024c3a8,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 6.76
+      objectReference: {fileID: 0}
+    - target: {fileID: 3021741001469477318, guid: ed07dce0ff7f7b44688d78541024c3a8,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.96
+      objectReference: {fileID: 0}
+    - target: {fileID: 3021741001469477318, guid: ed07dce0ff7f7b44688d78541024c3a8,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3021741001469477318, guid: ed07dce0ff7f7b44688d78541024c3a8,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3021741001469477318, guid: ed07dce0ff7f7b44688d78541024c3a8,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3021741001469477318, guid: ed07dce0ff7f7b44688d78541024c3a8,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3021741001469477318, guid: ed07dce0ff7f7b44688d78541024c3a8,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3021741001469477318, guid: ed07dce0ff7f7b44688d78541024c3a8,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3021741001469477318, guid: ed07dce0ff7f7b44688d78541024c3a8,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3021741001469477318, guid: ed07dce0ff7f7b44688d78541024c3a8,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5130084855338310416, guid: ed07dce0ff7f7b44688d78541024c3a8,
+        type: 3}
+      propertyPath: m_Name
+      value: Mafia
+      objectReference: {fileID: 0}
+    - target: {fileID: 5130084855338310416, guid: ed07dce0ff7f7b44688d78541024c3a8,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5948707589889229996, guid: ed07dce0ff7f7b44688d78541024c3a8,
+        type: 3}
+      propertyPath: sceneViewId
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 9023903253295200802, guid: ed07dce0ff7f7b44688d78541024c3a8,
+        type: 3}
+      propertyPath: nickNameText
+      value: 
+      objectReference: {fileID: 488533919}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: ed07dce0ff7f7b44688d78541024c3a8, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -3716,3 +3896,5 @@ SceneRoots:
   - {fileID: 1281374569}
   - {fileID: 6010615310766972042}
   - {fileID: 488533918}
+  - {fileID: 51632592581077148}
+  - {fileID: 7958754221121133303}

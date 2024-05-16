@@ -18,7 +18,7 @@ public class UseSkillButton : MonoBehaviourPun
 
         foreach ( NightMafiaMove player in players)
         {
-            if ( player.ISActive )
+            if ( player.IsActive )
             {
                 player.Target = house.gameObject;
                 player.MoveToTarget();

@@ -13,7 +13,7 @@ public static class CustomProperty
     public const string GAMEMODE = "GameMode";
     public const string PLAYERROLE = "PlayerRole";
     public const string MAFIAROLELIST = "MafiaRoleList";
-    public const string MAFIAPLAYERROLELIST = "";
+    public const string PLAYERCOLOR = "PlayerColor";
     
     public static bool GetReady(this Player player)
     {
@@ -120,6 +120,21 @@ public static class CustomProperty
     public static void SetPlayerRole(this Player player, MafiaRole value)
     {
         PhotonHashtable properties = new PhotonHashtable { { PLAYERROLE, value } };
+        player.SetCustomProperties(properties);
+    }
+
+    // Player Color
+    public static Color GetPlayerColor(this Player player)
+    {
+        PhotonHashtable properties = player.CustomProperties;
+        if (properties.ContainsKey(PLAYERCOLOR))
+            return (Color) properties[PLAYERCOLOR];
+        return Color.white;
+    }
+
+    public static void SetPlayerColor(this Player player, Color value)
+    {
+        PhotonHashtable properties = new PhotonHashtable { { PLAYERCOLOR, value } };
         player.SetCustomProperties(properties);
     }
 }

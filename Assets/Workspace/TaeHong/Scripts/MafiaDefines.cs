@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public enum MafiaActionType { Block, Kill, Heal }
 
@@ -8,26 +9,40 @@ public enum MafiaRole { Mafia, Doctor, Insane, Police }
 
 public struct MafiaAction
 {
-    private int sender;
-    private int receiver;
-    private MafiaActionType actionType;
+    public int sender;
+    public int receiver;
+    public MafiaActionType actionType;
 
-    public MafiaAction(int sender, int receiver, MafiaActionType action)
+    public MafiaAction(int sender, int receiver, MafiaActionType actionType)
     {
         this.sender = sender;
         this.receiver = receiver;
-        this.actionType = action;
+        this.actionType = actionType;
+    }
+
+    public MafiaAction(int[] serialized)
+    {
+        sender = serialized[0];
+        receiver = serialized[1];
+        actionType = (MafiaActionType)serialized[2];
     }
 
     public int GetActionPrio()
     {
         return (int) actionType;
     }
+
+    public int[] Serialize()
+    {
+        int[] serialized = { sender, receiver, (int) actionType };
+        return serialized;
+    }
 }
 
 public class MafiaActionPQ
 {
-    List<MafiaAction> actions;
+    private List<MafiaAction> actions = new List<MafiaAction>();
+    public int Count { get { return actions.Count; } }
 
     public void Enqueue(MafiaAction action)
     {

@@ -121,8 +121,6 @@ namespace Tae
                 SpawnHouses(); // Spawn {PlayerCount} Houses
                 //SpawnPlayers();
                 SpawnPlayer();
-
-                GetComponent<MafiaGameFlow>().TestGameFlow();
             }
         }
 

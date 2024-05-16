@@ -12,9 +12,4 @@ public class Doctor : MafiaPlayer
 
         actionType = MafiaActionType.Heal;
     }
-
-    protected override void UseSkill((int, int) info)
-    {
-        MafiaAction action = new MafiaAction(info.Item1, info.Item2, actionType);
-    }
 }

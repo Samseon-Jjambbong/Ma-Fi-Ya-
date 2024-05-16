@@ -21,26 +21,53 @@ public class MafiaPlayer : MonoBehaviourPun
 
     private Dictionary<int, Player> playerDic;
 
-    protected MafiaRole role;
-    protected MafiaActionType actionType;
-    private MafiaActionPQ actionsToShow = new MafiaActionPQ();
+    // Tae Player Logic
+    public MafiaActionType actionType;
+    public int targetPlayerID;
+    public MafiaActionPQ actionsOnThisPlayer = new MafiaActionPQ();
 
     protected virtual void Start()
     {
         // 플레이어 역할 받기
-        role = PhotonNetwork.LocalPlayer.GetPlayerRole();
         playerDic = PhotonNetwork.CurrentRoom.Players;
     }
 
-    #region Game Logic
-    private void OnEnable()
+    public MafiaRole GetRole()
     {
-        Manager.Event.pairEventDic["useSkill"].OnEventRaised += UseSkill;
+        return PhotonNetwork.LocalPlayer.GetPlayerRole();
     }
 
-    protected virtual void UseSkill((int, int) info)
+    [PunRPC]
+    public void ShowNightResults()
     {
-        //MafiaAction action = new MafiaAction(info.Item1, info.Item2, mafiaActionType);
+        Debug.Log($"Player{PhotonNetwork.LocalPlayer.ActorNumber} Results. Count: {actionsOnThisPlayer.Count}");
+        while(actionsOnThisPlayer.Count > 0)
+        {
+            MafiaAction action = actionsOnThisPlayer.Dequeue();
+            Debug.Log($"Action on this player: {action.actionType}");
+        }
+    }
+
+    #region Game Logic
+    [PunRPC]
+    public void OnChooseTarget(int[] serialized)
+    {
+        // Deserialize Action
+        MafiaAction action = new MafiaAction(serialized);
+        Debug.Log($"sender: {action.sender}");
+        Debug.Log($"receiver: {action.receiver}");
+        Debug.Log($"action: {action.actionType}");
+
+        if(PhotonNetwork.LocalPlayer.ActorNumber == action.sender)
+        {
+            targetPlayerID = action.receiver;
+            Debug.Log($"{GetRole()} targeted Player{targetPlayerID}");
+        }
+        if(PhotonNetwork.LocalPlayer.ActorNumber == action.receiver)
+        {
+            actionsOnThisPlayer.Enqueue(action);
+            Debug.Log($"{action.receiver} got {action.actionType}ed");
+        }
     }
     #endregion
 

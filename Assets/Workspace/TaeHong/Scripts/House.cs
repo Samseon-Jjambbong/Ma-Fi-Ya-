@@ -44,7 +44,10 @@ public class House : MonoBehaviourPun, IPointerClickHandler, IPointerExitHandler
         // Send information about who clicked on who's house
         int sender = PhotonNetwork.LocalPlayer.ActorNumber;
         int receiver = houseOwnerId;
-        Manager.Event.pairEventDic["useSkill"].RaiseEvent((sender, receiver));
+        MafiaActionType actionType = Manager.Mafia.Player.actionType;
+        MafiaAction action = new MafiaAction(sender, receiver, actionType);
+        Manager.Mafia.Player.photonView.RPC("OnChooseTarget", RpcTarget.All, action.Serialize());
+        //Manager.Event.pairEventDic["useSkill"].RaiseEvent((sender, receiver));
     }
 
     // What UI should be shown when a house is clicked
@@ -92,6 +95,8 @@ public class House : MonoBehaviourPun, IPointerClickHandler, IPointerExitHandler
 
             house.ActivateOutline(false);
         }
+
+        ChooseTarget();
     }
 
     [PunRPC]

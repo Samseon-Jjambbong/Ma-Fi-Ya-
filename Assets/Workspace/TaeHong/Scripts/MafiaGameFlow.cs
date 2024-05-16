@@ -17,36 +17,38 @@ public class MafiaGameFlow : MonoBehaviourPun
     private void Start()
     {
         Manager.Mafia.IsDay = true;
-        //StartCoroutine(GameFlow());
-    }
-
-    public void TestGameFlow()
-    {
-        Manager.Mafia.IsDay = true;
-        StartCoroutine(DebugGameFlow());
     }
 
     #region RPCs
-    // 1. Display roles to each player
     [PunRPC]
     public void DisplayRole(int time)
     {
         StartCoroutine(DisplayRoleRoutine(time));
     }
-    
+
     [PunRPC]
-    public void AllowActions(int time)
+    public void StartNightPhase(int time)
     {
-        StartCoroutine(NightRoutine(time));
+        StartCoroutine(NightPhaseRoutine(time));
     }
 
     [PunRPC]
+    public void ShowNightEvents()
+    {
+        StartCoroutine(ShowNightEventsRoutine());
+    }
+
+    [PunRPC]
+    public void StartDayPhase(int time)
+    {
+        StartCoroutine(DayPhaseRoutine(time));
+    }
+
     public void ChangeTime()
     {
         StartCoroutine(ChangeTimeOfDayRoutine());
     }
 
-    [PunRPC]
     public void EnableChat(bool enable)
     {
         if (enable)
@@ -59,51 +61,11 @@ public class MafiaGameFlow : MonoBehaviourPun
         }
     }
 
-    [PunRPC]
-    public void EnableVoting(int time)
-    {
-        StartCoroutine(DayRoutine(time));
-    }
-
-    [PunRPC]
-    public void ShowResults()
-    {
-        StartCoroutine(ShowResultsRoutine());
-    }
+    
 
     #endregion
 
     #region Coroutines
-    IEnumerator DebugGameFlow()
-    {
-        // Delay
-        yield return new WaitForSeconds(1);
-        
-        // Display Role for X seconds
-        yield return DisplayRoleRoutine(3);
-
-        // Loop
-        while (true)
-        {
-            // Allow Chat for X Seconds
-            yield return AllowChatRoutine();
-
-            // Day -> Night
-            yield return ChangeTimeOfDayRoutine();
-            
-            // Night Stuff
-            yield return NightRoutine(5);
-
-            // Night -> Day
-            yield return ChangeTimeOfDayRoutine();
-
-            //Day Stuff
-            yield return DayRoutine(5);
-        }
-        
-        //Show Results
-    }
-
     // Display Role for X seconds
     IEnumerator DisplayRoleRoutine(int time)
     {
@@ -112,30 +74,22 @@ public class MafiaGameFlow : MonoBehaviourPun
         roleUI.SetActive(false);
     }
     
-    // Allow Chat for X Seconds
-    IEnumerator AllowChatRoutine()
-    {
-        // enable Chat
-        Debug.Log("All Chat enabled");
-        
-        yield return timer.StartTimer(3);
-        
-        // disable Chat
-        Debug.Log("All Chat disabled");
-    }
-    
-    // Day -> Night
+    // Day/Night Light Changer
     private IEnumerator ChangeTimeOfDayRoutine()
     {
         yield return lightController.ChangePhase();
         Manager.Mafia.IsDay = !Manager.Mafia.IsDay;
     }
     
-    // Night Stuff
-    private IEnumerator NightRoutine(int time)
+    // Night Phase
+    private IEnumerator NightPhaseRoutine(int time)
     {
+        // Day -> Night
+        yield return ChangeTimeOfDayRoutine();
+
         // Allow chat for mafia
         Debug.Log("Mafia Chat enabled");
+        // TODO : Insert chat ON function here
 
         // Allow skill usage for X Seconds
         for ( int i = 0; i < PhotonNetwork.PlayerList.Length; i++ )
@@ -154,18 +108,19 @@ public class MafiaGameFlow : MonoBehaviourPun
         }
         
         Debug.Log("Mafia Chat disabled");
+        // TODO : Insert chat OFF function here
     }
-    
-    // Night -> Day
-    // Allow Chat for X Seconds
-    // Show role usage results
-    // Show player death (if there was any)
-    private IEnumerator DayRoutine(int time)
+
+    // Allow Chat and votingfor X Seconds
+    private IEnumerator DayPhaseRoutine(int time)
     {
-        // Allow chat for mafia
+        // Night -> Day
+        yield return ChangeTimeOfDayRoutine();
+
+        // Allow chat for everyone
         EnableChat(true);
 
-        // Allow skill usage for X Seconds
+        // Allow voting for X Seconds
         for ( int i = 0; i < PhotonNetwork.PlayerList.Length; i++ )
         {
             if ( i == (PhotonNetwork.LocalPlayer.ActorNumber - 1) )
@@ -184,8 +139,9 @@ public class MafiaGameFlow : MonoBehaviourPun
         EnableChat(false);
     }
 
-    private IEnumerator ShowResultsRoutine()
+    private IEnumerator ShowNightEventsRoutine()
     {
+        Manager.Mafia.Player.photonView.RPC("ShowNightResults", RpcTarget.All);
         yield return null;
     }
     #endregion

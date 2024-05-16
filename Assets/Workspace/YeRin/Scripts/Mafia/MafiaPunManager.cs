@@ -121,29 +121,20 @@ public class MafiaPunManager : MonoBehaviourPunCallbacks
         photonView.RPC("DisplayRole", RpcTarget.All, displayRoleTime);
         yield return new WaitForSeconds(displayRoleTime);
 
-
         while (true)
         {
-            // Day Phase
-            photonView.RPC("EnableChat", RpcTarget.All, true);
-            yield return new WaitForSeconds(voteTime);
-            photonView.RPC("EnableChat", RpcTarget.All, false);
-
             // Change to night
-            photonView.RPC("ChangeTime", RpcTarget.All);
-            yield return new WaitForSeconds(1);
+            photonView.RPC("StartNightPhase", RpcTarget.All, skillTime);
 
-            // Allow role usage
-            photonView.RPC("AllowActions", RpcTarget.All, skillTime);
-            yield return new WaitForSeconds(skillTime);
+            yield return new WaitForSeconds(skillTime + 1);
 
-            // Change to day
-            photonView.RPC("ChangeTime", RpcTarget.All);
+            // Show Night Events
+            photonView.RPC("ShowNightEvents", RpcTarget.All);
 
-            // Voting Phase
-            photonView.RPC("EnableVoting", RpcTarget.All, voteTime);
+            // Day Phase
+            photonView.RPC("StartDayPhase", RpcTarget.All, voteTime);
+            yield return new WaitForSeconds(voteTime + 1);
         }
-        
     }
 
     private void SpawnPlayer()
@@ -176,6 +167,7 @@ public class MafiaPunManager : MonoBehaviourPunCallbacks
         GameObject player = PhotonNetwork.Instantiate("Mafia", pos, Quaternion.LookRotation(-pos));
         player.GetComponent<MafiaPlayer>().SetPlayerHouse(playerNumber);
         player.GetComponent<MafiaPlayer>().SetNickName(PhotonNetwork.PlayerList [playerNumber].NickName);
+        Manager.Mafia.Player = player.GetComponent<MafiaPlayer>();
     }
 
     private void SpawnHouses()

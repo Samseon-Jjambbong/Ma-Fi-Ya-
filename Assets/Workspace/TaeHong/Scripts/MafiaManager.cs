@@ -27,10 +27,12 @@ public class MafiaManager : Singleton<MafiaManager>, IPunObservable
     public List<House> Houses { get { return houses; } set { houses = value; } }
     public float SkillTime => skillTime;
 
+    private MafiaPlayer player;
+    public MafiaPlayer Player { get; set; }
+
     private void Start()
     {
         isDay = true;
-        // timer.StartTimer(roleUseTime);
         playerCount = PhotonNetwork.CurrentRoom.Players.Count;
     }
 
@@ -45,43 +47,4 @@ public class MafiaManager : Singleton<MafiaManager>, IPunObservable
             isDay = (bool)stream.ReceiveNext();
         }
     }
-
-    // TIME MANAGER:
-    /*private PhotonView photonView;
-    public void StartGame()
-    {
-        if ( !PhotonNetwork.IsMasterClient )
-            return;
-        
-        photonView = GetComponent<PhotonView>();
-        StartCoroutine(GameLoop());
-    }
-
-    private IEnumerator GameLoop()
-    {
-        // Delay
-        yield return new WaitForSeconds(1);
-        
-        // Display role
-        photonView.RPC("DisplayRole", RpcTarget.All, displayRoleTime);
-        yield return new WaitForSeconds(displayRoleTime);
-
-        // Delay
-        yield return new WaitForSeconds(1);
-        
-        // Day Phase
-        photonView.RPC("EnableChat", RpcTarget.All); // Enable Chat
-        yield return new WaitForSeconds(voteTime);
-        
-        // Delay
-        yield return new WaitForSeconds(1);
-        
-        // Change to night
-        photonView.RPC("ChangeTime", RpcTarget.All);
-        yield return new WaitForSeconds(1);
-        
-        // Allow role usage
-        photonView.RPC("ChangeTime", RpcTarget.All, skillTime);
-        photonView.RPC("EnableChat", RpcTarget.All);
-    }*/
 }

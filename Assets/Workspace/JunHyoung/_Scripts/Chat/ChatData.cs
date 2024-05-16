@@ -63,12 +63,14 @@ public class ChatData
         List<byte> result = new List<byte>();
 
         // name 문자열 길이와 문자열 byte 배열을 추가
-        result.AddRange(BitConverter.GetBytes(chatData.name.Length));
-        result.AddRange(Encoding.UTF8.GetBytes(chatData.name));
+        byte [] nameBytes = Encoding.UTF8.GetBytes(chatData.name);
+        result.AddRange(BitConverter.GetBytes(nameBytes.Length));
+        result.AddRange(nameBytes);
 
         // message 문자열 길이와 문자열 byte 배열을 추가
-        result.AddRange(BitConverter.GetBytes(chatData.message.Length));
-        result.AddRange(Encoding.UTF8.GetBytes(chatData.message));
+        byte [] messageBytes = Encoding.UTF8.GetBytes(chatData.message);
+        result.AddRange(BitConverter.GetBytes(messageBytes.Length));
+        result.AddRange(messageBytes);
 
         // nameColor 값을 byte 배열로 변환하여 추가
         result.Add(( byte ) chatData.nameColor.r);

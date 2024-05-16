@@ -86,7 +86,9 @@ public class ChatPanel : MonoBehaviour, IChatClientListener
             return;
 
         //chatClient.PublishMessage(curChannelName, message);
+        ChatData newChat = new ChatData(PhotonNetwork.LocalPlayer.NickName, inputField.text);
         chatClient.PublishMessage(curChannelName, new ChatData(PhotonNetwork.LocalPlayer.NickName, inputField.text));
+        Debug.Log($"Send Message : {newChat.message}");
         inputField.text = "";
         inputField.ActivateInputField();
     }
@@ -130,6 +132,7 @@ public class ChatPanel : MonoBehaviour, IChatClientListener
                 ChatEntry newChat = Instantiate(chatEntry, contents);
                 //newChat.Set(senders[i], (string)messages[i]);
                 ChatData chatData = ( ChatData ) messages [i];
+                Debug.Log($"nameColor: {chatData.nameColor}, Recive message :{chatData.message}");
                 newChat.Set(chatData);
             }
         }

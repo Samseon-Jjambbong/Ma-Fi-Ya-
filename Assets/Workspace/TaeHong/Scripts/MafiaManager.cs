@@ -35,11 +35,61 @@ public class MafiaManager : Singleton<MafiaManager>, IPunObservable
     private MafiaPlayer player;
     public MafiaPlayer Player { get; set; }
 
+    public MafiaGame Game = new MafiaGame();
+    public event Action VoteCountChanged;
+    private int[] votes;
+    public int[] Votes => votes;
+
     private void Start()
     {
         isDay = true;
         playerCount = PhotonNetwork.CurrentRoom.Players.Count;
+        votes = new int[playerCount];
     }
+
+    [PunRPC] // Called only on MasterClient
+    public void PlayerDied(int id)
+    {
+        bool result = Game.RemovePlayer((MafiaRole)PhotonNetwork.CurrentRoom.GetMafiaRoleList()[id - 1]);
+        if(result)
+        {
+            // civilian win
+        }
+        else
+        {
+            // mafia win
+        }
+    }
+
+    [PunRPC]
+    public void VoteForPlayer(int playerID)
+    {
+        votes[playerID - 1]++;
+        VoteCountChanged?.Invoke();
+    }
+
+    public int GetVoteResult() // Return playerID or -1 if none
+    {
+        int maxVotes = -1;
+        int maxVoted = -1;
+        for(int i = 0; i < votes.Length; i++)
+        {
+            if (votes[i] > maxVotes)
+            {
+                maxVotes = votes[i];
+                maxVoted = i + 1;
+            }
+        }
+
+        // Reset values
+        for(int i = 0; i < votes.Length; i++)
+        {
+            votes[i] = 0;
+        }
+
+        return maxVoted;
+    }
+
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {

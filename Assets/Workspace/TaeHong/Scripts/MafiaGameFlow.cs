@@ -1,4 +1,5 @@
 using Photon.Pun;
+using Photon.Realtime;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -44,6 +45,12 @@ public class MafiaGameFlow : MonoBehaviourPun
         StartCoroutine(DayPhaseRoutine(time));
     }
 
+    [PunRPC]
+    public void ShowVoteResults()
+    {
+        StartCoroutine(ShowVoteResultsRoutine());
+    }
+
     public void ChangeTime()
     {
         StartCoroutine(ChangeTimeOfDayRoutine());
@@ -60,8 +67,6 @@ public class MafiaGameFlow : MonoBehaviourPun
             Debug.Log("Disabled Chat");
         }
     }
-
-    
 
     #endregion
 
@@ -111,6 +116,12 @@ public class MafiaGameFlow : MonoBehaviourPun
         // TODO : Insert chat OFF function here
     }
 
+    private IEnumerator ShowNightEventsRoutine()
+    {
+        Manager.Mafia.Player.photonView.RPC("ShowNightResults", RpcTarget.All);
+        yield return new WaitForSeconds(1);
+    }
+
     // Allow Chat and votingfor X Seconds
     private IEnumerator DayPhaseRoutine(int time)
     {
@@ -123,6 +134,7 @@ public class MafiaGameFlow : MonoBehaviourPun
         // Allow voting for X Seconds
         for ( int i = 0; i < PhotonNetwork.PlayerList.Length; i++ )
         {
+            Manager.Mafia.Houses[i].ShowVoteCount(true);
             if ( i == (PhotonNetwork.LocalPlayer.ActorNumber - 1) )
                 continue;
             
@@ -134,15 +146,26 @@ public class MafiaGameFlow : MonoBehaviourPun
         foreach ( var house in Manager.Mafia.Houses )
         {
             house.ActivateOutline(false);
+            house.ShowVoteCount(false);
         }
 
         EnableChat(false);
     }
 
-    private IEnumerator ShowNightEventsRoutine()
+    private IEnumerator ShowVoteResultsRoutine()
     {
-        Manager.Mafia.Player.photonView.RPC("ShowNightResults", RpcTarget.All);
-        yield return null;
+        // Show vote result on everyone's screen
+        int voteResult = Manager.Mafia.GetVoteResult();
+        if(voteResult == -1)
+        {
+            Debug.Log("No one got kicked");
+        }
+        else
+        {
+            Debug.Log($"Player{voteResult} got kicked");
+        }
+        yield return new WaitForSeconds(1);
     }
+
     #endregion
 }

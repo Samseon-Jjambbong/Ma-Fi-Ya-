@@ -99,7 +99,7 @@ public class ChatTest : MonoBehaviour, IChatClientListener
                     return;
 
                 ChatEntry newChat = Instantiate(chatEntry, contents);
-                newChat.Set(senders [i], (string)messages [i]);
+                //newChat.Set(senders [i], (string)messages [i]);
             }
         }
     }
@@ -119,7 +119,7 @@ public class ChatTest : MonoBehaviour, IChatClientListener
     {
         //내가 채널 입장시
         ChatEntry newChat = Instantiate(chatEntry, contents);
-        newChat.Set(curChannelName, "입장하였습니다.");
+       // newChat.Set(curChannelName, "입장하였습니다.");
     }
 
     void IChatClientListener.OnUnsubscribed( string [] channels )

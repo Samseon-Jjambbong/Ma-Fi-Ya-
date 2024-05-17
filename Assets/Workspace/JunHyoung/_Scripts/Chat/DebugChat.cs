@@ -26,6 +26,6 @@ public class DebugChat : MonoBehaviourPunCallbacks
     {
         RoomOptions options = new RoomOptions { MaxPlayers = 8 };
         options.SetGameMode(GameMode.Mafia, true);
-        PhotonNetwork.CreateRoom(roomName: ROOMNAME, roomOptions: options);
+        PhotonNetwork.JoinOrCreateRoom(roomName: ROOMNAME, roomOptions: options, TypedLobby.Default);
     }
 }

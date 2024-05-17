@@ -6,38 +6,45 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ChatPanel : MonoBehaviour, IChatClientListener
+public class InGameChatManager : MonoBehaviour, IChatClientListener
 {
-    [SerializeField]  ChatEntry chatEntry;
-    [SerializeField]  Transform contents;
+    [SerializeField] bool isChatable;
+    public bool IsChatable { get { return isChatable; } set { isChatable = value; inputField.interactable = isChatable; } }
 
-    [SerializeField]  TMP_InputField inputField;
-    [SerializeField]  Button buttonSend;
+    [SerializeField] ChatEntry chatEntry;
+    [SerializeField] Transform contents;
+    [SerializeField] RectTransform rectTransform;
 
-     ChatClient chatClient;
-     string curChannelName;
+    [SerializeField] TMP_InputField inputField;
+    [SerializeField] Button buttonFixSize;
 
+    private ChatClient chatClient;
+    private string curChannelName;
+    private string mafiaChannelName;
+
+    [SerializeField] public bool isMafia;
+    [SerializeField] private Color nickNameColor;
+    [SerializeField] Color mafiaMessageColor;
+    [SerializeField] Color systemMessageColor;
+
+    [Header("For Debug")]
+    [SerializeField] public bool isDay;
 
     /******************************************************
     *                    Unity Events
     ******************************************************/
     #region Unity Events
-     void  Start()
+    void Start()
     {
         PhotonPeer.RegisterType(typeof(ChatData), 100, ChatData.Serialize, ChatData.Deserialize);
 
-        buttonSend.onClick.AddListener(SendMessage);
+        buttonFixSize.onClick.AddListener(FixSize);
         inputField.onSubmit.AddListener(SendMessage);
     }
 
     void OnEnable()
     {
-        chatClient = new ChatClient(this);
-        chatClient.AuthValues = new AuthenticationValues(PhotonNetwork.LocalPlayer.NickName);
-        ChatEntry newChat = Instantiate(chatEntry, contents);
-        newChat.SetChat(new ChatData(" ", $"Connect On Chatting Channel...", Color.black, Color.yellow));
-        chatClient.ConnectUsingSettings(PhotonNetwork.PhotonServerSettings.AppSettings.GetChatSettings()); // GetChatSetting는 Demo에 있는 확장 메서드(...)
-        curChannelName = PhotonNetwork.CurrentRoom.Name; //채팅 채널을 로비-룸 상태랑 게임중일 때 상태랑 구분지어야 하는지 확인해 볼것.
+        InitChatClient();
     }
 
     void OnDisable()
@@ -58,6 +65,14 @@ public class ChatPanel : MonoBehaviour, IChatClientListener
         if ( chatClient == null )
             return;
         chatClient.Service();
+
+        if ( !isChatable )
+            return;
+
+        if ( Input.GetKeyDown(KeyCode.Return) ) //the key used to accept a line of text. osMac calls this Return. A PC calls this Enter. There is no KeyCode.Enter(...)
+        {
+            inputField.ActivateInputField();
+        }
     }
 
     #endregion
@@ -67,28 +82,64 @@ public class ChatPanel : MonoBehaviour, IChatClientListener
     ******************************************************/
 
     #region Methods
-    private void SendMessage() // 버튼 클릭 시
+
+    void InitChatClient()
     {
-        if ( string.IsNullOrEmpty(inputField.text) )
-            return;
+        chatClient = new ChatClient(this);
+        chatClient.AuthValues = new AuthenticationValues(PhotonNetwork.LocalPlayer.NickName);
 
+        ChatEntry newChat = Instantiate(chatEntry, contents);
+        newChat.SetChat(new ChatData(" ", $"Connect On Chatting Channel...", Color.black, Color.yellow));
 
-        //chatClient.PublishMessage(curChannelName, inputField.text);
-        chatClient.PublishMessage(curChannelName, new ChatData(PhotonNetwork.LocalPlayer.NickName, inputField.text));
-        //Player의 color 커스텀 프로퍼티 구현할 것.
-        inputField.text = "";
-        inputField.ActivateInputField();
+        chatClient.ConnectUsingSettings(PhotonNetwork.PhotonServerSettings.AppSettings.GetChatSettings());
+
+        curChannelName = PhotonNetwork.CurrentRoom.Name + "InGame";
+        mafiaChannelName = curChannelName + "Night";
+
+        //isMafia = (PhotonNetwork.LocalPlayer.GetRole() == "Mafia";
+        //nickNameColor = PhotonNetwork.LocalPlayer.GetColor();
     }
 
-    new  void SendMessage( string message ) // InputField 에서 Enter 시
+    private void FixSize() // 버튼 클릭 시
     {
+        IsChatable = !IsChatable;
+
+        //rectTransform.sizeDelta =new Vector2();
+
+        Debug.Log(PhotonNetwork.LocalPlayer.NickName);
+    }
+
+    new void SendMessage( string message ) // InputField 에서 Enter 시
+    {
+        if ( !isChatable )
+            return;
+
         if ( string.IsNullOrEmpty(message) )
             return;
 
-        chatClient.PublishMessage(curChannelName, new ChatData(PhotonNetwork.LocalPlayer.NickName, inputField.text));
+        if ( !isDay && isMafia )
+        //if(!MafiaManager.Instance.IsDay && isMafia ) // 낮이 아니고, 마피아라면 마피아 채널에
+        {
+            chatClient.PublishMessage(mafiaChannelName, new ChatData(PhotonNetwork.LocalPlayer.NickName, inputField.text, nickNameColor, mafiaMessageColor));
+        }
+        else // 이외라면 일반 채팅 채널에
+        {
+            chatClient.PublishMessage(curChannelName, new ChatData(PhotonNetwork.LocalPlayer.NickName, inputField.text, nickNameColor));
+        }
+
         inputField.text = "";
         inputField.ActivateInputField();
+        chatClient.PublicChannels.Clear();
     }
+
+    public void PublishMessage( ChatData chatdata )
+    {
+        if ( !PhotonNetwork.IsMasterClient ) return;
+
+        chatClient.PublishMessage(curChannelName, chatdata);
+    }
+
+
     #endregion
     /******************************************************
     *              IChatClientListener Callbacks
@@ -108,8 +159,12 @@ public class ChatPanel : MonoBehaviour, IChatClientListener
     void IChatClientListener.OnConnected()
     {
         // PublishSubscribers = true 가 아니면 OnuserSubscribe 가 콜백되지 않음
-        chatClient.Subscribe(curChannelName, 0, -1, 
+        chatClient.Subscribe(curChannelName, 0, -1,
             new ChannelCreationOptions() { PublishSubscribers = true, MaxSubscribers = PhotonNetwork.CurrentRoom.MaxPlayers });
+        if ( isMafia )
+        {
+            chatClient.Subscribe(mafiaChannelName);
+        }
     }
 
     void IChatClientListener.OnDisconnected()
@@ -126,8 +181,23 @@ public class ChatPanel : MonoBehaviour, IChatClientListener
             {
                 if ( senders [i] == null )
                     return;
+                ChatData chatData = ( ChatData ) messages [i];
                 ChatEntry newChat = Instantiate(chatEntry, contents);
-                //newChat.Set(senders[i], (string)messages[i]);
+                newChat.SetChat(chatData);
+            }
+        }
+
+        // 마피아일 때만 마피아 채널의 메세지 수신함
+        if ( !isMafia )
+            return;
+
+        if ( channelName.Equals(mafiaChannelName) )
+        {
+            for ( int i = 0; i < senders.Length; i++ )
+            {
+                if ( senders [i] == null )
+                    return;
+                ChatEntry newChat = Instantiate(chatEntry, contents);
                 ChatData chatData = ( ChatData ) messages [i];
                 newChat.SetChat(chatData);
             }
@@ -155,11 +225,6 @@ public class ChatPanel : MonoBehaviour, IChatClientListener
     void IChatClientListener.OnUnsubscribed( string [] channels )
     {
         //내가 채널에서 퇴장할 시
-        //ChatChannel.ClearMessages();
-        if(chatClient.PublicChannels.TryGetValue(curChannelName, out ChatChannel value))
-        {
-            value.ClearMessages();
-        }
     }
 
     void IChatClientListener.OnUserSubscribed( string channel, string user )

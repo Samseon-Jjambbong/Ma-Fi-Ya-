@@ -29,19 +29,16 @@ public class MafiaPunManager : MonoBehaviourPunCallbacks
 
     [Header("Game Logic")]
     [SerializeField] MafiaRolesSO mafiaRolesSO;
-    private MafiaGame game = new MafiaGame();
 
     private void Start()
     {
         PhotonNetwork.LocalPlayer.SetLoaded(true);
         playerDic = PhotonNetwork.CurrentRoom.Players;
 
-        for (int i = 0; i < playerDic.Count; i++) 
+        for (int i = 0; i < playerDic.Count; i++)
         {
             colorList.Add(new Color(Random.value, Random.value, Random.value, 1f));
         }
-
-
     }
 
     public override void OnPlayerPropertiesUpdate( Player targetPlayer, PhotonHashTable changedProps )
@@ -106,8 +103,20 @@ public class MafiaPunManager : MonoBehaviourPunCallbacks
                 loadCount++;
             }
         }
-
         return loadCount;
+    }
+
+    private int PlayerMafiaReadyCount()
+    {
+        int count = 0;
+        foreach (Player player in PhotonNetwork.PlayerList)
+        {
+            if (player.GetMafiaReady())
+            {
+                count++;
+            }
+        }
+        return count;
     }
 
     public void GameStart()
@@ -138,11 +147,24 @@ public class MafiaPunManager : MonoBehaviourPunCallbacks
             yield return new WaitForSeconds(skillTime + 1);
 
             // Show Night Events
+            Debug.Log("Night Events Start");
             photonView.RPC("ShowNightEvents", RpcTarget.All);
+
+            // Wait until everyone finishes showing events
+            while (PlayerMafiaReadyCount() != PhotonNetwork.PlayerList.Length)
+            {
+                yield return null;
+            }
+            Debug.Log("Night Events End");
+
+            yield return new WaitForSeconds(1);
 
             // Day Phase
             photonView.RPC("StartDayPhase", RpcTarget.All, voteTime);
             yield return new WaitForSeconds(voteTime + 1);
+
+            // Show Vote Result
+            photonView.RPC("ShowVoteResults", RpcTarget.All);
         }
     }
 
@@ -237,7 +259,7 @@ public class MafiaPunManager : MonoBehaviourPunCallbacks
         int[] roles = PhotonNetwork.CurrentRoom.GetMafiaRoleList();
         MafiaRole role = (MafiaRole)roles[PhotonNetwork.LocalPlayer.ActorNumber - 1];
         PhotonNetwork.LocalPlayer.SetPlayerRole(role);
-        game.AddPlayer(role);
+        Manager.Mafia.Game.AddPlayer(role);
     }
 }
 

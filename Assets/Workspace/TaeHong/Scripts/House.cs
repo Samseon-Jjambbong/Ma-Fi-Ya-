@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using TMPro;
 
 /// <summary>
 /// programmer : TaeHong
@@ -15,15 +16,18 @@ using UnityEngine.UI;
 /// </summary>
 public class House : MonoBehaviourPun, IPointerClickHandler, IPointerExitHandler, IPunObservable
 {
+    [Header("Components")]
     [SerializeField] private GameObject useSkillUI;
     [SerializeField] private GameObject voteUI;
     [SerializeField] private Outlinable outline;
+    [SerializeField] private TextMeshProUGUI voteCountText;
 
+    [Header("Mafia")]
     [SerializeField] private MafiaPlayer houseOwner;
     public MafiaPlayer HouseOwner { get { return houseOwner; } set { houseOwner = value; } }
-
     public int houseOwnerId;
 
+    [Header("Misc")]
     public bool debugMode;
 
     private void Start()
@@ -39,6 +43,21 @@ public class House : MonoBehaviourPun, IPointerClickHandler, IPointerExitHandler
         //}
     }
 
+    private void OnEnable()
+    {
+        Manager.Mafia.VoteCountChanged += OnVoteCountChanged;
+    }
+
+    private void OnDisable()
+    {
+        Manager.Mafia.VoteCountChanged -= OnVoteCountChanged;
+    }
+
+    private void OnVoteCountChanged()
+    {
+        voteCountText.text = Manager.Mafia.Votes[houseOwnerId].ToString();
+    }
+
     public void ChooseTarget()
     {
         // Send information about who clicked on who's house
@@ -50,6 +69,11 @@ public class House : MonoBehaviourPun, IPointerClickHandler, IPointerExitHandler
         //Manager.Event.pairEventDic["useSkill"].RaiseEvent((sender, receiver));
     }
 
+    public void Vote()
+    {
+
+    }
+
     // What UI should be shown when a house is clicked
     public void OnPointerClick( PointerEventData eventData )
     {
@@ -58,6 +82,12 @@ public class House : MonoBehaviourPun, IPointerClickHandler, IPointerExitHandler
         
         voteUI.gameObject.SetActive(Manager.Mafia.IsDay);      // Day == vote
         useSkillUI.gameObject.SetActive(!Manager.Mafia.IsDay); // Night == skill
+    }
+
+    // Show vote count during voting phase
+    public void ShowVoteCount(bool show)
+    {
+        voteCountText.gameObject.SetActive(show);
     }
 
     // Hide UI if cursor exits house
@@ -97,6 +127,23 @@ public class House : MonoBehaviourPun, IPointerClickHandler, IPointerExitHandler
         }
 
         ChooseTarget();
+    }
+
+    public void ClickedVoteUI()
+    {
+        foreach (House house in Manager.Mafia.Houses)
+        {
+            if (house.HouseOwner == houseOwner)
+            {
+                useSkillUI.gameObject.SetActive(false);
+                outline.OutlineParameters.Color = Color.yellow;
+                continue;
+            }
+
+            house.ActivateOutline(false);
+        }
+
+        Vote();
     }
 
     [PunRPC]

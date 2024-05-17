@@ -1,4 +1,5 @@
 using Photon.Pun;
+using Photon.Realtime;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -111,6 +112,12 @@ public class MafiaGameFlow : MonoBehaviourPun
         // TODO : Insert chat OFF function here
     }
 
+    private IEnumerator ShowNightEventsRoutine()
+    {
+        Manager.Mafia.Player.photonView.RPC("ShowNightResults", RpcTarget.All);
+        yield return new WaitForSeconds(1);
+    }
+
     // Allow Chat and votingfor X Seconds
     private IEnumerator DayPhaseRoutine(int time)
     {
@@ -139,10 +146,5 @@ public class MafiaGameFlow : MonoBehaviourPun
         EnableChat(false);
     }
 
-    private IEnumerator ShowNightEventsRoutine()
-    {
-        Manager.Mafia.Player.photonView.RPC("ShowNightResults", RpcTarget.All);
-        yield return null;
-    }
     #endregion
 }

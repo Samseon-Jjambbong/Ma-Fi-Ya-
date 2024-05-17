@@ -14,6 +14,7 @@ public static class CustomProperty
     public const string PLAYERROLE = "PlayerRole";
     public const string MAFIAROLELIST = "MafiaRoleList";
     public const string PLAYERCOLOR = "PlayerColor";
+    public const string MAFIAREADY = "MafiaReady";
     
     public static bool GetReady(this Player player)
     {
@@ -135,5 +136,20 @@ public static class CustomProperty
     {
         PhotonHashtable properties = new PhotonHashtable { { PLAYERCOLOR, value } };
         player.SetCustomProperties(properties);
+    }
+
+    // Player Mafia Ready
+    public static bool GetMafiaReady(this Player player)
+    {
+        PhotonHashtable properties = player.CustomProperties;
+        if (properties.ContainsKey(MAFIAREADY))
+            return (bool) properties[MAFIAREADY];
+        return false;
+    }
+
+    public static void SetMafiaReady(this Player player, bool value)
+    {
+        PhotonHashtable propertiesToSet = new PhotonHashtable { { MAFIAREADY, value } };
+        player.SetCustomProperties(propertiesToSet);
     }
 }

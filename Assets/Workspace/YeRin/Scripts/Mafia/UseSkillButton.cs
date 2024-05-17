@@ -11,12 +11,14 @@ using UnityEngine;
 public class UseSkillButton : MonoBehaviourPun
 {
     [SerializeField] House house;
- 
+
     public void SetTarget()
     {
-        NightMafiaMove [] players =  FindObjectsOfType<NightMafiaMove>();
+        house.VisitorId(PhotonNetwork.LocalPlayer.ActorNumber);
+    }
 
-
+    public void ShowMyPlayerMove()
+    {
         GameObject obj = Instantiate(Manager.Mafia.NightMafia, Manager.Mafia.NightMafiaPos, Manager.Mafia.NightMafia.transform.rotation);
 
         foreach (MafiaPlayer player in FindObjectsOfType<MafiaPlayer>())
@@ -29,9 +31,11 @@ public class UseSkillButton : MonoBehaviourPun
         NightMafiaMove mafia = obj.GetComponent<NightMafiaMove>();
 
         mafia.Target = house.gameObject;
-        house.VisitorId(PhotonNetwork.LocalPlayer.ActorNumber);
         mafia.MoveToTarget();
+    }
 
+    public void ShowSomebodyMove()
+    {
         house.MafiaComesHome();
     }
 }

@@ -1,11 +1,11 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
-using Photon.Pun;
 using TMPro;
+using UnityEngine;
 using UnityEngine.UI;
 
-public class RoleUI : BaseUI
+public class UseSkillUI : BaseUI
 {
     [SerializeField] MafiaRoleDataSO dataSO;
 
@@ -13,9 +13,7 @@ public class RoleUI : BaseUI
     {
         MafiaRole playerRole = PhotonNetwork.LocalPlayer.GetPlayerRole();
         MafiaRoleData data = dataSO.GetData(playerRole);
-        Debug.Log(playerRole);
 
-        GetUI<Image>("RoleIcon").sprite = data.roleIcon;
-        GetUI<TextMeshProUGUI>("RoleName").text = data.roleName;
+        GetUI<Image>("IconButton").sprite = data.roleIcon;
     }
 }

@@ -232,6 +232,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2060687734433725859}
   - component: {fileID: 4896103691704073745}
+  - component: {fileID: 5399461852707901745}
   - component: {fileID: 7763532220178918496}
   m_Layer: 5
   m_Name: UseSkillUI
@@ -269,6 +270,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 949041914881587969}
   m_CullTransparentMesh: 1
+--- !u!114 &5399461852707901745
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 949041914881587969}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d26dc9dea764f42d9acecec8ec11e178, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dataSO: {fileID: 11400000, guid: bdddeb253d6534c5ba32cbb2c14dfa9b, type: 2}
 --- !u!114 &7763532220178918496
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -45,11 +45,10 @@ public class ChatPanel : MonoBehaviour, IChatClientListener
         if ( chatClient == null )
             return;
 
-        foreach ( Transform child in contents )
+        if ( chatClient.PublicChannels.TryGetValue(curChannelName, out ChatChannel chatChannel) )
         {
-            Destroy(child.gameObject);
+            chatChannel.ClearMessages();
         }
-
         chatClient.Disconnect();
     }
 
@@ -108,7 +107,7 @@ public class ChatPanel : MonoBehaviour, IChatClientListener
     void IChatClientListener.OnConnected()
     {
         // PublishSubscribers = true 가 아니면 OnuserSubscribe 가 콜백되지 않음
-        chatClient.Subscribe(curChannelName, 0, -1, 
+        chatClient.Subscribe(curChannelName, 0, 0, //-1 이면 이전 모든 메세지 수신, 0이면 수신안함, 1보다 크면 그만큼만 수신
             new ChannelCreationOptions() { PublishSubscribers = true, MaxSubscribers = PhotonNetwork.CurrentRoom.MaxPlayers });
     }
 
@@ -129,6 +128,7 @@ public class ChatPanel : MonoBehaviour, IChatClientListener
                 ChatEntry newChat = Instantiate(chatEntry, contents);
                 //newChat.Set(senders[i], (string)messages[i]);
                 ChatData chatData = ( ChatData ) messages [i];
+                Debug.Log($"{chatData.name}, {chatData.message}");
                 newChat.SetChat(chatData);
             }
         }
@@ -156,10 +156,6 @@ public class ChatPanel : MonoBehaviour, IChatClientListener
     {
         //내가 채널에서 퇴장할 시
         //ChatChannel.ClearMessages();
-        if(chatClient.PublicChannels.TryGetValue(curChannelName, out ChatChannel value))
-        {
-            value.ClearMessages();
-        }
     }
 
     void IChatClientListener.OnUserSubscribed( string channel, string user )

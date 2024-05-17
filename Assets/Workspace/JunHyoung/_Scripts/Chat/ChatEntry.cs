@@ -6,6 +6,11 @@ public class ChatEntry : MonoBehaviour
     [SerializeField] TMP_Text nameText;
     [SerializeField] TMP_Text chatText;
 
+    private void OnDisable()
+    {
+        Destroy(gameObject);
+    }
+
     public void SetChat( ChatData chatData )
     {
         nameText.text = chatData.name;

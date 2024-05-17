@@ -233,7 +233,6 @@ GameObject:
   - component: {fileID: 2060687734433725859}
   - component: {fileID: 4896103691704073745}
   - component: {fileID: 7763532220178918496}
-  - component: {fileID: 8577322538521899095}
   m_Layer: 5
   m_Name: UseSkillUI
   m_TagString: Untagged
@@ -282,19 +281,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31b1557b2197ee74d8700cc1fac44089, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &8577322538521899095
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 949041914881587969}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9ed6d8f48e51f334bbde119e97694c2b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  house: {fileID: 7581854576598528016}
 --- !u!1 &965939242096875593
 GameObject:
   m_ObjectHideFlags: 0
@@ -1128,7 +1114,6 @@ MonoBehaviour:
   outline: {fileID: 7400318162097117840}
   voteCountText: {fileID: 9190378931470461126}
   houseOwner: {fileID: 0}
-  visitor: {fileID: 0}
   houseOwnerId: 0
   visitorId: 0
   debugMode: 0
@@ -1468,18 +1453,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 8577322538521899095}
-        m_TargetAssemblyTypeName: UseSkillButton, Assembly-CSharp
-        m_MethodName: SetTarget
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
       - m_Target: {fileID: 7581854576598528016}
         m_TargetAssemblyTypeName: House, Assembly-CSharp
         m_MethodName: ClickedUseSkillUI

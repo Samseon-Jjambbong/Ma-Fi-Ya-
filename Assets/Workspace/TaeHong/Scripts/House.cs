@@ -26,9 +26,6 @@ public class House : MonoBehaviourPun, IPointerClickHandler, IPointerExitHandler
     [SerializeField] private MafiaPlayer houseOwner;
     public MafiaPlayer HouseOwner { get { return houseOwner; } set { houseOwner = value; } }
 
-    [SerializeField] private MafiaPlayer visitor;
-    public MafiaPlayer Visitor { get { return visitor; } set { visitor = value; } }
-
     public int houseOwnerId;
     [SerializeField] private int visitorId;
 
@@ -149,10 +146,6 @@ public class House : MonoBehaviourPun, IPointerClickHandler, IPointerExitHandler
         }
 
         Vote();
-    }
-    public void VisitorId(int id)
-    {
-        photonView.RPC("SetVisitorId", PhotonNetwork.PlayerList[houseOwnerId - 1], id);
     }
 
     public void MafiaComesHome()

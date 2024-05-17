@@ -102,4 +102,26 @@ public class MafiaManager : Singleton<MafiaManager>, IPunObservable
             isDay = (bool)stream.ReceiveNext();
         }
     }
+
+    public void ShowMyPlayerMove(House house)
+    {
+        GameObject obj = Instantiate(Manager.Mafia.NightMafia, Manager.Mafia.NightMafiaPos, Manager.Mafia.NightMafia.transform.rotation);
+
+        foreach (MafiaPlayer player in FindObjectsOfType<MafiaPlayer>())
+        {
+            if (player.IsMine)
+            {
+                obj.GetComponentInChildren<Renderer>().material.color = player.GetComponentInChildren<Renderer>().material.color;
+            }
+        }
+        NightMafiaMove mafia = obj.GetComponent<NightMafiaMove>();
+
+        mafia.Target = house.gameObject;
+        mafia.MoveToTarget();
+    }
+
+    public void ShowSomebodyMove(House house)
+    {
+        house.MafiaComesHome();
+    }
 }

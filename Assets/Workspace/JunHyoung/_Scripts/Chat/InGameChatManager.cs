@@ -100,7 +100,7 @@ public class InGameChatManager : MonoBehaviour, IChatClientListener
         mafiaChannelName = curChannelName + "Night";
         ghostChannelName = curChannelName + "Ghots";
 
-        //isMafia = (PhotonNetwork.LocalPlayer.GetRole() == "Mafia";
+        //isMafia = (PhotonNetwork.LocalPlayer.GetRole() == MafiaRole.Mafia;
         //nickNameColor = PhotonNetwork.LocalPlayer.GetColor();
     }
 

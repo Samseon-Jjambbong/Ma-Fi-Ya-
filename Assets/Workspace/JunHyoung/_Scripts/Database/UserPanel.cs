@@ -1,5 +1,6 @@
 using Firebase.Database;
 using Firebase.Extensions;
+using LoginSystem;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -7,103 +8,62 @@ using UnityEngine.UI;
 public class UserPanel : MonoBehaviour
 {
     [SerializeField] TMP_Text nickNameText;
-    [SerializeField] TMP_InputField nickNameInputField;
-    [SerializeField] Button buttonGetDB;
-    [SerializeField] Button buttonSetDB;
-    
+    [SerializeField] TMP_Text scoreText;
+    [SerializeField] Button editInfo;
+    [SerializeField] EditPanel editPanel;
 
-    void Start()
+
+    private void Start()
     {
-        buttonGetDB.onClick.AddListener(ButtonGetDB);
-        
-
-        UserData data = new UserData("ParkJunHyoung");
-
-        string json = JsonUtility.ToJson(data);
-        //SetRawDB("UserData", "Park", json);
-
-        // GetDB("UserData", "Park");
+        editInfo.onClick.AddListener(ActivePanel);
     }
 
-    public void ButtonGetDB()
+    private void OnEnable()
     {
-        GetDB("UserData", "Park");
+        FirebaseManager.DB.GetReference(FirebaseManager.PATH)
+         .Child(FirebaseManager.Auth.CurrentUser.UserId)
+         .ValueChanged += UpdateInfo;
     }
 
-
-    UserData userData;
-    private void GetDB( string path, string child )
+    private void OnDisable()
     {
-        FirebaseManager.DB
-            .GetReference(path).Child(child)
-            .GetValueAsync().ContinueWithOnMainThread(task =>
-            {
-                if ( task.IsFaulted )
-                {
-                    return;
-                }
-                if ( task.IsCanceled )
-                {
-
-                    return;
-                }
-
-                DataSnapshot snapshot = task.Result;
-                if ( snapshot.Exists )
-                {
-                    string json = snapshot.GetRawJsonValue();
-                    Debug.Log(json);
-                    userData = JsonUtility.FromJson<UserData>(json);
-
-                    Debug.Log($"{userData.Name}");
-                    return;
-                }
-                else
-                {
-                    userData = new UserData();
-                }
-            });
+        FirebaseManager.DB.GetReference(FirebaseManager.PATH)
+          .Child(FirebaseManager.Auth.CurrentUser.UserId)
+          .ValueChanged -= UpdateInfo;
     }
 
-    public void ChangeNickName()
+    private void ActivePanel()
     {
-        string nickName = nickNameInputField.text;
-
-        FirebaseManager.DB
-            .GetReference("UserData")
-            .Child(FirebaseManager.Auth.CurrentUser.UserId)
-            .Child("nickName")
-            .SetValueAsync(nickName).ContinueWithOnMainThread(task =>
-            {
-                if ( task.IsFaulted )
-                {
-                    return;
-                }
-                if ( task.IsCanceled )
-                {
-                    return;
-                }
-            });
+        editPanel.gameObject.SetActive(true);
     }
 
-
-    private void SetRawDB( string path, string child, string value )
+    private void UpdateInfo( object sendor, ValueChangedEventArgs args )
     {
         FirebaseManager.DB
-            .GetReference(path).Child(child)
-            .SetRawJsonValueAsync(value).ContinueWithOnMainThread(task =>
-            {
-                if ( task.IsFaulted )
-                {
-                    return;
-                }
-                if ( task.IsCanceled )
-                {
-                    return;
-                }
+          .GetReference(FirebaseManager.PATH).Child(FirebaseManager.Auth.CurrentUser.UserId)
+          .GetValueAsync().ContinueWithOnMainThread(task =>
+          {
+              if ( task.IsFaulted )
+              {
+                  Debug.LogError($"DB GetValueAsync Faulted : {task.Exception}");
+                  return;
+              }
+              if ( task.IsCanceled )
+              {
+                  Debug.LogError($"DB SetValueAsync Canceled");
+                  return;
+              }
 
-                Debug.Log("SetRawJsonValueAsync Done");
-                return;
-            });
+              DataSnapshot snapshot = task.Result;
+              if ( snapshot.Exists )
+              {
+                  string json = snapshot.GetRawJsonValue();
+                  UserData userData = JsonUtility.FromJson<UserData>(json);
+                  nickNameText.text = userData.Name;
+                  scoreText.text = userData.score.ToString();
+                  return;
+              }
+          });
     }
+
 }

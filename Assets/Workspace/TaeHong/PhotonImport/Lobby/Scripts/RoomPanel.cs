@@ -96,6 +96,10 @@ public class RoomPanel : MonoBehaviour
             $"Player Count: {PhotonNetwork.CurrentRoom.PlayerCount}/{PhotonNetwork.CurrentRoom.MaxPlayers}";
 
         AllPlayersReadyCheck();
+
+        // Display PlayerCount
+        playerCountText.text =
+            $"Player Count: {PhotonNetwork.CurrentRoom.PlayerCount}/{PhotonNetwork.CurrentRoom.MaxPlayers}";
     }
 
     public void MasterClientSwitched(Player newMasterClient)

@@ -11,6 +11,7 @@ public class DebugInGameChat : MonoBehaviour
     [SerializeField] Button button1;
     [SerializeField] Button button2;
     [SerializeField] Button button3;
+    [SerializeField] Button button4;
 
     [SerializeField] Text text1;
     [SerializeField] Text text2;
@@ -21,6 +22,7 @@ public class DebugInGameChat : MonoBehaviour
         button1.onClick.AddListener(ChangeIsChatable);
         button2.onClick.AddListener(ChangeIsMafia);
         button3.onClick.AddListener(ChangeIsDay);
+        button4.onClick.AddListener(SubscribeGhost);
     }
 
     private void ChangeIsChatable()
@@ -37,5 +39,10 @@ public class DebugInGameChat : MonoBehaviour
     {
         panel.isDay = !panel.isDay;
         sun.enabled = panel.isDay;
+    }
+
+    private void SubscribeGhost()
+    {
+        panel.SubscribleGhostChannel();
     }
 }

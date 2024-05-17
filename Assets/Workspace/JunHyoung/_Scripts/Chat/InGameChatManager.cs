@@ -19,16 +19,22 @@ public class InGameChatManager : MonoBehaviour, IChatClientListener
     [SerializeField] Button buttonFixSize;
 
     private ChatClient chatClient;
+
+    private string userName;
     private string curChannelName;
     private string mafiaChannelName;
+    private string ghostChannelName;
 
-    [SerializeField] public bool isMafia;
+    [Header("Message Color Settings")]
     [SerializeField] private Color nickNameColor;
     [SerializeField] Color mafiaMessageColor;
+    [SerializeField] Color ghostMessageColor;
     [SerializeField] Color systemMessageColor;
 
-    [Header("For Debug")]
-    [SerializeField] public bool isDay;
+    [Header("For Debugging")]
+    [SerializeField] bool isGhost = false;
+    [SerializeField] public bool isMafia;
+    [SerializeField] public bool isDay; // MafiaGameManager의 isDay에 이벤트 연결해서 사용할것.
 
     /******************************************************
     *                    Unity Events
@@ -52,11 +58,6 @@ public class InGameChatManager : MonoBehaviour, IChatClientListener
         if ( chatClient == null )
             return;
 
-        foreach ( Transform child in contents )
-        {
-            Destroy(child.gameObject);
-        }
-
         chatClient.Disconnect();
     }
 
@@ -64,6 +65,7 @@ public class InGameChatManager : MonoBehaviour, IChatClientListener
     {
         if ( chatClient == null )
             return;
+
         chatClient.Service();
 
         if ( !isChatable )
@@ -85,8 +87,9 @@ public class InGameChatManager : MonoBehaviour, IChatClientListener
 
     void InitChatClient()
     {
+        userName = PhotonNetwork.LocalPlayer.NickName;
         chatClient = new ChatClient(this);
-        chatClient.AuthValues = new AuthenticationValues(PhotonNetwork.LocalPlayer.NickName);
+        chatClient.AuthValues = new AuthenticationValues(userName);
 
         ChatEntry newChat = Instantiate(chatEntry, contents);
         newChat.SetChat(new ChatData(" ", $"Connect On Chatting Channel...", Color.black, Color.yellow));
@@ -95,18 +98,35 @@ public class InGameChatManager : MonoBehaviour, IChatClientListener
 
         curChannelName = PhotonNetwork.CurrentRoom.Name + "InGame";
         mafiaChannelName = curChannelName + "Night";
+        ghostChannelName = curChannelName + "Ghots";
 
         //isMafia = (PhotonNetwork.LocalPlayer.GetRole() == "Mafia";
         //nickNameColor = PhotonNetwork.LocalPlayer.GetColor();
     }
 
+    enum SizeState {Default, MAX, MIN }
+    [Header ("Chat Size Setting")]
+    [SerializeField]  SizeState sizeState = SizeState.Default;
+    [SerializeField] Vector2 deafaultSize;
+    [SerializeField] Vector2 maxSize;
+    [SerializeField] Vector2 minSize;
     private void FixSize() // 버튼 클릭 시
     {
-        IsChatable = !IsChatable;
-
-        //rectTransform.sizeDelta =new Vector2();
-
-        Debug.Log(PhotonNetwork.LocalPlayer.NickName);
+        switch(sizeState)
+        {
+            case SizeState.Default:
+                sizeState = SizeState.MAX;
+                rectTransform.sizeDelta = maxSize;
+                break;
+            case SizeState.MAX:
+                sizeState = SizeState.MIN;
+                rectTransform.sizeDelta = minSize;
+                break;
+            case SizeState.MIN:
+                sizeState = SizeState.Default;
+                rectTransform.sizeDelta = deafaultSize;
+                break;
+        }
     }
 
     new void SendMessage( string message ) // InputField 에서 Enter 시
@@ -117,19 +137,25 @@ public class InGameChatManager : MonoBehaviour, IChatClientListener
         if ( string.IsNullOrEmpty(message) )
             return;
 
-        if ( !isDay && isMafia )
+        if ( isGhost ) //죽었으면 고스트 채널에
+        {
+            Debug.Log("Publish to ghost channnel");
+            chatClient.PublishMessage(ghostChannelName, new ChatData(userName, inputField.text, nickNameColor, ghostMessageColor));
+        }
+        else if ( !isDay && isMafia )
         //if(!MafiaManager.Instance.IsDay && isMafia ) // 낮이 아니고, 마피아라면 마피아 채널에
         {
-            chatClient.PublishMessage(mafiaChannelName, new ChatData(PhotonNetwork.LocalPlayer.NickName, inputField.text, nickNameColor, mafiaMessageColor));
+            Debug.Log("Publish to mafia channnel");
+            chatClient.PublishMessage(mafiaChannelName, new ChatData(userName, inputField.text, nickNameColor, mafiaMessageColor));
         }
         else // 이외라면 일반 채팅 채널에
         {
-            chatClient.PublishMessage(curChannelName, new ChatData(PhotonNetwork.LocalPlayer.NickName, inputField.text, nickNameColor));
+            Debug.Log("Publish to default channnel");
+            chatClient.PublishMessage(curChannelName, new ChatData(userName, inputField.text, nickNameColor));
         }
 
         inputField.text = "";
         inputField.ActivateInputField();
-        chatClient.PublicChannels.Clear();
     }
 
     public void PublishMessage( ChatData chatdata )
@@ -139,6 +165,11 @@ public class InGameChatManager : MonoBehaviour, IChatClientListener
         chatClient.PublishMessage(curChannelName, chatdata);
     }
 
+    public void SubscribleGhostChannel()
+    {
+        chatClient.Subscribe(ghostChannelName, 0, 0);
+        isGhost = true;
+    }
 
     #endregion
     /******************************************************
@@ -174,24 +205,37 @@ public class InGameChatManager : MonoBehaviour, IChatClientListener
 
     void IChatClientListener.OnGetMessages( string channelName, string [] senders, object [] messages )
     {
+        Debug.Log($"GetMessage from {channelName}");
         //chatClient.Service(); 가 이거 호출함
+        // 일반 채널 채팅 수신
         if ( channelName.Equals(curChannelName) )
         {
             for ( int i = 0; i < senders.Length; i++ )
             {
                 if ( senders [i] == null )
                     return;
-                ChatData chatData = ( ChatData ) messages [i];
                 ChatEntry newChat = Instantiate(chatEntry, contents);
+                ChatData chatData = ( ChatData ) messages [i];
+                Debug.Log($"{chatData.name} Send {chatData.message}");
                 newChat.SetChat(chatData);
             }
         }
 
-        // 마피아일 때만 마피아 채널의 메세지 수신함
-        if ( !isMafia )
-            return;
+        // 마피아일 때만 마피아 채널의 메세지 수신
+        if ( isMafia && channelName.Equals(mafiaChannelName) )
+        {
+            for ( int i = 0; i < senders.Length; i++ )
+            {
+                if ( senders [i] == null )
+                    return;
+                ChatEntry newChat = Instantiate(chatEntry, contents);
+                ChatData chatData = ( ChatData ) messages [i];
+                newChat.SetChat(chatData);
+            }
+        }
 
-        if ( channelName.Equals(mafiaChannelName) )
+        //죽었을 때는 ghost 채널 메세지 수신
+        if ( isGhost && channelName.Equals(ghostChannelName) )
         {
             for ( int i = 0; i < senders.Length; i++ )
             {
@@ -218,8 +262,8 @@ public class InGameChatManager : MonoBehaviour, IChatClientListener
     void IChatClientListener.OnSubscribed( string [] channels, bool [] results )
     {
         //내가 채널 입장시
-        ChatEntry newChat = Instantiate(chatEntry, contents);
-        newChat.SetChat(new ChatData(" ", $"You Entered Room:{curChannelName}", Color.black, Color.green));
+        //ChatEntry newChat = Instantiate(chatEntry, contents);
+        //newChat.SetChat(new ChatData(" ", $"You Entered Room:{curChannelName}", Color.black, Color.green));
     }
 
     void IChatClientListener.OnUnsubscribed( string [] channels )
@@ -229,16 +273,14 @@ public class InGameChatManager : MonoBehaviour, IChatClientListener
 
     void IChatClientListener.OnUserSubscribed( string channel, string user )
     {
-        ChatEntry newChat = Instantiate(chatEntry, contents);
         //유저가 채널에 입장 할 시
-        newChat.SetChat(new ChatData(" ", $"{user} was Entered Room", Color.black, Color.blue));
+        ChatEntry newChat = Instantiate(chatEntry, contents);
+        newChat.SetChat(new ChatData(" ", $"{user} was Entered {channel}", Color.black, Color.blue));
     }
 
     void IChatClientListener.OnUserUnsubscribed( string channel, string user )
     {
         // 유저가 채널 퇴장시
-        ChatEntry newChat = Instantiate(chatEntry, contents);
-        newChat.SetChat(new ChatData(" ", $"{user} was Exit Room", Color.black, Color.red));
     }
     #endregion
 }

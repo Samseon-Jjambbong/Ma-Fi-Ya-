@@ -12,7 +12,6 @@ public class UserPanel : MonoBehaviour
     [SerializeField] Button editInfo;
     [SerializeField] EditPanel editPanel;
 
-    private bool isActive = false;
 
     private void Start()
     {
@@ -35,7 +34,6 @@ public class UserPanel : MonoBehaviour
 
     private void ActivePanel()
     {
-         //isActive = !isActive;
         editPanel.gameObject.SetActive(true);
     }
 

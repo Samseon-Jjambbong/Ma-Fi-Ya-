@@ -1,5 +1,6 @@
 using Firebase.Auth;
 using Firebase.Extensions;
+using Photon.Pun;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -42,6 +43,7 @@ namespace LoginSystem
             if ( FirebaseManager.UpdateName(name) )
             {
                 panelController.ShowInfo("Update NickName Success!");
+                PhotonNetwork.LocalPlayer.NickName = name;
                 SetInteractable(true);
             }
             else

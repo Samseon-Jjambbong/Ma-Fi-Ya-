@@ -62,7 +62,7 @@ public class RoomPanel : MonoBehaviour
     {
         PhotonNetwork.CurrentRoom.IsOpen = false;
         PhotonNetwork.CurrentRoom.IsVisible = false;
-        PhotonNetwork.LoadLevel("TestGame");
+        PhotonNetwork.LoadLevel("TestGame_Ye");
     }
 
     public void PlayerEnterRoom(Player newPlayer)

@@ -16,13 +16,22 @@ public class UseSkillButton : MonoBehaviourPun
     {
         NightMafiaMove [] players =  FindObjectsOfType<NightMafiaMove>();
 
-        foreach ( NightMafiaMove player in players)
+
+        GameObject obj = Instantiate(Manager.Mafia.NightMafia, Manager.Mafia.NightMafiaPos, Manager.Mafia.NightMafia.transform.rotation);
+
+        foreach (MafiaPlayer player in FindObjectsOfType<MafiaPlayer>())
         {
-            if ( player.IsActive )
+            if (player.IsMine)
             {
-                player.Target = house.gameObject;
-                player.MoveToTarget();
+                obj.GetComponentInChildren<Renderer>().material.color = player.GetComponentInChildren<Renderer>().material.color;
             }
         }
+        NightMafiaMove mafia = obj.GetComponent<NightMafiaMove>();
+
+        mafia.Target = house.gameObject;
+        house.VisitorId(PhotonNetwork.LocalPlayer.ActorNumber);
+        mafia.MoveToTarget();
+
+        house.MafiaComesHome();
     }
 }

@@ -8,6 +8,9 @@ using UnityEngine.UI;
 
 public class InGameChatManager : MonoBehaviour, IChatClientListener
 {
+    static  InGameChatManager instance;
+    static InGameChatManager Instance {  get { return instance; } }
+
     [SerializeField] bool isChatable;
     public bool IsChatable { get { return isChatable; } set { isChatable = value; inputField.interactable = isChatable; } }
 
@@ -40,6 +43,20 @@ public class InGameChatManager : MonoBehaviour, IChatClientListener
     *                    Unity Events
     ******************************************************/
     #region Unity Events
+
+     void Awake()
+    {
+        if ( instance == null )
+        {
+            instance = this;
+       
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
     void Start()
     {
         PhotonPeer.RegisterType(typeof(ChatData), 100, ChatData.Serialize, ChatData.Deserialize);

@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028334, g: 0.22571328, b: 0.3069217, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028326, g: 0.22571333, b: 0.30692202, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -616,6 +616,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: MenuCanvas
       objectReference: {fileID: 0}
+    - target: {fileID: 823391473512369255, guid: ddcc1c73dffb2e442b4407237b8779eb,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1188388672409314520, guid: ddcc1c73dffb2e442b4407237b8779eb,
         type: 3}
       propertyPath: m_Pivot.x
@@ -714,6 +719,71 @@ PrefabInstance:
     - target: {fileID: 1188388672409314520, guid: ddcc1c73dffb2e442b4407237b8779eb,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1197534598591258992, guid: ddcc1c73dffb2e442b4407237b8779eb,
+        type: 3}
+      propertyPath: m_UiScaleMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1197534598591258992, guid: ddcc1c73dffb2e442b4407237b8779eb,
+        type: 3}
+      propertyPath: m_ReferenceResolution.x
+      value: 1920
+      objectReference: {fileID: 0}
+    - target: {fileID: 1197534598591258992, guid: ddcc1c73dffb2e442b4407237b8779eb,
+        type: 3}
+      propertyPath: m_ReferenceResolution.y
+      value: 1080
+      objectReference: {fileID: 0}
+    - target: {fileID: 1474802961785690898, guid: ddcc1c73dffb2e442b4407237b8779eb,
+        type: 3}
+      propertyPath: m_text
+      value: "\u200B"
+      objectReference: {fileID: 0}
+    - target: {fileID: 2024801140010633993, guid: ddcc1c73dffb2e442b4407237b8779eb,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6314982267643962460, guid: ddcc1c73dffb2e442b4407237b8779eb,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6314982267643962460, guid: ddcc1c73dffb2e442b4407237b8779eb,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6314982267643962460, guid: ddcc1c73dffb2e442b4407237b8779eb,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6546851724931035237, guid: ddcc1c73dffb2e442b4407237b8779eb,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6579133691857275226, guid: ddcc1c73dffb2e442b4407237b8779eb,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6579133691857275226, guid: ddcc1c73dffb2e442b4407237b8779eb,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8542993148239933669, guid: ddcc1c73dffb2e442b4407237b8779eb,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8894681590921183421, guid: ddcc1c73dffb2e442b4407237b8779eb,
+        type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

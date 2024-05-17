@@ -40,6 +40,6 @@ public class HouseCreator : MonoBehaviour
             houses.Add(house.GetComponent<House>());
         }
 
-        MafiaGameFlow.Instance.Houses = houses;
+        //MafiaGameFlow.Instance.Houses = houses;
     }
 }

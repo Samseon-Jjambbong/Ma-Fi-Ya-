@@ -19,25 +19,12 @@ public class NightMafiaMove : MonoBehaviour
 
     [SerializeField] Animator animator;
 
-    private bool isActive;
-    public bool IsActive => isActive;
-
     private void Start()
     {
         walkAudio.Stop();
     }
 
-
     Vector3 targetPos;
-    private void OnEnable()
-    {
-        isActive = true;
-    }
-
-    private void OnDisable()
-    {
-        isActive = false;
-    }
 
     IEnumerator MoveToTargetHouse()
     {
@@ -49,14 +36,13 @@ public class NightMafiaMove : MonoBehaviour
         animator.Play("Walk");
         walkAudio.Play();
 
-        while ( transform.position != targetPos )
+        while ((int)transform.position.x != (int)targetPos.x)
         {
-            transform.position = Vector3.MoveTowards(transform.position, targetPos, moveSpeed);
+            transform.position = Vector3.MoveTowards(transform.position, targetPos, moveSpeed * Time.deltaTime);
             yield return null;
         }
 
-        animator.Play("Idle");
-        walkAudio.Stop();
+        Destroy(gameObject);
     }
 
     public void MoveToTarget()

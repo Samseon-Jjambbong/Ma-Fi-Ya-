@@ -25,7 +25,12 @@ public class House : MonoBehaviourPun, IPointerClickHandler, IPointerExitHandler
     [Header("Mafia")]
     [SerializeField] private MafiaPlayer houseOwner;
     public MafiaPlayer HouseOwner { get { return houseOwner; } set { houseOwner = value; } }
+
+    [SerializeField] private MafiaPlayer visitor;
+    public MafiaPlayer Visitor { get { return visitor; } set { visitor = value; } }
+
     public int houseOwnerId;
+    [SerializeField] private int visitorId;
 
     [Header("Misc")]
     public bool debugMode;
@@ -145,12 +150,38 @@ public class House : MonoBehaviourPun, IPointerClickHandler, IPointerExitHandler
 
         Vote();
     }
+    public void VisitorId(int id)
+    {
+        photonView.RPC("SetVisitorId", PhotonNetwork.PlayerList[houseOwnerId - 1], id);
+    }
+
+    public void MafiaComesHome()
+    {
+        photonView.RPC("ComesHome", PhotonNetwork.PlayerList[houseOwnerId - 1]);
+    }
+
+    [PunRPC]
+    private void ComesHome()
+    {
+        GameObject obj = Instantiate(Manager.Mafia.NightMafia, Manager.Mafia.NightMafiaPos, Manager.Mafia.NightMafia.transform.rotation);
+
+        NightMafiaMove mafia = obj.GetComponent<NightMafiaMove>();
+
+        mafia.Target = gameObject;
+        mafia.MoveToTarget();
+    }
 
     [PunRPC]
     private void AddHouse(int id)
     {
         houseOwnerId = id;
         Manager.Mafia.Houses.Add(this);
+    }
+
+    [PunRPC]
+    private void SetVisitorId(int id)
+    {
+        visitorId = id;
     }
 
     public void OnPhotonSerializeView( PhotonStream stream, PhotonMessageInfo info )

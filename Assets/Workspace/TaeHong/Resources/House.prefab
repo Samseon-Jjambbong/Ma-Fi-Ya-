@@ -1128,7 +1128,9 @@ MonoBehaviour:
   outline: {fileID: 7400318162097117840}
   voteCountText: {fileID: 9190378931470461126}
   houseOwner: {fileID: 0}
+  visitor: {fileID: 0}
   houseOwnerId: 0
+  visitorId: 0
   debugMode: 0
 --- !u!114 &7400318162097117840
 MonoBehaviour:

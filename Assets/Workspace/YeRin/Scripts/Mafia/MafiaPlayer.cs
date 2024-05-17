@@ -35,7 +35,9 @@ public class MafiaPlayer : MonoBehaviourPun
     public MafiaActionType actionType;
     public MafiaAction actionByThisPlayer;
     public MafiaActionPQ actionsOnThisPlayer = new MafiaActionPQ();
+
     private bool skillBlocked;
+    public bool IsMine => photonView.IsMine;
 
     private Vector3 moveDir;
     private float currentSpeed;

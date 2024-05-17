@@ -23,6 +23,11 @@ public class MafiaManager : Singleton<MafiaManager>, IPunObservable
     [SerializeField] private int voteTime;
     [SerializeField] private float skillTime;
 
+    [SerializeField] GameObject nightMafia;
+    public GameObject NightMafia => nightMafia;
+    [SerializeField] Vector3 nightMafiaPos;
+    public Vector3 NightMafiaPos => nightMafiaPos;
+
     [SerializeField] List<House> houses;
     public List<House> Houses { get { return houses; } set { houses = value; } }
     public float SkillTime => skillTime;

@@ -75,6 +75,13 @@ public class MafiaManager : Singleton<MafiaManager>, IPunObservable
                 maxVoted = i + 1;
             }
         }
+
+        // Reset values
+        for(int i = 0; i < votes.Length; i++)
+        {
+            votes[i] = 0;
+        }
+
         return maxVoted;
     }
 

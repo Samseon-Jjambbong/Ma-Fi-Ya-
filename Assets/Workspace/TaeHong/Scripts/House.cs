@@ -55,7 +55,7 @@ public class House : MonoBehaviourPun, IPointerClickHandler, IPointerExitHandler
 
     private void OnVoteCountChanged()
     {
-        voteCountText.text = Manager.Mafia.Votes[houseOwnerId].ToString();
+        voteCountText.text = Manager.Mafia.Votes[houseOwnerId - 1].ToString();
     }
 
     public void ChooseTarget()
@@ -71,7 +71,7 @@ public class House : MonoBehaviourPun, IPointerClickHandler, IPointerExitHandler
 
     public void Vote()
     {
-
+        Manager.Mafia.GetComponent<PhotonView>().RPC("VoteForPlayer", RpcTarget.All, houseOwnerId);
     }
 
     // What UI should be shown when a house is clicked

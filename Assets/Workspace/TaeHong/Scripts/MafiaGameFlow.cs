@@ -45,6 +45,12 @@ public class MafiaGameFlow : MonoBehaviourPun
         StartCoroutine(DayPhaseRoutine(time));
     }
 
+    [PunRPC]
+    public void ShowVoteResults()
+    {
+        StartCoroutine(ShowVoteResultsRoutine());
+    }
+
     public void ChangeTime()
     {
         StartCoroutine(ChangeTimeOfDayRoutine());
@@ -61,8 +67,6 @@ public class MafiaGameFlow : MonoBehaviourPun
             Debug.Log("Disabled Chat");
         }
     }
-
-    
 
     #endregion
 
@@ -130,6 +134,7 @@ public class MafiaGameFlow : MonoBehaviourPun
         // Allow voting for X Seconds
         for ( int i = 0; i < PhotonNetwork.PlayerList.Length; i++ )
         {
+            Manager.Mafia.Houses[i].ShowVoteCount(true);
             if ( i == (PhotonNetwork.LocalPlayer.ActorNumber - 1) )
                 continue;
             
@@ -141,9 +146,16 @@ public class MafiaGameFlow : MonoBehaviourPun
         foreach ( var house in Manager.Mafia.Houses )
         {
             house.ActivateOutline(false);
+            house.ShowVoteCount(false);
         }
 
         EnableChat(false);
+    }
+
+    private IEnumerator ShowVoteResultsRoutine()
+    {
+        Manager.Mafia.Player.photonView.RPC("ShowNightResults", RpcTarget.All);
+        yield return new WaitForSeconds(1);
     }
 
     #endregion

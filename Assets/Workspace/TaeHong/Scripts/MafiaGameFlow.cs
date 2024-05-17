@@ -154,7 +154,16 @@ public class MafiaGameFlow : MonoBehaviourPun
 
     private IEnumerator ShowVoteResultsRoutine()
     {
-        Manager.Mafia.Player.photonView.RPC("ShowNightResults", RpcTarget.All);
+        // Show vote result on everyone's screen
+        int voteResult = Manager.Mafia.GetVoteResult();
+        if(voteResult == -1)
+        {
+            Debug.Log("No one got kicked");
+        }
+        else
+        {
+            Debug.Log($"Player{voteResult} got kicked");
+        }
         yield return new WaitForSeconds(1);
     }
 

@@ -196,7 +196,7 @@ public class MafiaPunManager : MonoBehaviourPunCallbacks
 
             Vector3 pos = new Vector3(Mathf.Cos(currentAngle * Mathf.Deg2Rad) * houseRadius, 1.8f, Mathf.Sin(currentAngle * Mathf.Deg2Rad) * houseRadius);
             GameObject houseGO = PhotonNetwork.InstantiateRoomObject("House", pos, Quaternion.LookRotation(pos));
-            houseGO.GetComponent<House>().houseOwnerId = i + 1;
+            houseGO.GetComponent<House>().photonView.RPC("AddHouse", RpcTarget.All, i + 1);
 
             currentAngle -= angle;
         }

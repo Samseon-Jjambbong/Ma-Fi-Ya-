@@ -50,7 +50,7 @@ public class MafiaManager : Singleton<MafiaManager>, IPunObservable
     [PunRPC] // Called only on MasterClient
     public void PlayerDied(int id)
     {
-        bool result = Game.RemovePlayer((MafiaRole)PhotonNetwork.CurrentRoom.GetMafiaRoleList()[id - 1]);
+        bool result = Game.RemovePlayer(PhotonNetwork.PlayerList[id].GetPlayerRole());
         if(result)
         {
             // civilian win

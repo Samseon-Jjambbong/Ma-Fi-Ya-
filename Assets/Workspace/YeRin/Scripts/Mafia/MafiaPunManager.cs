@@ -12,23 +12,21 @@ using Random = UnityEngine.Random;
 
 public class MafiaPunManager : MonoBehaviourPunCallbacks
 {
+    [Header("Components")]
     [SerializeField] TMP_Text infoText;
-    [SerializeField] float CountDownTime;
+    [SerializeField] MafiaRolesSO mafiaRolesSO;
 
+    [Header("Values")]
     [SerializeField] int playerRadius;
     [SerializeField] int houseRadius;
     [SerializeField] List<Color> colorList;
-
-    private Dictionary<int, Player> playerDic;
-
-    [Header("Game Flow")]
+    [SerializeField] float CountDownTime;
     [SerializeField] private int displayRoleTime;
     [SerializeField] private int roleUseTime;
     [SerializeField] private int voteTime;
     [SerializeField] private int skillTime;
 
-    [Header("Game Logic")]
-    [SerializeField] MafiaRolesSO mafiaRolesSO;
+    private Dictionary<int, Player> playerDic;
 
     private void Start()
     {
@@ -74,8 +72,8 @@ public class MafiaPunManager : MonoBehaviourPunCallbacks
         if ( PhotonNetwork.IsMasterClient )
         {
             SpawnHouses(); // Spawn {PlayerCount} Houses
-            //RandomizeRoles(PhotonNetwork.CurrentRoom.PlayerCount);
-            RandomizeRoles(4); // TODO: CHANGE LATER
+            //AssignRoles(PhotonNetwork.CurrentRoom.PlayerCount);
+            AssignRoles(4); // TODO: CHANGE LATER
         }
 
         double loadTime = PhotonNetwork.CurrentRoom.GetGameStartTime();
@@ -121,7 +119,6 @@ public class MafiaPunManager : MonoBehaviourPunCallbacks
 
     public void GameStart()
     {
-        AssignRole();
         SpawnPlayer();
 
         if (PhotonNetwork.IsMasterClient ) 
@@ -225,12 +222,12 @@ public class MafiaPunManager : MonoBehaviourPunCallbacks
         }
     }
 
-    private void RandomizeRoles(int numPlayers)
+    private void AssignRoles(int numPlayers)
     {
         // Get role pool
         MafiaRole[] roles = mafiaRolesSO.GetRoles(numPlayers);
         
-        // Shuffle list algorithm
+        // Shuffle algorithm
         int n = roles.Length;
         for (int i = n - 1; i > 0; i--)
         {
@@ -243,22 +240,12 @@ public class MafiaPunManager : MonoBehaviourPunCallbacks
             roles[j] = temp;
         }
 
-        int[] arr = new int[roles.Length];
-        for (int i = 0; i < arr.Length; i++)
+        // Assign roles
+        for(int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
         {
-            arr[i] = (int) roles[i];
+            PhotonNetwork.PlayerList[i].SetPlayerRole(roles[i]);
+            Manager.Mafia.Game.AddPlayer(roles[i]);
         }
-
-        // Update role list on master
-        PhotonNetwork.CurrentRoom.SetMafiaRoleList(arr);
-    }
-
-    private void AssignRole()
-    {
-        int[] roles = PhotonNetwork.CurrentRoom.GetMafiaRoleList();
-        MafiaRole role = (MafiaRole)roles[PhotonNetwork.LocalPlayer.ActorNumber - 1];
-        PhotonNetwork.LocalPlayer.SetPlayerRole(role);
-        Manager.Mafia.Game.AddPlayer(role);
     }
 }
 

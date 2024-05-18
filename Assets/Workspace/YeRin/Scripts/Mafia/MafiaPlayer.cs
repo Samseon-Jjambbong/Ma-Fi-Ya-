@@ -15,34 +15,33 @@ using UnityEngine.UI;
 /// </summary>
 public class MafiaPlayer : MonoBehaviourPun
 {
+    [Header("Components")]
     [SerializeField] TMP_Text nickNameText;
     [SerializeField] Rigidbody rigid;
     [SerializeField] Animator animator;
-
     [SerializeField] AudioSource walkAudio;
 
+    [Header("Movement Values")]
     [SerializeField] float movePower;
     [SerializeField] float maxSpeed;
     [SerializeField] float rotateSpeed;
+    private Vector3 moveDir;
+    private float currentSpeed;
 
-    // 플레이어의 생존 여부
-    private bool isAlive = true;
+    [Header("Properties")]
+    private bool isAlive = true; // 플레이어의 생존 여부
     public bool IsAlive { get { return isAlive; } }
 
+    [Header("Mafia Logic")]
     private Dictionary<int, Player> playerDic;
-
-    // Tae Player Logic
     public MafiaActionType actionType;
     public MafiaAction actionByThisPlayer;
     public MafiaActionPQ actionsOnThisPlayer = new MafiaActionPQ();
 
+    [Header("States")]
     private bool skillBlocked;
-    public bool IsMine => photonView.IsMine;
-
-    private Vector3 moveDir;
-    private float currentSpeed;
-
     private bool isWalking;
+    public bool IsMine => photonView.IsMine;
 
     protected virtual void Start()
     {
@@ -268,13 +267,6 @@ public class MafiaPlayer : MonoBehaviourPun
     }
 
     [PunRPC]
-    private void NickName( string nickName )
-    {
-        nickNameText.text = nickName;
-    }
-    #endregion
-    
-    [PunRPC]
     private void SetColor(float r, float g, float b)
     {
         if (PhotonNetwork.IsMasterClient)
@@ -286,4 +278,11 @@ public class MafiaPlayer : MonoBehaviourPun
         }
         GetComponentInChildren<Renderer>().material.color = new Color(r, g, b, 1f);
     }
+
+    [PunRPC]
+    private void NickName( string nickName )
+    {
+        nickNameText.text = nickName;
+    }
+    #endregion
 }

@@ -35,6 +35,7 @@ public class MafiaManager : Singleton<MafiaManager>, IPunObservable
     private MafiaPlayer player;
     public MafiaPlayer Player { get; set; }
 
+    // MASTER CLIENT ONLY
     public MafiaGame Game = new MafiaGame();
     public event Action VoteCountChanged;
     private int[] votes;
@@ -123,5 +124,16 @@ public class MafiaManager : Singleton<MafiaManager>, IPunObservable
     public void ShowSomebodyMove(House house)
     {
         house.MafiaComesHome();
+    }
+
+    public void ActivateHouseOutlines()
+    {
+        for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
+        {
+            if (i == (PhotonNetwork.LocalPlayer.ActorNumber - 1))
+                continue;
+
+            Manager.Mafia.Houses[i].ActivateOutline(true);
+        }
     }
 }

@@ -97,13 +97,7 @@ public class MafiaGameFlow : MonoBehaviourPun
         // TODO : Insert chat ON function here
 
         // Allow skill usage for X Seconds
-        for ( int i = 0; i < PhotonNetwork.PlayerList.Length; i++ )
-        {
-            if ( i == (PhotonNetwork.LocalPlayer.ActorNumber - 1) )
-                continue;
-            
-            Manager.Mafia.Houses[i].ActivateOutline(true);
-        }
+        Manager.Mafia.ActivateHouseOutlines();
 
         yield return timer.StartTimer(time);
 
@@ -118,7 +112,10 @@ public class MafiaGameFlow : MonoBehaviourPun
 
     private IEnumerator ShowNightEventsRoutine()
     {
-        Manager.Mafia.Player.photonView.RPC("ShowNightResults", RpcTarget.All);
+        MafiaActionPQ actionPQ = Manager.Mafia.Player.actionsOnThisPlayer;
+        int receiver = actionPQ.Peek().receiver;
+        Manager.Mafia.ShowMyPlayerMove(Manager.Mafia.Houses[receiver - 1]);
+        //Manager.Mafia.Player.photonView.RPC("ShowNightResults", RpcTarget.All);
         yield return new WaitForSeconds(1);
     }
 

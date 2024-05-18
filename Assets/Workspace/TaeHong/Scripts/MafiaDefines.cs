@@ -74,7 +74,7 @@ public class MafiaActionPQ
                 prioIndex = i;
             }
         }
-        return actions[prioIndex];
+        return actions[prioIndex];  
     }
 }
 

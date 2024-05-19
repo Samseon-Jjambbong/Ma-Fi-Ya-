@@ -1,13 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
-using PhotonHashTable = ExitGames.Client.Photon.Hashtable;
+using System.Collections;
+using System.Collections.Generic;
 using TMPro;
-using Photon.Pun.UtilityScripts;
-using UnityEngine.InputSystem;
-using System;
+using UnityEngine;
+using PhotonHashTable = ExitGames.Client.Photon.Hashtable;
 using Random = UnityEngine.Random;
 
 public class MafiaPunManager : MonoBehaviourPunCallbacks
@@ -39,14 +36,14 @@ public class MafiaPunManager : MonoBehaviourPunCallbacks
         }
     }
 
-    public override void OnPlayerPropertiesUpdate( Player targetPlayer, PhotonHashTable changedProps )
+    public override void OnPlayerPropertiesUpdate(Player targetPlayer, PhotonHashTable changedProps)
     {
-        if ( changedProps.ContainsKey(CustomProperty.LOAD) )
+        if (changedProps.ContainsKey(CustomProperty.LOAD))
         {
             infoText.text = $"{PlayerLoadCount()} / {PhotonNetwork.PlayerList.Length}";
-            if ( PlayerLoadCount() == PhotonNetwork.PlayerList.Length )
+            if (PlayerLoadCount() == PhotonNetwork.PlayerList.Length)
             {
-                if ( PhotonNetwork.IsMasterClient )
+                if (PhotonNetwork.IsMasterClient)
                 {
                     PhotonNetwork.CurrentRoom.SetGameStart(true);
                     PhotonNetwork.CurrentRoom.SetGameStartTime(PhotonNetwork.Time);
@@ -59,9 +56,9 @@ public class MafiaPunManager : MonoBehaviourPunCallbacks
         }
     }
 
-    public override void OnRoomPropertiesUpdate( PhotonHashTable propertiesThatChanged )
+    public override void OnRoomPropertiesUpdate(PhotonHashTable propertiesThatChanged)
     {
-        if ( propertiesThatChanged.ContainsKey(CustomProperty.GAMESTARTTIME) )
+        if (propertiesThatChanged.ContainsKey(CustomProperty.GAMESTARTTIME))
         {
             StartCoroutine(StartTime());
         }
@@ -69,7 +66,7 @@ public class MafiaPunManager : MonoBehaviourPunCallbacks
 
     IEnumerator StartTime()
     {
-        if ( PhotonNetwork.IsMasterClient )
+        if (PhotonNetwork.IsMasterClient)
         {
             SpawnHouses(); // Spawn {PlayerCount} Houses
             //AssignRoles(PhotonNetwork.CurrentRoom.PlayerCount);
@@ -77,10 +74,10 @@ public class MafiaPunManager : MonoBehaviourPunCallbacks
         }
 
         double loadTime = PhotonNetwork.CurrentRoom.GetGameStartTime();
-        while ( PhotonNetwork.Time - loadTime < CountDownTime )
+        while (PhotonNetwork.Time - loadTime < CountDownTime)
         {
-            int remainTime = ( int ) ( CountDownTime - ( PhotonNetwork.Time - loadTime ) );
-            infoText.text = ( remainTime + 1 ).ToString();
+            int remainTime = (int) (CountDownTime - (PhotonNetwork.Time - loadTime));
+            infoText.text = (remainTime + 1).ToString();
             yield return null;
         }
 
@@ -94,9 +91,9 @@ public class MafiaPunManager : MonoBehaviourPunCallbacks
     private int PlayerLoadCount()
     {
         int loadCount = 0;
-        foreach ( Player player in PhotonNetwork.PlayerList )
+        foreach (Player player in PhotonNetwork.PlayerList)
         {
-            if ( player.GetLoaded() )
+            if (player.GetLoaded())
             {
                 loadCount++;
             }
@@ -121,7 +118,7 @@ public class MafiaPunManager : MonoBehaviourPunCallbacks
     {
         SpawnPlayer();
 
-        if (PhotonNetwork.IsMasterClient ) 
+        if (PhotonNetwork.IsMasterClient)
         {
             StartCoroutine(GameLoop());
         }
@@ -166,14 +163,14 @@ public class MafiaPunManager : MonoBehaviourPunCallbacks
 
     private void SpawnPlayer()
     {
-        int angle = 180 / ( Manager.Mafia.PlayerCount - 1 );    // 각 플레이어의 간격의 각도
+        int angle = 180 / (Manager.Mafia.PlayerCount - 1);    // 각 플레이어의 간격의 각도
 
         int playerNumber = -1;
 
         // 플레이어의 게임 입장 순번 찾아내기
         for (int i = 1; i <= playerDic.Count; i++)
         {
-            if ( playerDic [i] == PhotonNetwork.LocalPlayer)
+            if (playerDic[i] == PhotonNetwork.LocalPlayer)
             {
                 playerNumber = i - 1;
             }
@@ -197,16 +194,16 @@ public class MafiaPunManager : MonoBehaviourPunCallbacks
         // PhotonNetwork.Instantiate를 통해 각 플레이어 캐릭터 생성, 센터를 바라보도록 rotation 설정
         GameObject player = PhotonNetwork.Instantiate("Mafia", pos, Quaternion.LookRotation(-pos));
         player.GetComponent<MafiaPlayer>().SetPlayerHouse(playerNumber);
-        player.GetComponent<MafiaPlayer>().SetNickName(PhotonNetwork.PlayerList [playerNumber].NickName);
+        player.GetComponent<MafiaPlayer>().SetNickName(PhotonNetwork.PlayerList[playerNumber].NickName);
         Manager.Mafia.Player = player.GetComponent<MafiaPlayer>();
     }
 
     private void SpawnHouses()
     {
-        int angle = 180 / ( Manager.Mafia.PlayerCount - 1 );    // 각 집의 간격의 각도
+        int angle = 180 / (Manager.Mafia.PlayerCount - 1);    // 각 집의 간격의 각도
 
         int currentAngle = 180;
-        for ( int i = 0; i < Manager.Mafia.PlayerCount; i++ )
+        for (int i = 0; i < Manager.Mafia.PlayerCount; i++)
         {
             if (i == Manager.Mafia.PlayerCount - 1)
             {
@@ -225,7 +222,7 @@ public class MafiaPunManager : MonoBehaviourPunCallbacks
     {
         // Get role pool
         MafiaRole[] roles = mafiaRolesSO.GetRoles(numPlayers);
-        
+
         // Shuffle algorithm
         int n = roles.Length;
         for (int i = n - 1; i > 0; i--)
@@ -240,7 +237,7 @@ public class MafiaPunManager : MonoBehaviourPunCallbacks
         }
 
         // Assign roles
-        for(int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
+        for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
         {
             PhotonNetwork.PlayerList[i].SetPlayerRole(roles[i]);
             Manager.Mafia.Game.AddPlayer(roles[i]);

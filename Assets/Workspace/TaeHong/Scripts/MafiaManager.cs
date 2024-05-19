@@ -1,9 +1,7 @@
 using Photon.Pun;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Tae;
 
 /// <summary>
 /// programmer : Yerin, TaeHong
@@ -64,7 +62,7 @@ public class MafiaManager : Singleton<MafiaManager>, IPunObservable
     public void PlayerDied(int id)
     {
         bool result = Game.RemovePlayer(PhotonNetwork.PlayerList[id].GetPlayerRole());
-        if(result)
+        if (result)
         {
             // civilian win
         }
@@ -85,7 +83,7 @@ public class MafiaManager : Singleton<MafiaManager>, IPunObservable
     {
         int maxVotes = -1;
         int maxVoted = -1;
-        for(int i = 0; i < votes.Length; i++)
+        for (int i = 0; i < votes.Length; i++)
         {
             if (votes[i] > maxVotes)
             {
@@ -95,7 +93,7 @@ public class MafiaManager : Singleton<MafiaManager>, IPunObservable
         }
 
         // Reset values
-        for(int i = 0; i < votes.Length; i++)
+        for (int i = 0; i < votes.Length; i++)
         {
             votes[i] = 0;
         }
@@ -112,7 +110,7 @@ public class MafiaManager : Singleton<MafiaManager>, IPunObservable
         }
         else
         {
-            isDay = (bool)stream.ReceiveNext();
+            isDay = (bool) stream.ReceiveNext();
         }
     }
 
@@ -181,18 +179,18 @@ public class MafiaManager : Singleton<MafiaManager>, IPunObservable
     public void ParseActionsAndAssign()
     {
         MafiaAction action;
-        while(MafiaActionPQ.Count > 0)
+        while (MafiaActionPQ.Count > 0)
         {
             action = MafiaActionPQ.Dequeue();
             int senderIdx = action.sender - 1;
             int receiverIdx = action.receiver - 1;
 
             // If blocked, don't add action
-            if (blockedPlayers[senderIdx]) 
+            if (blockedPlayers[senderIdx])
             {
                 continue;
             }
-            
+
             // Send action info to players
             switch (action.actionType)
             {

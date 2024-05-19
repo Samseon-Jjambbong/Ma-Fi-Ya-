@@ -1,12 +1,8 @@
 using Photon.Pun;
-using Photon.Realtime;
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using Tae;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public class MafiaGameFlow : MonoBehaviourPun
 {
@@ -78,14 +74,14 @@ public class MafiaGameFlow : MonoBehaviourPun
         yield return timer.StartTimer(time);
         roleUI.SetActive(false);
     }
-    
+
     // Day/Night Light Changer
     private IEnumerator ChangeTimeOfDayRoutine()
     {
         yield return lightController.ChangePhase();
         Manager.Mafia.IsDay = !Manager.Mafia.IsDay;
     }
-    
+
     // Night Phase
     private IEnumerator NightPhaseRoutine(int time)
     {
@@ -142,18 +138,18 @@ public class MafiaGameFlow : MonoBehaviourPun
         EnableChat(true);
 
         // Allow voting for X Seconds
-        for ( int i = 0; i < PhotonNetwork.PlayerList.Length; i++ )
+        for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
         {
             Manager.Mafia.Houses[i].ShowVoteCount(true);
-            if ( i == (PhotonNetwork.LocalPlayer.ActorNumber - 1) )
+            if (i == (PhotonNetwork.LocalPlayer.ActorNumber - 1))
                 continue;
-            
+
             Manager.Mafia.Houses[i].ActivateOutline(true);
         }
 
         yield return timer.StartTimer(time);
-        
-        foreach ( var house in Manager.Mafia.Houses )
+
+        foreach (var house in Manager.Mafia.Houses)
         {
             house.ActivateOutline(false);
             house.ShowVoteCount(false);
@@ -166,7 +162,7 @@ public class MafiaGameFlow : MonoBehaviourPun
     {
         // Show vote result on everyone's screen
         int voteResult = Manager.Mafia.GetVoteResult();
-        if(voteResult == -1)
+        if (voteResult == -1)
         {
             Debug.Log("No one got kicked");
         }

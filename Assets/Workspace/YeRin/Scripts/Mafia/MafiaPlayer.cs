@@ -1,12 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using Photon.Pun;
-using Photon.Pun.Demo.PunBasics;
 using Photon.Realtime;
+using System.Collections.Generic;
 using TMPro;
+using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.UI;
 
 /// <summary>
 /// programmer : Yerin, TaeHong
@@ -49,7 +46,7 @@ public class MafiaPlayer : MonoBehaviourPun
         playerDic = PhotonNetwork.CurrentRoom.Players;
 
 
-        if ( PhotonNetwork.IsMasterClient )
+        if (PhotonNetwork.IsMasterClient)
         {
             photonView.RPC("SetColor", RpcTarget.MasterClient, Color.black.r, Color.black.g, Color.black.b);
         }
@@ -58,7 +55,7 @@ public class MafiaPlayer : MonoBehaviourPun
 
     private void FixedUpdate()
     {
-        if ( photonView.IsMine )
+        if (photonView.IsMine)
         {
             Accelate();
         }
@@ -66,7 +63,7 @@ public class MafiaPlayer : MonoBehaviourPun
 
     private void Update()
     {
-        if ( photonView.IsMine )
+        if (photonView.IsMine)
         {
             Rotate();
         }
@@ -105,13 +102,13 @@ public class MafiaPlayer : MonoBehaviourPun
 
         PhotonNetwork.LocalPlayer.SetMafiaReady(false);
 
-        if(actionByThisPlayer != null)
+        if (actionByThisPlayer != null)
         {
             MafiaAction action = (MafiaAction) actionByThisPlayer;
             Manager.Mafia.ShowMyPlayerMove(Manager.Mafia.Houses[action.receiver - 1]);
         }
 
-        foreach(MafiaActionType action in actionsOnThisPlayer)
+        foreach (MafiaActionType action in actionsOnThisPlayer)
         {
             Manager.Mafia.ShowSomebodyMove(Manager.Mafia.Houses[PhotonNetwork.LocalPlayer.ActorNumber - 1]);
         }
@@ -196,18 +193,18 @@ public class MafiaPlayer : MonoBehaviourPun
     #endregion
 
     #region Photon
-    public void SetPlayerHouse( int playerNumber )
+    public void SetPlayerHouse(int playerNumber)
     {
         photonView.RPC("AddHouseList", RpcTarget.All, playerNumber);
-        Manager.Mafia.Houses [playerNumber].ActivateOutline(false);
+        Manager.Mafia.Houses[playerNumber].ActivateOutline(false);
     }
 
-    private void OnMove( InputValue value )
+    private void OnMove(InputValue value)
     {
         moveDir.x = value.Get<Vector2>().x;
         moveDir.z = value.Get<Vector2>().y;
 
-        if ( photonView.IsMine )
+        if (photonView.IsMine)
         {
             photonView.RPC("Walk", RpcTarget.All);
         }
@@ -215,7 +212,7 @@ public class MafiaPlayer : MonoBehaviourPun
 
     private void Accelate()
     {
-        if ( moveDir.x == 0 && moveDir.z == 0 && isWalking )
+        if (moveDir.x == 0 && moveDir.z == 0 && isWalking)
         {
             photonView.RPC("Walk", RpcTarget.All);
         }
@@ -229,7 +226,7 @@ public class MafiaPlayer : MonoBehaviourPun
             rigid.AddForce(moveDir.z * transform.forward * movePower, ForceMode.Force);
         }
 
-        if ( rigid.velocity.sqrMagnitude > maxSpeed * maxSpeed )
+        if (rigid.velocity.sqrMagnitude > maxSpeed * maxSpeed)
         {
             rigid.velocity = rigid.velocity.normalized * maxSpeed;
         }
@@ -242,22 +239,22 @@ public class MafiaPlayer : MonoBehaviourPun
     }
 
     [PunRPC]
-    private void OnHipHopDance( InputValue value)
+    private void OnHipHopDance(InputValue value)
     {
-        if ( photonView.IsMine )
+        if (photonView.IsMine)
             photonView.RPC("HipHop", RpcTarget.All);
     }
 
     [PunRPC]
-    private void OnRumbaDance( InputValue value )
+    private void OnRumbaDance(InputValue value)
     {
-        if ( photonView.IsMine )
+        if (photonView.IsMine)
             photonView.RPC("Rumba", RpcTarget.All);
     }
 
-    private void OnSillyDance( InputValue value )
+    private void OnSillyDance(InputValue value)
     {
-        if ( photonView.IsMine )
+        if (photonView.IsMine)
             photonView.RPC("Silly", RpcTarget.All);
     }
 
@@ -299,9 +296,9 @@ public class MafiaPlayer : MonoBehaviourPun
     }
 
     [PunRPC]
-    private void AddHouseList( int playerNumber )
+    private void AddHouseList(int playerNumber)
     {
-        Manager.Mafia.Houses [playerNumber].HouseOwner = this;
+        Manager.Mafia.Houses[playerNumber].HouseOwner = this;
     }
 
     public void SetNickName(string nickName)
@@ -323,7 +320,7 @@ public class MafiaPlayer : MonoBehaviourPun
     }
 
     [PunRPC]
-    private void NickName( string nickName )
+    private void NickName(string nickName)
     {
         nickNameText.text = nickName;
     }

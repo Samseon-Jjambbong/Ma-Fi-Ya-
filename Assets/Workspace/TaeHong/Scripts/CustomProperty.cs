@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using Photon.Realtime;
 using UnityEngine;
 using PhotonHashtable = ExitGames.Client.Photon.Hashtable;
@@ -15,12 +13,12 @@ public static class CustomProperty
     public const string MAFIAROLELIST = "MafiaRoleList";
     public const string PLAYERCOLOR = "PlayerColor";
     public const string MAFIAREADY = "MafiaReady";
-    
+
     public static bool GetReady(this Player player)
     {
         PhotonHashtable properties = player.CustomProperties;
         if (properties.ContainsKey(READY))
-            return (bool)properties[READY];
+            return (bool) properties[READY];
         return false;
     }
 
@@ -35,9 +33,9 @@ public static class CustomProperty
         PhotonHashtable properties = player.CustomProperties;
         if (properties.ContainsKey(LOAD))
         {
-            return (bool)properties[LOAD];
+            return (bool) properties[LOAD];
         }
-            
+
         return false;
     }
 
@@ -51,10 +49,10 @@ public static class CustomProperty
     {
         PhotonHashtable properties = room.CustomProperties;
         if (properties.ContainsKey(GAMESTART))
-            return (bool)properties[GAMESTART];
+            return (bool) properties[GAMESTART];
         return false;
     }
-    
+
     public static void SetGameStart(this Room room, bool value)
     {
         PhotonHashtable propertiesToSet = new PhotonHashtable { { GAMESTART, value } };
@@ -65,40 +63,40 @@ public static class CustomProperty
     {
         PhotonHashtable properties = room.CustomProperties;
         if (properties.ContainsKey(GAMESTARTTIME))
-            return (double)properties[GAMESTARTTIME];
+            return (double) properties[GAMESTARTTIME];
         return 0;
     }
-    
+
     public static void SetGameStartTime(this Room room, double value)
     {
         PhotonHashtable propertiesToSet = new PhotonHashtable { { GAMESTARTTIME, value } };
         room.SetCustomProperties(propertiesToSet);
     }
-    
+
     // Room Custom Property for Game Mode
-    public static GameMode GetGameMode( this Room room )
+    public static GameMode GetGameMode(this Room room)
     {
         PhotonHashtable properties = room.CustomProperties;
         if (properties.ContainsKey(GAMEMODE))
-            return (GameMode)properties[GAMEMODE];
+            return (GameMode) properties[GAMEMODE];
         return 0;
     }
-    
+
     public static void SetGameMode(this RoomOptions room, GameMode value, bool setPropertyToLobby)
     {
         PhotonHashtable propertiesToSet = new PhotonHashtable { { GAMEMODE, value } };
         room.CustomRoomProperties = propertiesToSet;
-        
-        if ( setPropertyToLobby )
-            room.CustomRoomPropertiesForLobby = new string [] { GAMEMODE };
+
+        if (setPropertyToLobby)
+            room.CustomRoomPropertiesForLobby = new string[] { GAMEMODE };
     }
-    
+
     // Player Role
     public static MafiaRole GetPlayerRole(this Player player)
     {
         PhotonHashtable properties = player.CustomProperties;
         if (properties.ContainsKey(PLAYERROLE))
-            return (MafiaRole)properties[PLAYERROLE];
+            return (MafiaRole) properties[PLAYERROLE];
         return 0;
     }
 

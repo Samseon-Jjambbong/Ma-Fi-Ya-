@@ -1,5 +1,6 @@
 using Photon.Pun;
 using Photon.Realtime;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -39,12 +40,32 @@ public class MafiaPlayer : MonoBehaviourPun
     private bool skillBlocked;
     private bool isWalking;
     public bool IsMine => photonView.IsMine;
+    int ID => PhotonNetwork.LocalPlayer.ActorNumber;
+    int Idx => PhotonNetwork.LocalPlayer.ActorNumber - 1;
 
     protected virtual void Start()
     {
         // 플레이어 역할 받기
         playerDic = PhotonNetwork.CurrentRoom.Players;
 
+        if (IsMine)
+        {
+            switch (PhotonNetwork.LocalPlayer.GetPlayerRole())
+            {
+                case MafiaRole.Mafia:
+                    actionType = MafiaActionType.Kill;
+                    break;
+                case MafiaRole.Doctor:
+                    actionType = MafiaActionType.Heal;
+                    break;
+                case MafiaRole.Police:
+                    actionType = MafiaActionType.Block;
+                    break;
+                case MafiaRole.Insane:
+                    actionType = (MafiaActionType) Random.Range(0, 4);
+                    break;
+            }
+        }
 
         if (PhotonNetwork.IsMasterClient)
         {
@@ -79,6 +100,7 @@ public class MafiaPlayer : MonoBehaviourPun
     public void AddAction(int[] serialized)
     {
         MafiaAction action = new MafiaAction(serialized);
+        Debug.Log($"Add Action RPC Info: {action.sender} {action.receiver} {action.actionType}");
         if (PhotonNetwork.LocalPlayer.ActorNumber == action.sender)
         {
             actionByThisPlayer = action;
@@ -94,96 +116,35 @@ public class MafiaPlayer : MonoBehaviourPun
         }
     }
 
-    [PunRPC]
-    public void ShowActions()
+    public IEnumerator ShowActionsRoutine()
     {
-        if (!photonView.IsMine)
-            return;
-
-        PhotonNetwork.LocalPlayer.SetMafiaReady(false);
-
         if (actionByThisPlayer != null)
         {
             MafiaAction action = (MafiaAction) actionByThisPlayer;
-            Manager.Mafia.ShowMyPlayerMove(Manager.Mafia.Houses[action.receiver - 1]);
+            Debug.Log($"Player{ID} did {action.actionType}");
+            yield return Manager.Mafia.PlayerGoRoutine(action);
         }
-
-        foreach (MafiaActionType action in actionsOnThisPlayer)
+        else
         {
-            Manager.Mafia.ShowSomebodyMove(Manager.Mafia.Houses[PhotonNetwork.LocalPlayer.ActorNumber - 1]);
+            Debug.Log("actionby null");
         }
 
+        yield return new WaitForSeconds(1);
+
+        foreach (MafiaActionType actionType in actionsOnThisPlayer)
+        {
+            House house = Manager.Mafia.Houses[PhotonNetwork.LocalPlayer.ActorNumber - 1];
+            Debug.Log($"Player{ID} received {actionType}");
+            yield return Manager.Mafia.PlayerComeRoutine(house, actionType);
+            yield return new WaitForSeconds(1);
+        }
+
+        yield return new WaitForSeconds(1);
+        
         actionByThisPlayer = null;
         actionsOnThisPlayer.Clear();
-        PhotonNetwork.LocalPlayer.SetMafiaReady(true);
+        Manager.Mafia.nightEventFinishedCount++;
     }
-
-    /*[PunRPC] // 집을 선택시 모든 플레이어에게 정보를 보낸다
-    public void OnChooseTarget(int[] serialized)
-    {
-        // Deserialize Action
-        MafiaAction action = new MafiaAction(serialized);
-        Debug.Log($"sender: {action.sender}");
-        Debug.Log($"receiver: {action.receiver}");
-        Debug.Log($"action: {action.actionType}");
-
-        if (PhotonNetwork.LocalPlayer.ActorNumber == action.sender)
-        {
-            actionByThisPlayer = action;
-            Debug.Log($"{GetRole()} targeted Player{action.receiver}");
-        }
-        if (PhotonNetwork.LocalPlayer.ActorNumber == action.receiver)
-        {
-            if (action.actionType == MafiaActionType.Block)
-                skillBlocked = true;
-
-            //actionsOnThisPlayer.Enqueue(action);
-            Debug.Log($"{action.receiver} got {action.actionType}ed");
-        }
-    }*/
-
-    /*[PunRPC] // 플레이어랑 관련된 모든 행동들을 화면에 보여준다
-    public void ShowNightResults()
-    {
-        PhotonNetwork.LocalPlayer.SetMafiaReady(false);
-
-        bool playerDies = false; //결국에 죽는지
-
-        Debug.Log($"Player{PhotonNetwork.LocalPlayer.ActorNumber} Results. Count: {actionsOnThisPlayer.Count}");
-        while (actionsOnThisPlayer.Count > 0)
-        {
-            //MafiaAction action = actionsOnThisPlayer.Dequeue();
-            Debug.Log($"Action on this player: {action.actionType}");
-
-            switch (action.actionType)
-            {
-                case MafiaActionType.Block:
-                    // BlockAction();
-                    break;
-                case MafiaActionType.Kill:
-                    // KillAction();
-                    playerDies = true;
-                    break;
-                case MafiaActionType.Heal:
-                    // HealAction();
-                    if (playerDies)
-                    {
-                        //힐 효과 생성
-                    }
-                    playerDies = false;
-                    break;
-            }
-        }
-
-        if (playerDies)
-        {
-            // 죽었다
-            Debug.Log("Player died");
-            Manager.Mafia.GetComponent<PhotonView>().RPC("PlayerDied", RpcTarget.MasterClient, PhotonNetwork.LocalPlayer.ActorNumber);
-        }
-
-        PhotonNetwork.LocalPlayer.SetMafiaReady(true);
-    }*/
 
     [PunRPC]
     public void DieAnimation(int playerID)

@@ -76,7 +76,7 @@ public class House : MonoBehaviourPun, IPointerClickHandler, IPointerExitHandler
     // What UI should be shown when a house is clicked
     public void OnPointerClick(PointerEventData eventData)
     {
-        if (!outline.enabled)
+        if (!outline.enabled || outline.OutlineParameters.Color == Color.yellow)
             return;
 
         // Cancel Skill
@@ -158,7 +158,7 @@ public class House : MonoBehaviourPun, IPointerClickHandler, IPointerExitHandler
         {
             if (house.HouseOwner == houseOwner)
             {
-                useSkillUI.gameObject.SetActive(false);
+                voteUI.gameObject.SetActive(false);
                 outline.OutlineParameters.Color = Color.yellow;
                 continue;
             }

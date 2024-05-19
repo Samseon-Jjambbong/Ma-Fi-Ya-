@@ -1,5 +1,6 @@
 using Photon.Pun;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -31,7 +32,7 @@ public class MafiaManager : Singleton<MafiaManager>, IPunObservable
     public float SkillTime => skillTime;
 
     private MafiaPlayer player;
-    public MafiaPlayer Player { get; set; }
+    public MafiaPlayer Player { get { return player; } set { player = value; } }
 
     // MASTER CLIENT ONLY
     public MafiaGame Game = new MafiaGame();
@@ -48,6 +49,15 @@ public class MafiaManager : Singleton<MafiaManager>, IPunObservable
     public bool[] healedPlayers;
     public PhotonView photonView => GetComponent<PhotonView>();
 
+    // Game Loop Flags
+    public bool displayRoleFinished;
+    public bool nightPhaseFinished;
+    public int nightEventFinishedCount;
+    public bool nightEventsFinished;
+    public bool dayPhaseFinished;
+    public bool voteResultsFinished;
+    
+
     private void Start()
     {
         isDay = true;
@@ -56,6 +66,17 @@ public class MafiaManager : Singleton<MafiaManager>, IPunObservable
         blockedPlayers = new bool[playerCount];
         deadPlayers = new bool[playerCount];
         healedPlayers = new bool[playerCount];
+    }
+
+    public int ActivePlayerCount()
+    {
+        int count = 0;
+        foreach(bool dead in deadPlayers)
+        {
+            if(!dead)
+                count++;
+        }
+        return count;
     }
 
     [PunRPC] // Called only on MasterClient
@@ -136,6 +157,32 @@ public class MafiaManager : Singleton<MafiaManager>, IPunObservable
         house.MafiaComesHome();
     }
 
+    public IEnumerator PlayerGoRoutine(MafiaAction action)
+    {
+        GameObject obj = Instantiate(Manager.Mafia.NightMafia, Manager.Mafia.NightMafiaPos, Manager.Mafia.NightMafia.transform.rotation);
+        foreach (MafiaPlayer player in FindObjectsOfType<MafiaPlayer>())
+        {
+            if (player.IsMine)
+            {
+                obj.GetComponentInChildren<Renderer>().material.color = player.GetComponentInChildren<Renderer>().material.color;
+            }
+        }
+        NightMafiaMove mafia = obj.GetComponent<NightMafiaMove>();
+        mafia.Target = Manager.Mafia.Houses[action.receiver - 1].gameObject;
+        return mafia.MoveToTargetHouse();
+        // return mafia.MoveToTarget();
+    }
+
+    public IEnumerator PlayerComeRoutine(House house, MafiaActionType actionType)
+    {
+        GameObject obj = Instantiate(Manager.Mafia.NightMafia, Manager.Mafia.NightMafiaPos, Manager.Mafia.NightMafia.transform.rotation);
+
+        NightMafiaMove mafia = obj.GetComponent<NightMafiaMove>();
+
+        mafia.Target = house.gameObject;
+        return mafia.MoveToTargetHouse();
+    }
+
     public void ActivateHouseOutlines()
     {
         for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
@@ -159,7 +206,6 @@ public class MafiaManager : Singleton<MafiaManager>, IPunObservable
     {
         if (PlayerAction == null)
         {
-            Debug.Log("Notify action null");
             return;
         }
 
@@ -170,7 +216,9 @@ public class MafiaManager : Singleton<MafiaManager>, IPunObservable
     [PunRPC] // Called only on MasterClient
     public void EnqueueAction(int[] serialized)
     {
-        Debug.Log("enqueue action called");
+        if (!PhotonNetwork.IsMasterClient)
+            return;
+
         MafiaAction action = new MafiaAction(serialized);
         MafiaActionPQ.Enqueue(action);
     }
@@ -178,10 +226,17 @@ public class MafiaManager : Singleton<MafiaManager>, IPunObservable
     [PunRPC] // Called only on MasterClient
     public void ParseActionsAndAssign()
     {
+        // Reset states
+        blockedPlayers = new bool[playerCount];
+        healedPlayers = new bool[playerCount];
+
         MafiaAction action;
+        
+        Debug.Log($"Begin ActionPQ Debug with Count: {Manager.Mafia.MafiaActionPQ.Count}");
         while (MafiaActionPQ.Count > 0)
         {
             action = MafiaActionPQ.Dequeue();
+            Debug.Log($"{action.sender} ==> {action.receiver} with {action.actionType}");
             int senderIdx = action.sender - 1;
             int receiverIdx = action.receiver - 1;
 
@@ -215,10 +270,14 @@ public class MafiaManager : Singleton<MafiaManager>, IPunObservable
                     break;
             }
         }
+        Debug.Log($"End ActionPQ Debug");
+    }
 
-        // Reset states
-        blockedPlayers = new bool[playerCount];
-        deadPlayers = new bool[playerCount];
-        healedPlayers = new bool[playerCount];
+    [PunRPC]
+    public void ShowActions()
+    {
+        Debug.Log($"Client{PhotonNetwork.LocalPlayer.ActorNumber} Show Actions");
+        StartCoroutine(player.ShowActionsRoutine());
+        Debug.Log($"FUK");
     }
 }

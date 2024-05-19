@@ -73,6 +73,7 @@ public class MafiaGameFlow : MonoBehaviourPun
         roleUI.SetActive(true);
         yield return timer.StartTimer(time);
         roleUI.SetActive(false);
+        Manager.Mafia.displayRoleFinished = true;
     }
 
     // Day/Night Light Changer
@@ -104,31 +105,25 @@ public class MafiaGameFlow : MonoBehaviourPun
 
         yield return new WaitForSeconds(3); // Give time for network to receive actions
 
-        //REMOVE LATER
-        if (PhotonNetwork.IsMasterClient)
-        {
-            Debug.developerConsoleVisible = true;
-            Debug.Log($"Begin ActionPQ Debug with Count: {Manager.Mafia.MafiaActionPQ.Count}");
-            while (Manager.Mafia.MafiaActionPQ.Count > 0)
-            {
-                MafiaAction action = Manager.Mafia.MafiaActionPQ.Dequeue();
-                Debug.Log($"{action.sender} ==> {action.receiver} with {action.actionType}");
-            }
-            Debug.Log($"End ActionPQ Debug");
-        }
-
         Debug.Log("Mafia Chat disabled");
         // TODO : Insert chat OFF function here
+
+        Manager.Mafia.nightPhaseFinished = true;
     }
 
     private IEnumerator ShowNightEventsRoutine()
     {
+        Debug.Log("Show Night Events");
         Manager.Mafia.photonView.RPC("ParseActionsAndAssign", RpcTarget.MasterClient);
         yield return new WaitForSeconds(1);
-        Manager.Mafia.Player.photonView.RPC("ShowActions", RpcTarget.All);
+        Manager.Mafia.photonView.RPC("ShowActions", RpcTarget.All);
+        yield return new WaitForSeconds(1);
+        yield return new WaitUntil(() => Manager.Mafia.nightEventFinishedCount == Manager.Mafia.ActivePlayerCount());
+        Manager.Mafia.nightEventsFinished = true;
+        Debug.Log("End Night Events");
     }
 
-    // Allow Chat and votingfor X Seconds
+    // Allow Chat and voting for X Seconds
     private IEnumerator DayPhaseRoutine(int time)
     {
         // Night -> Day

@@ -129,35 +129,50 @@ public class MafiaPunManager : MonoBehaviourPunCallbacks
         // Delay
         yield return new WaitForSeconds(1);
 
-        // Display role
+        // Display role 
         photonView.RPC("DisplayRole", RpcTarget.All, displayRoleTime);
-        yield return new WaitForSeconds(displayRoleTime);
+        yield return new WaitUntil(() => Manager.Mafia.displayRoleFinished);
 
+        // Loop
         while (true)
         {
             // Change to night
-            photonView.RPC("StartNightPhase", RpcTarget.All, 15);
+            Debug.Log("Night Phase Start");
+            photonView.RPC("StartNightPhase", RpcTarget.All, displayRoleTime);
+            yield return new WaitUntil(() => Manager.Mafia.nightPhaseFinished);
+            Debug.Log("Night Phase End");
 
-            yield return new WaitForSeconds(15 + 1);
+            yield return new WaitForSeconds(1);
 
             // Show Night Events
             Debug.Log("Night Events Start");
-            photonView.RPC("ShowNightEvents", RpcTarget.All);
-
-            // Wait until everyone finishes showing events
-            while (PlayerMafiaReadyCount() != PhotonNetwork.PlayerList.Length)
-            {
-                yield return null;
-            }
-            yield return new WaitForSeconds(3);
+            photonView.RPC("ShowNightEvents", RpcTarget.MasterClient);
+            yield return new WaitUntil(() => Manager.Mafia.nightEventsFinished);
             Debug.Log("Night Events End");
 
+            yield return new WaitForSeconds(1);
+
             // Day Phase
+            Debug.Log("Day Phase Start");
             photonView.RPC("StartDayPhase", RpcTarget.All, voteTime);
-            yield return new WaitForSeconds(voteTime + 1);
+            yield return new WaitUntil(() => Manager.Mafia.dayPhaseFinished);
+            Debug.Log("Day Events End");
+
+            yield return new WaitForSeconds(1);
 
             // Show Vote Result
+            Debug.Log("Show Vote Results Start");
             photonView.RPC("ShowVoteResults", RpcTarget.All);
+            yield return new WaitUntil(() => Manager.Mafia.voteResultsFinished);
+            Debug.Log("Show Vote Results End");
+
+            yield return new WaitForSeconds(1);
+
+            // Reset flags
+            Manager.Mafia.nightPhaseFinished = false;
+            Manager.Mafia.nightEventsFinished = false;
+            Manager.Mafia.dayPhaseFinished = false;
+            Manager.Mafia.voteResultsFinished = false;
         }
     }
 
@@ -244,4 +259,3 @@ public class MafiaPunManager : MonoBehaviourPunCallbacks
         }
     }
 }
-

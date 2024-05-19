@@ -10,7 +10,6 @@ public static class CustomProperty
     public const string GAMESTARTTIME = "GameStartTime";
     public const string GAMEMODE = "GameMode";
     public const string PLAYERROLE = "PlayerRole";
-    public const string MAFIAROLELIST = "MafiaRoleList";
     public const string PLAYERCOLOR = "PlayerColor";
     public const string MAFIAREADY = "MafiaReady";
 

@@ -3,7 +3,7 @@ using UnityEngine;
 
 public enum MafiaActionType { Block, Kill, Heal }
 
-public enum MafiaRole { Mafia, Doctor, Insane, Police }
+public enum MafiaRole { Mafia, Doctor, Police, Insane }
 
 public struct MafiaAction
 {

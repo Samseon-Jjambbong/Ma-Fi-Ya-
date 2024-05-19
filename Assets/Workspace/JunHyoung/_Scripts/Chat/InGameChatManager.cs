@@ -117,8 +117,8 @@ public class InGameChatManager : MonoBehaviour, IChatClientListener
         mafiaChannelName = curChannelName + "Night";
         ghostChannelName = curChannelName + "Ghots";
 
-        //isMafia = (PhotonNetwork.LocalPlayer.GetRole() == MafiaRole.Mafia;
-        //nickNameColor = PhotonNetwork.LocalPlayer.GetColor();
+        isMafia = PhotonNetwork.LocalPlayer.GetPlayerRole() == MafiaRole.Mafia;
+        nickNameColor = PhotonNetwork.LocalPlayer.GetPlayerColor();
     }
 
     enum SizeState {Default, MAX, MIN }
@@ -169,6 +169,8 @@ public class InGameChatManager : MonoBehaviour, IChatClientListener
         {
             Debug.Log("Publish to default channnel");
             chatClient.PublishMessage(curChannelName, new ChatData(userName, inputField.text, nickNameColor));
+            PhotonNetwork.LocalPlayer.SetMafiaReady(true);
+            Manager.Mafia.Player.photonView.RPC("OpenSpeechBubble", RpcTarget.All, inputField.text);
         }
 
         inputField.text = "";

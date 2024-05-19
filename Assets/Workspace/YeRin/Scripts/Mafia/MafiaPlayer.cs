@@ -21,6 +21,9 @@ public class MafiaPlayer : MonoBehaviourPun
 
     [SerializeField] AudioSource walkAudio;
 
+    [SerializeField] GameObject speechBubble;
+    [SerializeField] TMP_Text bubbleText;
+
     [SerializeField] float movePower;
     [SerializeField] float maxSpeed;
     [SerializeField] float rotateSpeed;
@@ -43,6 +46,8 @@ public class MafiaPlayer : MonoBehaviourPun
     private float currentSpeed;
 
     private bool isWalking;
+
+    Coroutine bubble;
 
     protected virtual void Start()
     {
@@ -286,4 +291,31 @@ public class MafiaPlayer : MonoBehaviourPun
         }
         GetComponentInChildren<Renderer>().material.color = new Color(r, g, b, 1f);
     }
+
+    #region Speech Bubble
+
+    [PunRPC]
+    public void OpenSpeechBubble(string sendText)
+    {
+        if (speechBubble.activeSelf)
+        {
+            StopCoroutine(bubble);
+        }
+        else
+        {
+            speechBubble.SetActive(true);
+        }
+
+        bubbleText.text = sendText;
+
+        bubble = StartCoroutine(CloseSpeechBubble());
+    }
+    IEnumerator CloseSpeechBubble()
+    {
+        yield return new WaitForSeconds(3f);
+
+        speechBubble.SetActive(false);
+    }
+    #endregion
+
 }

@@ -35,8 +35,8 @@ public class MafiaPlayer : MonoBehaviourPun
     [Header("Mafia Logic")]
     private Dictionary<int, Player> playerDic;
     public MafiaActionType actionType;
-    public MafiaAction actionByThisPlayer;
-    public MafiaActionPQ actionsOnThisPlayer = new MafiaActionPQ();
+    public MafiaAction? actionByThisPlayer = null;
+    public List<MafiaActionType> actionsOnThisPlayer = new List<MafiaActionType>();
 
     [Header("States")]
     private bool skillBlocked;
@@ -78,7 +78,50 @@ public class MafiaPlayer : MonoBehaviourPun
     }
 
     #region Game Logic
-    [PunRPC] // 집을 선택시 모든 플레이어에게 정보를 보낸다
+    [PunRPC]
+    public void AddAction(int[] serialized)
+    {
+        MafiaAction action = new MafiaAction(serialized);
+        if (PhotonNetwork.LocalPlayer.ActorNumber == action.sender)
+        {
+            actionByThisPlayer = action;
+            Debug.Log($"{GetRole()} targeted Player{action.receiver}");
+        }
+        if (PhotonNetwork.LocalPlayer.ActorNumber == action.receiver)
+        {
+            if (action.actionType == MafiaActionType.Block)
+                skillBlocked = true;
+
+            actionsOnThisPlayer.Add(action.actionType);
+            Debug.Log($"{action.receiver} got {action.actionType}ed");
+        }
+    }
+
+    [PunRPC]
+    public void ShowActions()
+    {
+        if (!photonView.IsMine)
+            return;
+
+        PhotonNetwork.LocalPlayer.SetMafiaReady(false);
+
+        if(actionByThisPlayer != null)
+        {
+            MafiaAction action = (MafiaAction) actionByThisPlayer;
+            Manager.Mafia.ShowMyPlayerMove(Manager.Mafia.Houses[action.receiver - 1]);
+        }
+
+        foreach(MafiaActionType action in actionsOnThisPlayer)
+        {
+            Manager.Mafia.ShowSomebodyMove(Manager.Mafia.Houses[PhotonNetwork.LocalPlayer.ActorNumber - 1]);
+        }
+
+        actionByThisPlayer = null;
+        actionsOnThisPlayer.Clear();
+        PhotonNetwork.LocalPlayer.SetMafiaReady(true);
+    }
+
+    /*[PunRPC] // 집을 선택시 모든 플레이어에게 정보를 보낸다
     public void OnChooseTarget(int[] serialized)
     {
         // Deserialize Action
@@ -87,22 +130,22 @@ public class MafiaPlayer : MonoBehaviourPun
         Debug.Log($"receiver: {action.receiver}");
         Debug.Log($"action: {action.actionType}");
 
-        if(PhotonNetwork.LocalPlayer.ActorNumber == action.sender)
+        if (PhotonNetwork.LocalPlayer.ActorNumber == action.sender)
         {
             actionByThisPlayer = action;
             Debug.Log($"{GetRole()} targeted Player{action.receiver}");
         }
-        if(PhotonNetwork.LocalPlayer.ActorNumber == action.receiver)
+        if (PhotonNetwork.LocalPlayer.ActorNumber == action.receiver)
         {
             if (action.actionType == MafiaActionType.Block)
                 skillBlocked = true;
 
-            actionsOnThisPlayer.Enqueue(action);
+            //actionsOnThisPlayer.Enqueue(action);
             Debug.Log($"{action.receiver} got {action.actionType}ed");
         }
-    }
+    }*/
 
-    [PunRPC] // 플레이어랑 관련된 모든 행동들을 화면에 보여준다
+    /*[PunRPC] // 플레이어랑 관련된 모든 행동들을 화면에 보여준다
     public void ShowNightResults()
     {
         PhotonNetwork.LocalPlayer.SetMafiaReady(false);
@@ -112,7 +155,7 @@ public class MafiaPlayer : MonoBehaviourPun
         Debug.Log($"Player{PhotonNetwork.LocalPlayer.ActorNumber} Results. Count: {actionsOnThisPlayer.Count}");
         while (actionsOnThisPlayer.Count > 0)
         {
-            MafiaAction action = actionsOnThisPlayer.Dequeue();
+            //MafiaAction action = actionsOnThisPlayer.Dequeue();
             Debug.Log($"Action on this player: {action.actionType}");
 
             switch (action.actionType)
@@ -143,7 +186,7 @@ public class MafiaPlayer : MonoBehaviourPun
         }
 
         PhotonNetwork.LocalPlayer.SetMafiaReady(true);
-    }
+    }*/
 
     [PunRPC]
     public void DieAnimation(int playerID)

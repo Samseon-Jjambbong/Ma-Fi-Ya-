@@ -101,22 +101,35 @@ public class MafiaGameFlow : MonoBehaviourPun
 
         yield return timer.StartTimer(time);
 
-        foreach ( var house in Manager.Mafia.Houses )
+        Manager.Mafia.DeactivateHouseOutlines();
+
+        // Store skill usage info
+        Manager.Mafia.NotifyAction();
+
+        yield return new WaitForSeconds(3); // Give time for network to receive actions
+
+        //REMOVE LATER
+        if (PhotonNetwork.IsMasterClient)
         {
-            house.ActivateOutline(false);
+            Debug.developerConsoleVisible = true;
+            Debug.Log($"Begin ActionPQ Debug with Count: {Manager.Mafia.MafiaActionPQ.Count}");
+            while (Manager.Mafia.MafiaActionPQ.Count > 0)
+            {
+                MafiaAction action = Manager.Mafia.MafiaActionPQ.Dequeue();
+                Debug.Log($"{action.sender} ==> {action.receiver} with {action.actionType}");
+            }
+            Debug.Log($"End ActionPQ Debug");
         }
-        
+
         Debug.Log("Mafia Chat disabled");
         // TODO : Insert chat OFF function here
     }
 
     private IEnumerator ShowNightEventsRoutine()
     {
-        MafiaActionPQ actionPQ = Manager.Mafia.Player.actionsOnThisPlayer;
-        int receiver = actionPQ.Peek().receiver;
-        Manager.Mafia.ShowMyPlayerMove(Manager.Mafia.Houses[receiver - 1]);
-        //Manager.Mafia.Player.photonView.RPC("ShowNightResults", RpcTarget.All);
+        Manager.Mafia.photonView.RPC("ParseActionsAndAssign", RpcTarget.MasterClient);
         yield return new WaitForSeconds(1);
+        Manager.Mafia.Player.photonView.RPC("ShowActions", RpcTarget.All);
     }
 
     // Allow Chat and votingfor X Seconds

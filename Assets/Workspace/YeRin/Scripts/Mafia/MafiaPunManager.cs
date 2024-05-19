@@ -139,9 +139,9 @@ public class MafiaPunManager : MonoBehaviourPunCallbacks
         while (true)
         {
             // Change to night
-            photonView.RPC("StartNightPhase", RpcTarget.All, skillTime);
+            photonView.RPC("StartNightPhase", RpcTarget.All, 15);
 
-            yield return new WaitForSeconds(skillTime + 1);
+            yield return new WaitForSeconds(15 + 1);
 
             // Show Night Events
             Debug.Log("Night Events Start");
@@ -152,9 +152,8 @@ public class MafiaPunManager : MonoBehaviourPunCallbacks
             {
                 yield return null;
             }
+            yield return new WaitForSeconds(3);
             Debug.Log("Night Events End");
-
-            yield return new WaitForSeconds(1);
 
             // Day Phase
             photonView.RPC("StartDayPhase", RpcTarget.All, voteTime);

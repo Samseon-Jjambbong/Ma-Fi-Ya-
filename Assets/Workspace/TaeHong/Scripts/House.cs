@@ -30,7 +30,7 @@ public class House : MonoBehaviourPun, IPointerClickHandler, IPointerExitHandler
 
     public int houseOwnerId;
     [SerializeField] private int visitorId;
-    private MafiaAction? lastAction;
+    
 
     [Header("Misc")]
     public bool debugMode;
@@ -85,7 +85,7 @@ public class House : MonoBehaviourPun, IPointerClickHandler, IPointerExitHandler
         // Cancel Skill
         if(outline.OutlineParameters.Color == Color.red)
         {
-            lastAction = null;
+            Manager.Mafia.PlayerAction = null;
             skillIcon.gameObject.SetActive(false);
             Manager.Mafia.ActivateHouseOutlines();
             return;
@@ -115,6 +115,10 @@ public class House : MonoBehaviourPun, IPointerClickHandler, IPointerExitHandler
 
     public void ActivateOutline( bool activate )
     {
+        if (activate == false)
+        {
+            skillIcon.gameObject.SetActive(false);
+        }
         if ( outline.OutlineParameters.Color == Color.red )
         {
             outline.OutlineParameters.Color = Color.green;
@@ -139,7 +143,7 @@ public class House : MonoBehaviourPun, IPointerClickHandler, IPointerExitHandler
                 skillIcon.sprite = data.roleIcon;
                 skillIcon.gameObject.SetActive(true);
                 // Store action info
-                lastAction = new MafiaAction(
+                Manager.Mafia.PlayerAction = new MafiaAction(
                     PhotonNetwork.LocalPlayer.ActorNumber,
                     houseOwnerId,
                     Manager.Mafia.Player.actionType

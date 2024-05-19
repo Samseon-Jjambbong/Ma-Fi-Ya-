@@ -46,6 +46,7 @@ public class MafiaActionPQ
 
     public void Enqueue(MafiaAction action)
     {
+        Debug.Log($"Enqueued {action.actionType}");
         actions.Add(action);
     }
 

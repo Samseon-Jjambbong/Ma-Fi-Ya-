@@ -41,11 +41,23 @@ public class MafiaManager : Singleton<MafiaManager>, IPunObservable
     private int[] votes;
     public int[] Votes => votes;
 
+    private MafiaAction? playerAction;
+    public MafiaAction? PlayerAction { get { return playerAction; } set { playerAction = value; } }
+
+    public MafiaActionPQ MafiaActionPQ = new MafiaActionPQ();
+    private bool[] blockedPlayers;
+    private bool[] deadPlayers;
+    public bool[] healedPlayers;
+    public PhotonView photonView => GetComponent<PhotonView>();
+
     private void Start()
     {
         isDay = true;
         playerCount = PhotonNetwork.CurrentRoom.Players.Count;
         votes = new int[playerCount];
+        blockedPlayers = new bool[playerCount];
+        deadPlayers = new bool[playerCount];
+        healedPlayers = new bool[playerCount];
     }
 
     [PunRPC] // Called only on MasterClient
@@ -135,5 +147,80 @@ public class MafiaManager : Singleton<MafiaManager>, IPunObservable
 
             Manager.Mafia.Houses[i].ActivateOutline(true);
         }
+    }
+
+    public void DeactivateHouseOutlines()
+    {
+        foreach (var house in Manager.Mafia.Houses)
+        {
+            house.ActivateOutline(false);
+        }
+    }
+
+    public void NotifyAction()
+    {
+        if (PlayerAction == null)
+        {
+            Debug.Log("Notify action null");
+            return;
+        }
+
+        MafiaAction action = (MafiaAction) PlayerAction;
+        photonView.RPC("EnqueueAction", RpcTarget.MasterClient, action.Serialize());
+    }
+
+    [PunRPC] // Called only on MasterClient
+    public void EnqueueAction(int[] serialized)
+    {
+        Debug.Log("enqueue action called");
+        MafiaAction action = new MafiaAction(serialized);
+        MafiaActionPQ.Enqueue(action);
+    }
+
+    [PunRPC] // Called only on MasterClient
+    public void ParseActionsAndAssign()
+    {
+        MafiaAction action;
+        while(MafiaActionPQ.Count > 0)
+        {
+            action = MafiaActionPQ.Dequeue();
+            int senderIdx = action.sender - 1;
+            int receiverIdx = action.receiver - 1;
+
+            // If blocked, don't add action
+            if (blockedPlayers[senderIdx]) 
+            {
+                continue;
+            }
+            
+            // Send action info to players
+            switch (action.actionType)
+            {
+                case MafiaActionType.Block:
+                    blockedPlayers[receiverIdx] = true;
+                    Player.photonView.RPC("AddAction", PhotonNetwork.PlayerList[senderIdx], action.Serialize());
+                    Player.photonView.RPC("AddAction", PhotonNetwork.PlayerList[receiverIdx], action.Serialize());
+                    break;
+                case MafiaActionType.Kill:
+                    deadPlayers[receiverIdx] = true;
+                    Player.photonView.RPC("AddAction", PhotonNetwork.PlayerList[senderIdx], action.Serialize());
+                    Player.photonView.RPC("AddAction", PhotonNetwork.PlayerList[receiverIdx], action.Serialize());
+                    break;
+                case MafiaActionType.Heal:
+                    if (deadPlayers[receiverIdx] == true)
+                    {
+                        deadPlayers[receiverIdx] = false;
+                        healedPlayers[receiverIdx] = true;
+                    }
+                    Player.photonView.RPC("AddAction", PhotonNetwork.PlayerList[senderIdx], action.Serialize());
+                    Player.photonView.RPC("AddAction", PhotonNetwork.PlayerList[receiverIdx], action.Serialize());
+                    break;
+            }
+        }
+
+        // Reset states
+        blockedPlayers = new bool[playerCount];
+        deadPlayers = new bool[playerCount];
+        healedPlayers = new bool[playerCount];
     }
 }

@@ -7,6 +7,7 @@ using Photon.Realtime;
 using TMPro;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
+using static System.Net.Mime.MediaTypeNames;
 
 /// <summary>
 /// programmer : Yerin, TaeHong
@@ -295,7 +296,7 @@ public class MafiaPlayer : MonoBehaviourPun
     #region Speech Bubble
 
     [PunRPC]
-    public void OpenSpeechBubble(string sendText)
+    public void OpenSpeechBubble(string userName, string sendText)
     {
         if (speechBubble.activeSelf)
         {
@@ -306,7 +307,7 @@ public class MafiaPlayer : MonoBehaviourPun
             speechBubble.SetActive(true);
         }
 
-        bubbleText.text = sendText;
+        bubbleText.text = $"<#00C8FF>{userName}</color>\n{sendText}";
 
         bubble = StartCoroutine(CloseSpeechBubble());
     }

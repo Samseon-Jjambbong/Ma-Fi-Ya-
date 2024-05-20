@@ -170,7 +170,7 @@ public class InGameChatManager : MonoBehaviour, IChatClientListener
             Debug.Log("Publish to default channnel");
             chatClient.PublishMessage(curChannelName, new ChatData(userName, inputField.text, nickNameColor));
             PhotonNetwork.LocalPlayer.SetMafiaReady(true);
-            Manager.Mafia.Player.photonView.RPC("OpenSpeechBubble", RpcTarget.All, inputField.text);
+            Manager.Mafia.Player.photonView.RPC("OpenSpeechBubble", RpcTarget.All, userName, inputField.text);
         }
 
         inputField.text = "";

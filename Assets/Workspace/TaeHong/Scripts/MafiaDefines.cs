@@ -1,11 +1,9 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System;
 
 public enum MafiaActionType { Block, Kill, Heal }
 
-public enum MafiaRole { Mafia, Doctor, Insane, Police }
+public enum MafiaRole { Mafia, Doctor, Police, Insane }
 
 public struct MafiaAction
 {
@@ -24,7 +22,7 @@ public struct MafiaAction
     {
         sender = serialized[0];
         receiver = serialized[1];
-        actionType = (MafiaActionType)serialized[2];
+        actionType = (MafiaActionType) serialized[2];
     }
 
     public int GetActionPrio()
@@ -46,15 +44,16 @@ public class MafiaActionPQ
 
     public void Enqueue(MafiaAction action)
     {
+        Debug.Log($"Enqueued {action.actionType}");
         actions.Add(action);
     }
 
     public MafiaAction Dequeue()
     {
         int prioIndex = 0;
-        for(int i = 0; i < actions.Count; i++)
+        for (int i = 0; i < actions.Count; i++)
         {
-            if(actions[i].GetActionPrio() < actions[prioIndex].GetActionPrio())
+            if (actions[i].GetActionPrio() < actions[prioIndex].GetActionPrio())
             {
                 prioIndex = i;
             }
@@ -67,9 +66,9 @@ public class MafiaActionPQ
     public MafiaAction Peek()
     {
         int prioIndex = 0;
-        for(int i = 0; i < actions.Count; i++)
+        for (int i = 0; i < actions.Count; i++)
         {
-            if(actions[i].GetActionPrio() < actions[prioIndex].GetActionPrio())
+            if (actions[i].GetActionPrio() < actions[prioIndex].GetActionPrio())
             {
                 prioIndex = i;
             }
@@ -85,17 +84,17 @@ public class MafiaGame
 
     public void AddPlayer(MafiaRole role)
     {
-        if(role == MafiaRole.Mafia)
+        if (role == MafiaRole.Mafia)
             numMafias++;
         numCivilians++;
     }
 
     public bool RemovePlayer(MafiaRole removedRole) // True == Civilian Win, False == Mafia Win
     {
-        if(removedRole == MafiaRole.Mafia)
+        if (removedRole == MafiaRole.Mafia)
         {
             numMafias--;
-            if(numMafias == 0)
+            if (numMafias == 0)
             {
                 return true;
             }
@@ -104,7 +103,7 @@ public class MafiaGame
         else
         {
             numCivilians--;
-            if(numMafias == numCivilians)
+            if (numMafias == numCivilians)
             {
                 return false;
             }

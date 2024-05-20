@@ -1,12 +1,8 @@
 using Photon.Pun;
-using Photon.Realtime;
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using Tae;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public class MafiaGameFlow : MonoBehaviourPun
 {
@@ -40,6 +36,12 @@ public class MafiaGameFlow : MonoBehaviourPun
     }
 
     [PunRPC]
+    public void ShowNightResults()
+    {
+        StartCoroutine(ShowNightResultsRoutine());
+    }
+
+    [PunRPC]
     public void StartDayPhase(int time)
     {
         StartCoroutine(DayPhaseRoutine(time));
@@ -60,11 +62,11 @@ public class MafiaGameFlow : MonoBehaviourPun
     {
         if (enable)
         {
-            Debug.Log("Enabled Chat");
+            // TODO: Enable chat here
         }
         else
         {
-            Debug.Log("Disabled Chat");
+            // TODO: Disable chat here
         }
     }
 
@@ -77,8 +79,9 @@ public class MafiaGameFlow : MonoBehaviourPun
         roleUI.SetActive(true);
         yield return timer.StartTimer(time);
         roleUI.SetActive(false);
+        Manager.Mafia.displayRoleFinished = true;
     }
-    
+
     // Day/Night Light Changer
     private IEnumerator ChangeTimeOfDayRoutine()
     {
@@ -99,7 +102,7 @@ public class MafiaGameFlow : MonoBehaviourPun
             }
         }
     }
-    
+
     // Night Phase
     private IEnumerator NightPhaseRoutine(int time)
     {
@@ -107,78 +110,90 @@ public class MafiaGameFlow : MonoBehaviourPun
         yield return ChangeTimeOfDayRoutine();
 
         // Allow chat for mafia
-        Debug.Log("Mafia Chat enabled");
         // TODO : Insert chat ON function here
 
         // Allow skill usage for X Seconds
-        for ( int i = 0; i < PhotonNetwork.PlayerList.Length; i++ )
-        {
-            if ( i == (PhotonNetwork.LocalPlayer.ActorNumber - 1) )
-                continue;
-            
-            Manager.Mafia.Houses[i].ActivateOutline(true);
-        }
+        Manager.Mafia.ActivateHouseOutlines();
 
         yield return timer.StartTimer(time);
 
-        foreach ( var house in Manager.Mafia.Houses )
-        {
-            house.ActivateOutline(false);
-        }
-        
-        Debug.Log("Mafia Chat disabled");
+        Manager.Mafia.DeactivateHouseOutlines();
+
+        // Store skill usage info
+        Manager.Mafia.NotifyAction();
+
+        yield return new WaitForSeconds(3); // Give time for network to receive actions
+
         // TODO : Insert chat OFF function here
+
+        Manager.Mafia.nightPhaseFinished = true;
     }
 
     private IEnumerator ShowNightEventsRoutine()
     {
-        Manager.Mafia.Player.photonView.RPC("ShowNightResults", RpcTarget.All);
+        Manager.Mafia.photonView.RPC("ParseActionsAndAssign", RpcTarget.MasterClient);
         yield return new WaitForSeconds(1);
+        Manager.Mafia.photonView.RPC("ShowActions", RpcTarget.All);
+        yield return new WaitForSeconds(1);
+        yield return new WaitUntil(() => Manager.Mafia.nightEventFinishedCount == Manager.Mafia.ActivePlayerCount());
+        Manager.Mafia.nightEventsFinished = true;
+        Manager.Mafia.sharedData.ClearActionInfo();
     }
 
-    // Allow Chat and votingfor X Seconds
-    private IEnumerator DayPhaseRoutine(int time)
+    private IEnumerator ShowNightResultsRoutine()
     {
         // Night -> Day
         yield return ChangeTimeOfDayRoutine();
+        Manager.Mafia.nightResultsFinished = true;
+    }
 
+    // Allow Chat and voting for X Seconds
+    private IEnumerator DayPhaseRoutine(int time)
+    {
         // Allow chat for everyone
         EnableChat(true);
 
         // Allow voting for X Seconds
-        for ( int i = 0; i < PhotonNetwork.PlayerList.Length; i++ )
+        for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
         {
             Manager.Mafia.Houses[i].ShowVoteCount(true);
-            if ( i == (PhotonNetwork.LocalPlayer.ActorNumber - 1) )
+            if (i == (PhotonNetwork.LocalPlayer.ActorNumber - 1))
                 continue;
-            
+
             Manager.Mafia.Houses[i].ActivateOutline(true);
         }
 
         yield return timer.StartTimer(time);
-        
-        foreach ( var house in Manager.Mafia.Houses )
+
+        foreach (var house in Manager.Mafia.Houses)
         {
             house.ActivateOutline(false);
             house.ShowVoteCount(false);
         }
 
         EnableChat(false);
+        Manager.Mafia.photonView.RPC("CountVotes", RpcTarget.MasterClient);
+        Manager.Mafia.dayPhaseFinished = true;
     }
 
     private IEnumerator ShowVoteResultsRoutine()
     {
         // Show vote result on everyone's screen
-        int voteResult = Manager.Mafia.GetVoteResult();
-        if(voteResult == -1)
+        int voteResult = Manager.Mafia.sharedData.playerToKick;
+        Debug.Log($"Vote Result : {voteResult}");
+        if (voteResult == -1)
         {
             Debug.Log("No one got kicked");
+            Manager.Mafia.voteResultsFinished = true;
+            yield break;
         }
         else
         {
             Debug.Log($"Player{voteResult} got kicked");
+            // Insert Player kicked coroutine here
+            //Manager.Mafia.photonView.RPC("", RpcTarget.All);
+            yield return new WaitUntil(() => Manager.Mafia.voteResultsFinished);
         }
-        yield return new WaitForSeconds(1);
     }
 
     #endregion

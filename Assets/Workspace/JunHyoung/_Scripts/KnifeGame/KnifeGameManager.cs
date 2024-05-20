@@ -55,13 +55,13 @@ public class KnifeGameManager : MonoBehaviourPunCallbacks, IPunObservable
         }
     }
 
-    void Start()
+    public override void OnEnable()
     {
-       // PhotonNetwork.LocalPlayer.SetLoaded(true);
-       //playerDic = PhotonNetwork.CurrentRoom.Players;
+        PhotonNetwork.LocalPlayer.SetLoaded(true);
+        playerDic = PhotonNetwork.CurrentRoom.Players;
 
         colorList = new List<Color> ();
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < playerDic.Count; i++)
         {
             colorList.Add(new Color(Random.value, Random.value, Random.value, 1f));
         }
@@ -97,7 +97,7 @@ public class KnifeGameManager : MonoBehaviourPunCallbacks, IPunObservable
     {
         if (propertiesThatChanged.ContainsKey(CustomProperty.GAMESTART))
         {
-            StartCoroutine(StartTimer());
+            StartCoroutine(GameStartRoutine());
         }
     }
 
@@ -120,7 +120,7 @@ public class KnifeGameManager : MonoBehaviourPunCallbacks, IPunObservable
         return loadcount;
     }
 
-    IEnumerator StartTimer()
+    IEnumerator GameStartRoutine()
     {
         double loadTime = PhotonNetwork.CurrentRoom.GetGameStartTime();
         while (PhotonNetwork.Time - loadTime < countDownTime)
@@ -134,12 +134,23 @@ public class KnifeGameManager : MonoBehaviourPunCallbacks, IPunObservable
         countDownText.text = "Start!";
         //게임 시작시 필요한 로직들
         yield return new WaitForSeconds(1.0f);
-    
+        
         //infoText.text = "";
 
 
         //if (PhotonNetwork.IsMasterClient)
             //spawner.StartSpawnRoutine();
+
+    }
+
+    IEnumerator GameTimer(double loadTime)
+    {
+        while (PhotonNetwork.Time - loadTime < gamePlayTime)
+        {
+            int reamainTime = (int) (gamePlayTime - (PhotonNetwork.Time - loadTime));
+            infoText.text = (reamainTime + 1).ToString();
+            yield return null;
+        }
     }
 
 
@@ -177,9 +188,6 @@ public class KnifeGameManager : MonoBehaviourPunCallbacks, IPunObservable
         // PhotonNetwork.Instantiate를 통해 각 플레이어 캐릭터 생성, 센터를 바라보도록 rotation 설정
         GameObject player = Instantiate(playerprefab, pos, Quaternion.LookRotation(-pos));
         //색깔 설정 - 은 플레이어에서 
-        //GameObject player = PhotonNetwork.Instantiate("Mafia", pos, Quaternion.LookRotation(-pos));
-        //player.GetComponent<MafiaPlayer>().SetPlayerHouse(playerNumber);
-        //player.GetComponent<MafiaPlayer>().SetNickName(PhotonNetwork.PlayerList[playerNumber].NickName);
     }
 
     /******************************************************

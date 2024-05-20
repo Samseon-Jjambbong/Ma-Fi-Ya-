@@ -27,19 +27,6 @@ public class MafiaPlayer : MonoBehaviourPun
     [SerializeField] float rotateSpeed;
 
     // 플레이어의 생존 여부
-    [SerializeField] private bool isAlive;// = false; /////////////////////////////
-    public bool IsAlive { get { return isAlive; } }
-
-    private Dictionary<int, Player> playerDic;
-
-    // Tae Player Logic
-    public MafiaActionType actionType;
-    public MafiaAction actionByThisPlayer;
-    public MafiaActionPQ actionsOnThisPlayer = new MafiaActionPQ();
-
-    private bool skillBlocked;
-    public bool IsMine => photonView.IsMine;
-
     private Vector3 moveDir;
     private float currentSpeed;
 
@@ -289,6 +276,7 @@ public class MafiaPlayer : MonoBehaviourPun
         }
         GetComponentInChildren<Renderer>().material.color = new Color(r, g, b, 1f);
     }
+    #endregion
 
     #region Speech Bubble
 
@@ -314,5 +302,6 @@ public class MafiaPlayer : MonoBehaviourPun
 
         speechBubble.SetActive(false);
     }
+
     #endregion
 }

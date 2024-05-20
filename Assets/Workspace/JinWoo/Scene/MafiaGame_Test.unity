@@ -246,8 +246,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7eee0b7cb8469004ba26ab4b121c7522, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerPrefab: {fileID: 8492271994209432676, guid: b079fcfeae06299498566315846f5d66,
-    type: 3}
   radius: 15
 --- !u!4 &41385844
 Transform:
@@ -293,12 +291,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01b066014f9dc4725bab194fdf11253c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerCount: 5
-  timer: {fileID: 287919190}
-  light: {fileID: 410087043}
+  sharedData: {fileID: 0}
+  displayRoleTime: 0
   roleUseTime: 3
   voteTime: 3
   skillTime: 15
+  nightMafia: {fileID: 0}
+  nightMafiaPos: {x: 0, y: 0, z: 0}
+  houses: []
+  displayRoleFinished: 0
+  nightPhaseFinished: 0
+  nightEventFinishedCount: 0
+  nightEventsFinished: 0
+  nightResultsFinished: 0
+  dayPhaseFinished: 0
+  voteResultsFinished: 0
 --- !u!4 &63178422
 Transform:
   m_ObjectHideFlags: 0
@@ -1522,7 +1529,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: ab8f5b8d882847446920803a23228348,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.96305144
+      value: 3.62
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: ab8f5b8d882847446920803a23228348,
         type: 3}

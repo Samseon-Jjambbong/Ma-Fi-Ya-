@@ -55,6 +55,7 @@ public class MafiaManager : Singleton<MafiaManager>, IPunObservable
     public bool nightPhaseFinished;
     public int nightEventFinishedCount;
     public bool nightEventsFinished;
+    public bool nightResultsFinished;
     public bool dayPhaseFinished;
     public bool voteResultsFinished;
     
@@ -91,26 +92,49 @@ public class MafiaManager : Singleton<MafiaManager>, IPunObservable
         VoteCountChanged?.Invoke();
     }
 
-    public int GetVoteResult() // Return playerID or -1 if none
+    [PunRPC] // Called only on MasterClient
+    public void CountVotes() // Return playerID or -1 if none
     {
-        int maxVotes = -1;
-        int maxVoted = -1;
-        for (int i = 0; i < votes.Length; i++)
+        // Look for candidate with highest votes
+        int highest = votes[0];
+        int count = 1;
+        int voted = 0;
+        for(int i = 1; i < votes.Length; i++)
         {
-            if (votes[i] > maxVotes)
+            if (votes[i] > votes[highest])
             {
-                maxVotes = votes[i];
-                maxVoted = i + 1;
+                highest = i;
+                count = 1;
             }
+            if (votes[i] == votes[highest])
+            {
+                count++;
+            }
+            voted += votes[i];
         }
 
-        // Reset values
+        // Reset values before returning result
         for (int i = 0; i < votes.Length; i++)
         {
             votes[i] = 0;
         }
 
-        return maxVoted;
+        // Return result
+        // No one gets kicked if:
+        //      - There is a tie for highest votes
+        //      - Skipped votes > highest vote
+        int result;
+        int skipped = Manager.Mafia.ActivePlayerCount() - voted;
+        if (count > 1 || skipped > votes[highest])
+        {
+            result = -1;
+        }
+        else
+        {
+            result = highest + 1;
+        }
+        
+        sharedData.photonView.RPC("SetPlayerToKick", RpcTarget.All, result);
     }
 
 

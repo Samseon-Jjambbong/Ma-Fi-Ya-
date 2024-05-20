@@ -70,7 +70,7 @@ public class House : MonoBehaviourPun, IPointerClickHandler, IPointerExitHandler
 
     public void Vote()
     {
-        Manager.Mafia.GetComponent<PhotonView>().RPC("VoteForPlayer", RpcTarget.All, houseOwnerId);
+        Manager.Mafia.photonView.RPC("VoteForPlayer", RpcTarget.All, houseOwnerId);
     }
 
     // What UI should be shown when a house is clicked

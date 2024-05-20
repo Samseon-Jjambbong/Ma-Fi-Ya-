@@ -16,6 +16,9 @@ namespace Mafia
         public Dictionary<int, MafiaAction> sentActionDic = new Dictionary<int, MafiaAction>();
         public Dictionary<int, List<MafiaActionType>> receivedActionDic = new Dictionary<int, List<MafiaActionType>>();
 
+        // Vote Info
+        public int playerToKick = -1;
+
         private void Start()
         {
             int playerCount = PhotonNetwork.CurrentRoom.Players.Count;
@@ -35,32 +38,10 @@ namespace Mafia
             return count;
         }
 
-        [PunRPC]
-        public void ResetPlayerStates()
-        {
-            int playerCount = PhotonNetwork.CurrentRoom.Players.Count;
-            blockedPlayers = new bool[playerCount];
-            healedPlayers = new bool[playerCount];
-        }
-
-        [PunRPC]
-        public void SetBlocked(int idx, bool blocked)
-        {
-            blockedPlayers[idx] = blocked;
-        }
-
-        [PunRPC]
-        public void SetHealed(int idx, bool healed)
-        {
-            healedPlayers[idx] = healed;
-        }
-
-        [PunRPC]
-        public void SetDead(int idx, bool dead)
-        {
-            deadPlayers[idx] = dead;
-        }
-
+        /******************************************************
+        *                    Player Actions
+        ******************************************************/
+        #region Player Actions
         [PunRPC]
         public void AddAction(int[] serialized)
         {
@@ -84,6 +65,49 @@ namespace Mafia
             sentActionDic.Clear();
             receivedActionDic.Clear();
         }
+        #endregion
+
+        /******************************************************
+        *                    Player States
+        ******************************************************/
+        #region Player States
+        [PunRPC]
+        public void SetBlocked(int idx, bool blocked)
+        {
+            blockedPlayers[idx] = blocked;
+        }
+
+        [PunRPC]
+        public void SetHealed(int idx, bool healed)
+        {
+            healedPlayers[idx] = healed;
+        }
+
+        [PunRPC]
+        public void SetDead(int idx, bool dead)
+        {
+            deadPlayers[idx] = dead;
+        }
+
+        [PunRPC]
+        public void ResetPlayerStates()
+        {
+            int playerCount = PhotonNetwork.CurrentRoom.Players.Count;
+            blockedPlayers = new bool[playerCount];
+            healedPlayers = new bool[playerCount];
+        }
+        #endregion
+
+        /******************************************************
+        *                    Vote Info
+        ******************************************************/
+        #region Vote Info
+        [PunRPC]
+        public void SetPlayerToKick(int id)
+        {
+            playerToKick = id;
+        }
+        #endregion
     }
 }
 

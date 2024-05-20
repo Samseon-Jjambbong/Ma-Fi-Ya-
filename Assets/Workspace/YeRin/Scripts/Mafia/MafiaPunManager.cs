@@ -152,12 +152,20 @@ public class MafiaPunManager : MonoBehaviourPunCallbacks
 
             yield return new WaitForSeconds(1);
 
+            // Show Night Results
+            Debug.Log("Night Results Start");
+            photonView.RPC("ShowNightResults", RpcTarget.All);
+            yield return new WaitUntil(() => Manager.Mafia.nightResultsFinished);
+            Debug.Log("Night Results End");
+
+            yield return new WaitForSeconds(1);
+
             // Day Phase
             Debug.Log("Day Phase Start");
             photonView.RPC("StartDayPhase", RpcTarget.All, voteTime);
             yield return new WaitUntil(() => Manager.Mafia.dayPhaseFinished);
             Debug.Log("Day Events End");
-
+              
             yield return new WaitForSeconds(1);
 
             // Show Vote Result

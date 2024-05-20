@@ -36,6 +36,12 @@ public class MafiaGameFlow : MonoBehaviourPun
     }
 
     [PunRPC]
+    public void ShowNightResults()
+    {
+        StartCoroutine(ShowNightResultsRoutine());
+    }
+
+    [PunRPC]
     public void StartDayPhase(int time)
     {
         StartCoroutine(DayPhaseRoutine(time));
@@ -56,11 +62,11 @@ public class MafiaGameFlow : MonoBehaviourPun
     {
         if (enable)
         {
-            Debug.Log("Enabled Chat");
+            // TODO: Enable chat here
         }
         else
         {
-            Debug.Log("Disabled Chat");
+            // TODO: Disable chat here
         }
     }
 
@@ -90,7 +96,6 @@ public class MafiaGameFlow : MonoBehaviourPun
         yield return ChangeTimeOfDayRoutine();
 
         // Allow chat for mafia
-        Debug.Log("Mafia Chat enabled");
         // TODO : Insert chat ON function here
 
         // Allow skill usage for X Seconds
@@ -105,7 +110,6 @@ public class MafiaGameFlow : MonoBehaviourPun
 
         yield return new WaitForSeconds(3); // Give time for network to receive actions
 
-        Debug.Log("Mafia Chat disabled");
         // TODO : Insert chat OFF function here
 
         Manager.Mafia.nightPhaseFinished = true;
@@ -113,7 +117,6 @@ public class MafiaGameFlow : MonoBehaviourPun
 
     private IEnumerator ShowNightEventsRoutine()
     {
-        Debug.Log("Show Night Events");
         Manager.Mafia.photonView.RPC("ParseActionsAndAssign", RpcTarget.MasterClient);
         yield return new WaitForSeconds(1);
         Manager.Mafia.photonView.RPC("ShowActions", RpcTarget.All);
@@ -121,15 +124,18 @@ public class MafiaGameFlow : MonoBehaviourPun
         yield return new WaitUntil(() => Manager.Mafia.nightEventFinishedCount == Manager.Mafia.ActivePlayerCount());
         Manager.Mafia.nightEventsFinished = true;
         Manager.Mafia.sharedData.ClearActionInfo();
-        Debug.Log("End Night Events");
+    }
+
+    private IEnumerator ShowNightResultsRoutine()
+    {
+        // Night -> Day
+        yield return ChangeTimeOfDayRoutine();
+        Manager.Mafia.nightResultsFinished = true;
     }
 
     // Allow Chat and voting for X Seconds
     private IEnumerator DayPhaseRoutine(int time)
     {
-        // Night -> Day
-        yield return ChangeTimeOfDayRoutine();
-
         // Allow chat for everyone
         EnableChat(true);
 
@@ -152,21 +158,28 @@ public class MafiaGameFlow : MonoBehaviourPun
         }
 
         EnableChat(false);
+        Manager.Mafia.photonView.RPC("CountVotes", RpcTarget.MasterClient);
+        Manager.Mafia.dayPhaseFinished = true;
     }
 
     private IEnumerator ShowVoteResultsRoutine()
     {
         // Show vote result on everyone's screen
-        int voteResult = Manager.Mafia.GetVoteResult();
+        int voteResult = Manager.Mafia.sharedData.playerToKick;
+        Debug.Log($"Vote Result : {voteResult}");
         if (voteResult == -1)
         {
             Debug.Log("No one got kicked");
+            Manager.Mafia.voteResultsFinished = true;
+            yield break;
         }
         else
         {
             Debug.Log($"Player{voteResult} got kicked");
+            // Insert Player kicked coroutine here
+            //Manager.Mafia.photonView.RPC("", RpcTarget.All);
+            yield return new WaitUntil(() => Manager.Mafia.voteResultsFinished);
         }
-        yield return new WaitForSeconds(1);
     }
 
     #endregion

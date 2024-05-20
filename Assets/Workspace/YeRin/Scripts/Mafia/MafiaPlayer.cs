@@ -19,10 +19,27 @@ public class MafiaPlayer : MonoBehaviourPun
     [SerializeField] Animator animator;
     [SerializeField] AudioSource walkAudio;
 
-    [Header("Movement Values")]
+    [SerializeField] GameObject speechBubble;
+    [SerializeField] TMP_Text bubbleText;
+
     [SerializeField] float movePower;
     [SerializeField] float maxSpeed;
     [SerializeField] float rotateSpeed;
+
+    // 플레이어의 생존 여부
+    [SerializeField] private bool isAlive;// = false; /////////////////////////////
+    public bool IsAlive { get { return isAlive; } }
+
+    private Dictionary<int, Player> playerDic;
+
+    // Tae Player Logic
+    public MafiaActionType actionType;
+    public MafiaAction actionByThisPlayer;
+    public MafiaActionPQ actionsOnThisPlayer = new MafiaActionPQ();
+
+    private bool skillBlocked;
+    public bool IsMine => photonView.IsMine;
+
     private Vector3 moveDir;
     private float currentSpeed;
 
@@ -40,6 +57,8 @@ public class MafiaPlayer : MonoBehaviourPun
     public bool IsMine => photonView.IsMine;
     int ID => PhotonNetwork.LocalPlayer.ActorNumber;
     int Idx => PhotonNetwork.LocalPlayer.ActorNumber - 1;
+
+    Coroutine bubble;
 
     protected virtual void Start()
     {
@@ -70,6 +89,8 @@ public class MafiaPlayer : MonoBehaviourPun
             photonView.RPC("SetColor", RpcTarget.MasterClient, Color.black.r, Color.black.g, Color.black.b);
         }
         walkAudio.Stop();
+
+        Debug.Log(PhotonNetwork.LocalPlayer.GetPlayerRole());
     }
 
     private void FixedUpdate()
@@ -269,10 +290,29 @@ public class MafiaPlayer : MonoBehaviourPun
         GetComponentInChildren<Renderer>().material.color = new Color(r, g, b, 1f);
     }
 
+    #region Speech Bubble
+
     [PunRPC]
-    private void NickName(string nickName)
+    public void OpenSpeechBubble(string userName, string sendText)
     {
-        nickNameText.text = nickName;
+        if (speechBubble.activeSelf)
+        {
+            StopCoroutine(bubble);
+        }
+        else
+        {
+            speechBubble.SetActive(true);
+        }
+
+        bubbleText.text = $"<#00C8FF>{userName}</color>\n{sendText}";
+
+        bubble = StartCoroutine(CloseSpeechBubble());
+    }
+    IEnumerator CloseSpeechBubble()
+    {
+        yield return new WaitForSeconds(3f);
+
+        speechBubble.SetActive(false);
     }
     #endregion
 }

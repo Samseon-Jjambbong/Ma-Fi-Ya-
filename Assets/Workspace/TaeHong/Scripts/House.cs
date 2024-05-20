@@ -21,6 +21,11 @@ public class House : MonoBehaviourPun, IPointerClickHandler, IPointerExitHandler
     [SerializeField] private Image skillIcon;
     [SerializeField] private MafiaRoleDataSO dataSO;
 
+    [SerializeField] GameObject speechBubble;
+    [SerializeField] TMP_Text bubbleText;
+
+    Coroutine bubble;
+
     [Header("Mafia")]
     [SerializeField] private MafiaPlayer houseOwner;
     public MafiaPlayer HouseOwner { get { return houseOwner; } set { houseOwner = value; } }
@@ -202,4 +207,30 @@ public class House : MonoBehaviourPun, IPointerClickHandler, IPointerExitHandler
     {
 
     }
+
+    #region Speech Bubble
+
+    [PunRPC]
+    public void OpenSpeechBubble(string userName, string sendText)
+    {
+        if (speechBubble.activeSelf)
+        {
+            StopCoroutine(bubble);
+        }
+        else
+        {
+            speechBubble.SetActive(true);
+        }
+
+        bubbleText.text = $"<#9b111e>{userName}</color>\n{sendText}";
+
+        bubble = StartCoroutine(CloseSpeechBubble());
+    }
+    IEnumerator CloseSpeechBubble()
+    {
+        yield return new WaitForSeconds(3f);
+
+        speechBubble.SetActive(false);
+    }
+    #endregion
 }

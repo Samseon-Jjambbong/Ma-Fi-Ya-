@@ -3,6 +3,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Tae;
+using TMPro;
 using Mafia;
 
 /// <summary>
@@ -37,7 +39,9 @@ public class MafiaManager : Singleton<MafiaManager>, IPunObservable
     private MafiaPlayer player;
     public MafiaPlayer Player { get { return player; } set { player = value; } }
 
-    // MASTER CLIENT ONLY
+    private House house;
+    public House House { get; set; }
+
     public MafiaGame Game = new MafiaGame();
     public event Action VoteCountChanged;
     private int[] votes;

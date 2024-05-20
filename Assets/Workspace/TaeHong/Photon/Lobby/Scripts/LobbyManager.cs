@@ -14,6 +14,8 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     [SerializeField] RoomPanel roomPanel;
     [SerializeField] LobbyPanel lobbyPanel;
 
+    [SerializeField] AudioClip mainBGM;
+    [SerializeField] AudioClip roomBGM;
     private ClientState state;
     
     private void Start()
@@ -49,6 +51,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
 
     public override void OnJoinedRoom()
     {
+        Manager.Sound.PlayBGM( roomBGM );
         SetActivePanel(Panel.Room);
     }
 
@@ -59,6 +62,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
 
     public override void OnLeftRoom()
     {
+        Manager.Sound.PlayBGM(mainBGM);
         SetActivePanel(Panel.Menu);
     }
 

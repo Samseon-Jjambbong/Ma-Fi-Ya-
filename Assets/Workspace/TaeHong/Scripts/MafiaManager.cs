@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Mafia;
 
 /// <summary>
 /// programmer : Yerin, TaeHong
@@ -12,6 +13,8 @@ using UnityEngine;
 
 public class MafiaManager : Singleton<MafiaManager>, IPunObservable
 {
+    public SharedData sharedData;
+
     private int playerCount;
     public int PlayerCount => playerCount;
 
@@ -44,9 +47,7 @@ public class MafiaManager : Singleton<MafiaManager>, IPunObservable
     public MafiaAction? PlayerAction { get { return playerAction; } set { playerAction = value; } }
 
     public MafiaActionPQ MafiaActionPQ = new MafiaActionPQ();
-    private bool[] blockedPlayers;
-    private bool[] deadPlayers;
-    public bool[] healedPlayers;
+
     public PhotonView photonView => GetComponent<PhotonView>();
 
     // Game Loop Flags
@@ -57,26 +58,16 @@ public class MafiaManager : Singleton<MafiaManager>, IPunObservable
     public bool dayPhaseFinished;
     public bool voteResultsFinished;
     
-
     private void Start()
     {
         isDay = true;
         playerCount = PhotonNetwork.CurrentRoom.Players.Count;
         votes = new int[playerCount];
-        blockedPlayers = new bool[playerCount];
-        deadPlayers = new bool[playerCount];
-        healedPlayers = new bool[playerCount];
     }
 
     public int ActivePlayerCount()
     {
-        int count = 0;
-        foreach(bool dead in deadPlayers)
-        {
-            if(!dead)
-                count++;
-        }
-        return count;
+        return sharedData.ActivePlayerCount();
     }
 
     [PunRPC] // Called only on MasterClient
@@ -226,9 +217,7 @@ public class MafiaManager : Singleton<MafiaManager>, IPunObservable
     [PunRPC] // Called only on MasterClient
     public void ParseActionsAndAssign()
     {
-        // Reset states
-        blockedPlayers = new bool[playerCount];
-        healedPlayers = new bool[playerCount];
+        sharedData.photonView.RPC("ResetPlayerStates", RpcTarget.All);
 
         MafiaAction action;
         
@@ -241,7 +230,7 @@ public class MafiaManager : Singleton<MafiaManager>, IPunObservable
             int receiverIdx = action.receiver - 1;
 
             // If blocked, don't add action
-            if (blockedPlayers[senderIdx])
+            if (sharedData.blockedPlayers[senderIdx])
             {
                 continue;
             }
@@ -250,25 +239,22 @@ public class MafiaManager : Singleton<MafiaManager>, IPunObservable
             switch (action.actionType)
             {
                 case MafiaActionType.Block:
-                    blockedPlayers[receiverIdx] = true;
-                    Player.photonView.RPC("AddAction", PhotonNetwork.PlayerList[senderIdx], action.Serialize());
-                    Player.photonView.RPC("AddAction", PhotonNetwork.PlayerList[receiverIdx], action.Serialize());
+                    sharedData.photonView.RPC("SetBlocked", RpcTarget.All, receiverIdx, true);
                     break;
                 case MafiaActionType.Kill:
-                    deadPlayers[receiverIdx] = true;
-                    Player.photonView.RPC("AddAction", PhotonNetwork.PlayerList[senderIdx], action.Serialize());
-                    Player.photonView.RPC("AddAction", PhotonNetwork.PlayerList[receiverIdx], action.Serialize());
+                    sharedData.photonView.RPC("SetDead", RpcTarget.All, receiverIdx, true);
                     break;
                 case MafiaActionType.Heal:
-                    if (deadPlayers[receiverIdx] == true)
+                    if (sharedData.deadPlayers[receiverIdx] == true)
                     {
-                        deadPlayers[receiverIdx] = false;
-                        healedPlayers[receiverIdx] = true;
+                        sharedData.photonView.RPC("SetDead", RpcTarget.All, receiverIdx, false);
+                        sharedData.photonView.RPC("SetHealed", RpcTarget.All, receiverIdx, true);
                     }
-                    Player.photonView.RPC("AddAction", PhotonNetwork.PlayerList[senderIdx], action.Serialize());
-                    Player.photonView.RPC("AddAction", PhotonNetwork.PlayerList[receiverIdx], action.Serialize());
                     break;
             }
+
+            // Add action to shared data
+            sharedData.photonView.RPC("AddAction", RpcTarget.All, action.Serialize());
         }
         Debug.Log($"End ActionPQ Debug");
     }
@@ -276,8 +262,6 @@ public class MafiaManager : Singleton<MafiaManager>, IPunObservable
     [PunRPC]
     public void ShowActions()
     {
-        Debug.Log($"Client{PhotonNetwork.LocalPlayer.ActorNumber} Show Actions");
-        StartCoroutine(player.ShowActionsRoutine());
-        Debug.Log($"FUK");
+        StartCoroutine(Player.ShowActionsRoutine());
     }
 }

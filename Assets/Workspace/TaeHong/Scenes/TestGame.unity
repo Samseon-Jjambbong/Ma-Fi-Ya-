@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028326, g: 0.22571333, b: 0.30692202, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1486,6 +1486,76 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1711871638}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &914158251
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 914158254}
+  - component: {fileID: 914158253}
+  - component: {fileID: 914158252}
+  m_Layer: 0
+  m_Name: MafiaSharedData
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &914158252
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 914158251}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 4
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
+--- !u!114 &914158253
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 914158251}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 65328b9d0f40843a1afc74b397e6727b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  blockedPlayers: 
+  deadPlayers: 
+  healedPlayers: 
+--- !u!4 &914158254
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 914158251}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &943324380
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2081,6 +2151,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01b066014f9dc4725bab194fdf11253c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sharedData: {fileID: 914158253}
   displayRoleTime: 5
   roleUseTime: 10
   voteTime: 10
@@ -2089,7 +2160,12 @@ MonoBehaviour:
     type: 3}
   nightMafiaPos: {x: 0, y: 0, z: 0}
   houses: []
-  healedPlayers: 
+  displayRoleFinished: 0
+  nightPhaseFinished: 0
+  nightEventFinishedCount: 0
+  nightEventsFinished: 0
+  dayPhaseFinished: 0
+  voteResultsFinished: 0
 --- !u!114 &1424524249
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3357,3 +3433,4 @@ SceneRoots:
   - {fileID: 1599447929}
   - {fileID: 1424524246}
   - {fileID: 1281374569}
+  - {fileID: 914158254}

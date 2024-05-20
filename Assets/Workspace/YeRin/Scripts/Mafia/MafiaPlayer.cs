@@ -33,8 +33,6 @@ public class MafiaPlayer : MonoBehaviourPun
     [Header("Mafia Logic")]
     private Dictionary<int, Player> playerDic;
     public MafiaActionType actionType;
-    public MafiaAction? actionByThisPlayer = null;
-    public List<MafiaActionType> actionsOnThisPlayer = new List<MafiaActionType>();
 
     [Header("States")]
     private bool skillBlocked;
@@ -96,28 +94,23 @@ public class MafiaPlayer : MonoBehaviourPun
     }
 
     #region Game Logic
-    [PunRPC]
-    public void AddAction(int[] serialized)
-    {
-        MafiaAction action = new MafiaAction(serialized);
-        Debug.Log($"Add Action RPC Info: {action.sender} {action.receiver} {action.actionType}");
-        if (PhotonNetwork.LocalPlayer.ActorNumber == action.sender)
-        {
-            actionByThisPlayer = action;
-            Debug.Log($"{GetRole()} targeted Player{action.receiver}");
-        }
-        if (PhotonNetwork.LocalPlayer.ActorNumber == action.receiver)
-        {
-            if (action.actionType == MafiaActionType.Block)
-                skillBlocked = true;
-
-            actionsOnThisPlayer.Add(action.actionType);
-            Debug.Log($"{action.receiver} got {action.actionType}ed");
-        }
-    }
-
     public IEnumerator ShowActionsRoutine()
     {
+        MafiaAction? actionByThisPlayer = null;
+        List<MafiaActionType> actionsOnThisPlayer = new List<MafiaActionType>();
+
+        // Get actions
+        if (Manager.Mafia.sharedData.sentActionDic.ContainsKey(ID))
+        {
+            actionByThisPlayer = Manager.Mafia.sharedData.sentActionDic[ID];
+        }
+        if (Manager.Mafia.sharedData.receivedActionDic.ContainsKey(ID))
+        {
+            actionsOnThisPlayer = Manager.Mafia.sharedData.receivedActionDic[ID];
+        }
+
+
+        // Do Actions
         if (actionByThisPlayer != null)
         {
             MafiaAction action = (MafiaAction) actionByThisPlayer;
@@ -140,9 +133,6 @@ public class MafiaPlayer : MonoBehaviourPun
         }
 
         yield return new WaitForSeconds(1);
-        
-        actionByThisPlayer = null;
-        actionsOnThisPlayer.Clear();
         Manager.Mafia.nightEventFinishedCount++;
     }
 

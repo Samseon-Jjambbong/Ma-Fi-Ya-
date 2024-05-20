@@ -3418,6 +3418,54 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1376909263}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &864224328
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 864224330}
+  - component: {fileID: 864224329}
+  m_Layer: 0
+  m_Name: ButtonSFXManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &864224329
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 864224328}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e800ad875344cfd479e1bbb1cabb4865, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  buttonSFXs:
+  - {fileID: 8300000, guid: e877f97fc56825b41abd3208e09d20fd, type: 3}
+  - {fileID: 8300000, guid: b3e76b9da842baa428e38e1aff42c896, type: 3}
+  - {fileID: 8300000, guid: a59ff9559f64f7f4683e948809f393a2, type: 3}
+--- !u!4 &864224330
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 864224328}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &865464428 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4099890921740684, guid: 9d200fbd47e9c7f45ad54450ebd25b94,
@@ -7961,6 +8009,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 808459222818606397, guid: 9ac340f7dfc8a8949a83fc506e021842, type: 3}
+    - {fileID: 8221124563014184208, guid: 9ac340f7dfc8a8949a83fc506e021842, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 8820692472842831227, guid: 9ac340f7dfc8a8949a83fc506e021842,
@@ -7990,6 +8039,7 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 1376909263}
+  - {fileID: 864224330}
   - {fileID: 413402955}
   - {fileID: 1601416077}
   - {fileID: 626179608}

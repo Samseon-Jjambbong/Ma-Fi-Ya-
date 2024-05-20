@@ -42,8 +42,8 @@ public class MafiaPlayer : MonoBehaviourPun
     private bool skillBlocked;
     private bool isWalking;
     public bool IsMine => photonView.IsMine;
-    int ID => PhotonNetwork.LocalPlayer.ActorNumber;
-    int Idx => PhotonNetwork.LocalPlayer.ActorNumber - 1;
+    public int ID => PhotonNetwork.LocalPlayer.ActorNumber;
+    public int Idx => PhotonNetwork.LocalPlayer.ActorNumber - 1;
 
     Coroutine bubble;
 
@@ -122,25 +122,20 @@ public class MafiaPlayer : MonoBehaviourPun
         {
             MafiaAction action = (MafiaAction) actionByThisPlayer;
             Debug.Log($"Player{ID} did {action.actionType}");
-            yield return Manager.Mafia.PlayerGoRoutine(action);
-        }
-        else
-        {
-            Debug.Log("actionby null");
+            yield return Manager.Mafia.animFactory.SpawnPlayerGo(action);
         }
 
         yield return new WaitForSeconds(1);
 
         foreach (MafiaActionType actionType in actionsOnThisPlayer)
         {
-            House house = Manager.Mafia.Houses[PhotonNetwork.LocalPlayer.ActorNumber - 1];
             Debug.Log($"Player{ID} received {actionType}");
-            yield return Manager.Mafia.PlayerComeRoutine(house, actionType);
+            yield return Manager.Mafia.animFactory.SpawnPlayerCome(ID, actionType);
             yield return new WaitForSeconds(1);
         }
 
         yield return new WaitForSeconds(1);
-        Manager.Mafia.nightEventFinishedCount++;
+        Manager.Mafia.sharedData.photonView.RPC("ClientFinished", RpcTarget.All);
     }
 
     [PunRPC]
@@ -262,6 +257,12 @@ public class MafiaPlayer : MonoBehaviourPun
     public void SetNickName(string nickName)
     {
         photonView.RPC("NickName", RpcTarget.All, nickName);
+    }
+
+    [PunRPC]
+    private void NickName(string nickName)
+    {
+        nickNameText.text = nickName;
     }
 
     [PunRPC]

@@ -8,8 +8,9 @@ namespace Mafia
     public class SharedData : MonoBehaviourPun
     {
         // Player State
-        public bool[] blockedPlayers;
         public bool[] deadPlayers;
+        public bool[] blockedPlayers;
+        public bool[] killedPlayers;
         public bool[] healedPlayers;
 
         // Player Actions
@@ -19,11 +20,15 @@ namespace Mafia
         // Vote Info
         public int playerToKick = -1;
 
+        // Game Loop
+        public int clientFinishedCount;
+
         private void Start()
         {
             int playerCount = PhotonNetwork.CurrentRoom.Players.Count;
-            blockedPlayers = new bool[playerCount];
             deadPlayers = new bool[playerCount];
+            blockedPlayers = new bool[playerCount];
+            killedPlayers = new bool[playerCount];
             healedPlayers = new bool[playerCount];
         }
 
@@ -84,6 +89,25 @@ namespace Mafia
         }
 
         [PunRPC]
+        public void SetKilled(int idx, bool killed)
+        {
+            killedPlayers[idx] = killed;
+        }
+
+        public List<int> GetKilledPlayers()
+        {
+            List<int> killed = new List<int>();
+            for(int i = 0; i < killedPlayers.Length; i++)
+            {
+                if (killedPlayers[i] == true)
+                {
+                    killed.Add(i + 1);
+                }
+            }
+            return killed;
+        }
+
+        [PunRPC]
         public void SetDead(int idx, bool dead)
         {
             deadPlayers[idx] = dead;
@@ -106,6 +130,23 @@ namespace Mafia
         public void SetPlayerToKick(int id)
         {
             playerToKick = id;
+        }
+        #endregion
+
+        /******************************************************
+        *                    Game Loop
+        ******************************************************/
+        #region Game Loop
+        [PunRPC] // Call before callbacks
+        public void ResetClientFinishedCount()
+        {
+            clientFinishedCount = 0;
+        }
+
+        [PunRPC]
+        public void ClientFinished()
+        {
+            clientFinishedCount++;
         }
         #endregion
     }

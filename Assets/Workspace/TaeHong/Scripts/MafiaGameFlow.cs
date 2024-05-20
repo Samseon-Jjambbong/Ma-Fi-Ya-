@@ -131,13 +131,14 @@ public class MafiaGameFlow : MonoBehaviourPun
 
     private IEnumerator ShowNightEventsRoutine()
     {
+        Manager.Mafia.sharedData.photonView.RPC("ResetClientFinishedCount", RpcTarget.All);
         Manager.Mafia.photonView.RPC("ParseActionsAndAssign", RpcTarget.MasterClient);
         yield return new WaitForSeconds(1);
         Manager.Mafia.photonView.RPC("ShowActions", RpcTarget.All);
         yield return new WaitForSeconds(1);
-        yield return new WaitUntil(() => Manager.Mafia.nightEventFinishedCount == Manager.Mafia.ActivePlayerCount());
+        yield return new WaitUntil(() => Manager.Mafia.sharedData.clientFinishedCount == Manager.Mafia.ActivePlayerCount());
         Manager.Mafia.nightEventsFinished = true;
-        Manager.Mafia.sharedData.ClearActionInfo();
+        Manager.Mafia.sharedData.photonView.RPC("ClearActionInfo", RpcTarget.All);
     }
 
     private IEnumerator ShowNightResultsRoutine()

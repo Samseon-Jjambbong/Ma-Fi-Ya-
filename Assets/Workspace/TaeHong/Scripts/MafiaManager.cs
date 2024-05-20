@@ -15,7 +15,10 @@ using Mafia;
 
 public class MafiaManager : Singleton<MafiaManager>, IPunObservable
 {
+    [Header("Components")]
     public SharedData sharedData;
+    public AnimationFactory animFactory;
+    public PhotonView photonView => GetComponent<PhotonView>();
 
     private int playerCount;
     public int PlayerCount => playerCount;
@@ -27,11 +30,6 @@ public class MafiaManager : Singleton<MafiaManager>, IPunObservable
     [SerializeField] private int voteTime;
     [SerializeField] private float skillTime;
 
-    [SerializeField] GameObject nightMafia;
-    public GameObject NightMafia => nightMafia;
-    [SerializeField] Vector3 nightMafiaPos;
-    public Vector3 NightMafiaPos => nightMafiaPos;
-
     [SerializeField] List<House> houses;
     public List<House> Houses { get { return houses; } set { houses = value; } }
     public float SkillTime => skillTime;
@@ -42,6 +40,7 @@ public class MafiaManager : Singleton<MafiaManager>, IPunObservable
     private House house;
     public House House { get; set; }
 
+    [Header("Game Logic")]
     public MafiaGame Game = new MafiaGame();
     public event Action VoteCountChanged;
     private int[] votes;
@@ -52,12 +51,9 @@ public class MafiaManager : Singleton<MafiaManager>, IPunObservable
 
     public MafiaActionPQ MafiaActionPQ = new MafiaActionPQ();
 
-    public PhotonView photonView => GetComponent<PhotonView>();
-
     // Game Loop Flags
     public bool displayRoleFinished;
     public bool nightPhaseFinished;
-    public int nightEventFinishedCount;
     public bool nightEventsFinished;
     public bool nightResultsFinished;
     public bool dayPhaseFinished;
@@ -154,54 +150,6 @@ public class MafiaManager : Singleton<MafiaManager>, IPunObservable
         }
     }
 
-    public void ShowMyPlayerMove(House house)
-    {
-        GameObject obj = Instantiate(Manager.Mafia.NightMafia, Manager.Mafia.NightMafiaPos, Manager.Mafia.NightMafia.transform.rotation);
-
-        foreach (MafiaPlayer player in FindObjectsOfType<MafiaPlayer>())
-        {
-            if (player.IsMine)
-            {
-                obj.GetComponentInChildren<Renderer>().material.color = player.GetComponentInChildren<Renderer>().material.color;
-            }
-        }
-        NightMafiaMove mafia = obj.GetComponent<NightMafiaMove>();
-
-        mafia.Target = house.gameObject;
-        mafia.MoveToTarget();
-    }
-
-    public void ShowSomebodyMove(House house)
-    {
-        house.MafiaComesHome();
-    }
-
-    public IEnumerator PlayerGoRoutine(MafiaAction action)
-    {
-        GameObject obj = Instantiate(Manager.Mafia.NightMafia, Manager.Mafia.NightMafiaPos, Manager.Mafia.NightMafia.transform.rotation);
-        foreach (MafiaPlayer player in FindObjectsOfType<MafiaPlayer>())
-        {
-            if (player.IsMine)
-            {
-                obj.GetComponentInChildren<Renderer>().material.color = player.GetComponentInChildren<Renderer>().material.color;
-            }
-        }
-        NightMafiaMove mafia = obj.GetComponent<NightMafiaMove>();
-        mafia.Target = Manager.Mafia.Houses[action.receiver - 1].gameObject;
-        return mafia.MoveToTargetHouse();
-        // return mafia.MoveToTarget();
-    }
-
-    public IEnumerator PlayerComeRoutine(House house, MafiaActionType actionType)
-    {
-        GameObject obj = Instantiate(Manager.Mafia.NightMafia, Manager.Mafia.NightMafiaPos, Manager.Mafia.NightMafia.transform.rotation);
-
-        NightMafiaMove mafia = obj.GetComponent<NightMafiaMove>();
-
-        mafia.Target = house.gameObject;
-        return mafia.MoveToTargetHouse();
-    }
-
     public void ActivateHouseOutlines()
     {
         for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
@@ -250,7 +198,7 @@ public class MafiaManager : Singleton<MafiaManager>, IPunObservable
 
         MafiaAction action;
         
-        Debug.Log($"Begin ActionPQ Debug with Count: {Manager.Mafia.MafiaActionPQ.Count}");
+        Debug.Log($"Begin ActionPQ Debug with Count: {MafiaActionPQ.Count}");
         while (MafiaActionPQ.Count > 0)
         {
             action = MafiaActionPQ.Dequeue();
@@ -271,12 +219,12 @@ public class MafiaManager : Singleton<MafiaManager>, IPunObservable
                     sharedData.photonView.RPC("SetBlocked", RpcTarget.All, receiverIdx, true);
                     break;
                 case MafiaActionType.Kill:
-                    sharedData.photonView.RPC("SetDead", RpcTarget.All, receiverIdx, true);
+                    sharedData.photonView.RPC("SetKilled", RpcTarget.All, receiverIdx, true);
                     break;
                 case MafiaActionType.Heal:
-                    if (sharedData.deadPlayers[receiverIdx] == true)
+                    if (sharedData.killedPlayers[receiverIdx] == true)
                     {
-                        sharedData.photonView.RPC("SetDead", RpcTarget.All, receiverIdx, false);
+                        sharedData.photonView.RPC("SetKilled", RpcTarget.All, receiverIdx, false);
                         sharedData.photonView.RPC("SetHealed", RpcTarget.All, receiverIdx, true);
                     }
                     break;

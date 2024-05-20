@@ -7714,6 +7714,36 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 808459222818606397, guid: 9ac340f7dfc8a8949a83fc506e021842,
+        type: 3}
+      propertyPath: mainBGM
+      value: 
+      objectReference: {fileID: 8300000, guid: c60a7adc2d3cce44a978bbcc52bba6ab, type: 3}
+    - target: {fileID: 808459222818606397, guid: 9ac340f7dfc8a8949a83fc506e021842,
+        type: 3}
+      propertyPath: roomBGM
+      value: 
+      objectReference: {fileID: 8300000, guid: 781ae56f79221b54ba21c36a0ec4d428, type: 3}
+    - target: {fileID: 808459222818606397, guid: 9ac340f7dfc8a8949a83fc506e021842,
+        type: 3}
+      propertyPath: buttonSFXs.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 808459222818606397, guid: 9ac340f7dfc8a8949a83fc506e021842,
+        type: 3}
+      propertyPath: buttonSFXs.Array.data[0]
+      value: 
+      objectReference: {fileID: 8300000, guid: e877f97fc56825b41abd3208e09d20fd, type: 3}
+    - target: {fileID: 808459222818606397, guid: 9ac340f7dfc8a8949a83fc506e021842,
+        type: 3}
+      propertyPath: buttonSFXs.Array.data[1]
+      value: 
+      objectReference: {fileID: 8300000, guid: b3e76b9da842baa428e38e1aff42c896, type: 3}
+    - target: {fileID: 808459222818606397, guid: 9ac340f7dfc8a8949a83fc506e021842,
+        type: 3}
+      propertyPath: buttonSFXs.Array.data[2]
+      value: 
+      objectReference: {fileID: 8300000, guid: a59ff9559f64f7f4683e948809f393a2, type: 3}
     - target: {fileID: 976116045434571428, guid: 9ac340f7dfc8a8949a83fc506e021842,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -7929,7 +7959,8 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 808459222818606397, guid: 9ac340f7dfc8a8949a83fc506e021842, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 8820692472842831227, guid: 9ac340f7dfc8a8949a83fc506e021842,

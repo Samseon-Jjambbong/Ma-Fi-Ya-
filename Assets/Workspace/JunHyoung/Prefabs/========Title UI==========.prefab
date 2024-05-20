@@ -427,7 +427,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3342347019875607397}
-  - component: {fileID: 808459222818606397}
+  - component: {fileID: 3513384343282107618}
+  - component: {fileID: 8221124563014184208}
   m_Layer: 0
   m_Name: TitleScene
   m_TagString: Untagged
@@ -450,7 +451,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 976116045434571428}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &808459222818606397
+--- !u!114 &3513384343282107618
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -465,6 +466,24 @@ MonoBehaviour:
   titleCanvas: {fileID: 3079757513530702543}
   loginCanvas: {fileID: 3650307644400039247}
   lobbyCanvas: {fileID: 4866930924116000070}
+  mainBGM: {fileID: 8300000, guid: c60a7adc2d3cce44a978bbcc52bba6ab, type: 3}
+  roomBGM: {fileID: 8300000, guid: 781ae56f79221b54ba21c36a0ec4d428, type: 3}
+--- !u!114 &8221124563014184208
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4163623749340898343}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e800ad875344cfd479e1bbb1cabb4865, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  buttonSFXs:
+  - {fileID: 8300000, guid: e877f97fc56825b41abd3208e09d20fd, type: 3}
+  - {fileID: 8300000, guid: b3e76b9da842baa428e38e1aff42c896, type: 3}
+  - {fileID: 8300000, guid: a59ff9559f64f7f4683e948809f393a2, type: 3}
 --- !u!1 &4536633347064601782
 GameObject:
   m_ObjectHideFlags: 0
@@ -941,17 +960,17 @@ PrefabInstance:
     - target: {fileID: 1780451062068909922, guid: 6177db46b5b03634fbaefa2ab02648b1,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1780451062068909922, guid: 6177db46b5b03634fbaefa2ab02648b1,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1780451062068909922, guid: 6177db46b5b03634fbaefa2ab02648b1,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1780451062068909922, guid: 6177db46b5b03634fbaefa2ab02648b1,
         type: 3}

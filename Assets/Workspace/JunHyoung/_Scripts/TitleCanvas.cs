@@ -17,7 +17,6 @@ public class TitleCanvas : MonoBehaviour
         buttonConnectAgain.onClick.AddListener(CheckConnectedToInternet);
     }
 
-
     private void Update()
     {
         if ( isDisconnect )

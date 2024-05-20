@@ -2,15 +2,20 @@ using LoginSystem;
 using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class TitleScene : MonoBehaviour
 {
     [SerializeField] TitleCanvas titleCanvas;
     [SerializeField] LoginManager loginCanvas;
     [SerializeField] LobbyManager lobbyCanvas;
+
+    [SerializeField] AudioClip mainBGM;
+    [SerializeField] AudioClip roomBGM;
+
     private void Awake()
     {
-        if ( PhotonNetwork.NetworkClientState == ClientState.Leaving || PhotonNetwork.NetworkClientState == ClientState.Joined )
+        if (PhotonNetwork.NetworkClientState == ClientState.Leaving || PhotonNetwork.NetworkClientState == ClientState.Joined)
         {
             ActiveLobby();
             return;
@@ -24,6 +29,7 @@ public class TitleScene : MonoBehaviour
         titleCanvas.gameObject.SetActive(true);
         loginCanvas.gameObject.SetActive(false);
         lobbyCanvas.gameObject.SetActive(false);
+        Manager.Sound.PlayBGM(mainBGM);
     }
 
     private void ActiveLobby()
@@ -33,5 +39,4 @@ public class TitleScene : MonoBehaviour
         loginCanvas.gameObject.SetActive(false);
         lobbyCanvas.gameObject.SetActive(true);
     }
-
 }

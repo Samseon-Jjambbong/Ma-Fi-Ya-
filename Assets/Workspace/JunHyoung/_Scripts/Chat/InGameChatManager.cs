@@ -2,6 +2,8 @@ using ExitGames.Client.Photon;
 using Photon.Chat;
 using Photon.Chat.Demo;
 using Photon.Pun;
+using Photon.Realtime;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,7 +11,7 @@ using UnityEngine.UI;
 public class InGameChatManager : MonoBehaviour, IChatClientListener
 {
     static  InGameChatManager instance;
-    static InGameChatManager Instance {  get { return instance; } }
+    static public InGameChatManager Instance {  get { return instance; } }
 
     [SerializeField] bool isChatable;
     public bool IsChatable { get { return isChatable; } set { isChatable = value; inputField.interactable = isChatable; } }
@@ -35,7 +37,7 @@ public class InGameChatManager : MonoBehaviour, IChatClientListener
     [SerializeField] Color systemMessageColor;
 
     [Header("For Debugging")]
-    [SerializeField] bool isGhost = false;
+    [SerializeField] bool isGhost; // = false; /////////////////////////////
     [SerializeField] public bool isMafia;
     [SerializeField] public bool isDay; // MafiaGameManager의 isDay에 이벤트 연결해서 사용할것.
 
@@ -106,7 +108,7 @@ public class InGameChatManager : MonoBehaviour, IChatClientListener
     {
         userName = PhotonNetwork.LocalPlayer.NickName;
         chatClient = new ChatClient(this);
-        chatClient.AuthValues = new AuthenticationValues(userName);
+        chatClient.AuthValues = new Photon.Chat.AuthenticationValues(userName);
 
         ChatEntry newChat = Instantiate(chatEntry, contents);
         newChat.SetChat(new ChatData(" ", $"Connect On Chatting Channel...", Color.black, Color.yellow));
@@ -117,7 +119,8 @@ public class InGameChatManager : MonoBehaviour, IChatClientListener
         mafiaChannelName = curChannelName + "Night";
         ghostChannelName = curChannelName + "Ghots";
 
-        isMafia = PhotonNetwork.LocalPlayer.GetPlayerRole() == MafiaRole.Mafia;
+        Debug.Log($"PlayerRole: {PhotonNetwork.LocalPlayer.GetPlayerRole()}");
+
         nickNameColor = PhotonNetwork.LocalPlayer.GetPlayerColor();
     }
 
@@ -158,12 +161,21 @@ public class InGameChatManager : MonoBehaviour, IChatClientListener
         {
             Debug.Log("Publish to ghost channnel");
             chatClient.PublishMessage(ghostChannelName, new ChatData(userName, inputField.text, nickNameColor, ghostMessageColor));
+            Manager.Mafia.Player.photonView.RPC("OpenSpeechBubble", RpcTarget.All, userName, inputField.text);
         }
-        else if ( !isDay && isMafia )
+        else if ( !Manager.Mafia.IsDay && isMafia )
         //if(!MafiaManager.Instance.IsDay && isMafia ) // 낮이 아니고, 마피아라면 마피아 채널에
         {
             Debug.Log("Publish to mafia channnel");
             chatClient.PublishMessage(mafiaChannelName, new ChatData(userName, inputField.text, nickNameColor, mafiaMessageColor));
+
+            foreach (Player player in PhotonNetwork.PlayerList)
+            {
+                if (player.GetPlayerRole().Equals(MafiaRole.Mafia))
+                {
+                    Manager.Mafia.House.photonView.RPC("OpenSpeechBubble", player, userName, inputField.text);
+                }
+            }
         }
         else // 이외라면 일반 채팅 채널에
         {

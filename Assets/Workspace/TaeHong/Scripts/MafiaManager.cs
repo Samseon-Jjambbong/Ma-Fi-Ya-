@@ -36,6 +36,9 @@ public class MafiaManager : Singleton<MafiaManager>, IPunObservable
     private MafiaPlayer player;
     public MafiaPlayer Player { get; set; }
 
+    private House house;
+    public House House { get; set; }
+
     public MafiaGame Game = new MafiaGame();
     public event Action VoteCountChanged;
     private int[] votes;

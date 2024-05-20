@@ -2,8 +2,6 @@ using Firebase;
 using Firebase.Auth;
 using Firebase.Database;
 using Firebase.Extensions;
-using System.Collections;
-using System.Threading.Tasks;
 using UnityEngine;
 
 public class FirebaseManager : MonoBehaviour
@@ -213,7 +211,7 @@ public class FirebaseManager : MonoBehaviour
         if ( !isValid )
             return VALIDFAIL;
 
-        return profile.DisplayName;
+        return Auth.CurrentUser.DisplayName;
     }
 
     public static UserData GetUserData()

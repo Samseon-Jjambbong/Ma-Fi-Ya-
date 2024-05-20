@@ -9,16 +9,23 @@ public class LobbyManager : MonoBehaviourPunCallbacks
 {
     public enum Panel { Login, Menu, Lobby, Room }
 
-    [SerializeField] LoginPanel loginPanel;
+    [SerializeField] LoginSystem.LoginManager loginPanel;
     [SerializeField] MainPanel menuPanel;
     [SerializeField] RoomPanel roomPanel;
     [SerializeField] LobbyPanel lobbyPanel;
 
+    [SerializeField] AudioClip mainBGM;
+    [SerializeField] AudioClip roomBGM;
     private ClientState state;
     
     private void Start()
     {
-        SetActivePanel(Panel.Login);
+        if ( PhotonNetwork.NetworkClientState == ClientState.Joined )
+        {
+            SetActivePanel(Panel.Room);
+            return;
+        }
+        SetActivePanel(Panel.Menu);
     }
 
     private void Update()
@@ -40,9 +47,11 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     {
         Debug.Log($"Create room success");
     }
+    
 
     public override void OnJoinedRoom()
     {
+        Manager.Sound.PlayBGM( roomBGM );
         SetActivePanel(Panel.Room);
     }
 
@@ -53,6 +62,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
 
     public override void OnLeftRoom()
     {
+        Manager.Sound.PlayBGM(mainBGM);
         SetActivePanel(Panel.Menu);
     }
 
@@ -95,7 +105,12 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     {
         if (cause == DisconnectCause.ApplicationQuit)
             return;
-        
+
+        if (cause == DisconnectCause.None )
+            return;
+
+        Debug.Log($"OnDisconnected : {cause}");
+        VCamController.Instance.SetVCam(VCamController.VCam.Login);
         SetActivePanel(Panel.Login);
     }
 

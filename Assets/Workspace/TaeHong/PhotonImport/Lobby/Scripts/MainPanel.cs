@@ -1,5 +1,7 @@
 using System;
+using ExitGames.Client.Photon;
 using Photon.Pun;
+using Photon.Pun.Demo.Cockpit;
 using Photon.Realtime;
 using TMPro;
 using UnityEngine;
@@ -18,6 +20,7 @@ public class MainPanel : MonoBehaviour
     private void OnEnable()
     {
         createRoomPanel.SetActive(false);
+        Login();
     }
 
     public void CreateRoomMenu()
@@ -59,5 +62,14 @@ public class MainPanel : MonoBehaviour
     public void Logout()
     {
         PhotonNetwork.Disconnect();
+    }
+
+    public void Login()
+    {
+        if ( PhotonNetwork.NetworkingClient.LoadBalancingPeer.PeerState != PeerStateValue.Disconnected ) // 접속중이 아닐 때만 로그인
+            return;
+
+        PhotonNetwork.LocalPlayer.NickName = FirebaseManager.GetName();
+        PhotonNetwork.ConnectUsingSettings();
     }
 }

@@ -39,7 +39,7 @@ namespace LoginSystem
 
         private void ResetPassword()
         {
-            VCamController.Instance.RotateVCam(-1);
+            VCamController.Instance.RotateVCam();
             panelController.SetActivePanel(LoginManager.Panel.Reset);
         }
 
@@ -66,6 +66,7 @@ namespace LoginSystem
 
                 if ( noVerify )
                 {
+                    VCamController.Instance.SetVCam(VCamController.VCam.Lobby);
                     panelController.SetActivePanel(LoginManager.Panel.Main);
                     SetInteractable(true);
                 }

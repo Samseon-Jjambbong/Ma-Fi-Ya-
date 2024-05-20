@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class TitleCanvas : MonoBehaviour
 {
-    [SerializeField] LoginManager loginCanvas;
+    [SerializeField] LoginSystem.LoginManager loginCanvas;
     [SerializeField] TMP_Text text;
     [SerializeField] Button buttonConnectAgain;
 
@@ -16,7 +16,6 @@ public class TitleCanvas : MonoBehaviour
         CheckConnectedToInternet();
         buttonConnectAgain.onClick.AddListener(CheckConnectedToInternet);
     }
-
 
     private void Update()
     {

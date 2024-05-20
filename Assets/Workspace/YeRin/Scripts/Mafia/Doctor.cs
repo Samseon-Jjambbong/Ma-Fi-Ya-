@@ -6,21 +6,10 @@ using Photon.Realtime;
 
 public class Doctor : MafiaPlayer
 {
-    private void Start()
+    protected override void Start()
     {
-        IsMafia = false;
-    }
-    protected override void UseSkill( MafiaPlayer targetPlayer )
-    {
-        base.UseSkill(targetPlayer);
+        base.Start();
 
-        photonView.RPC("Heal", RpcTarget.All, targetPlayer);
-        CanUseSkill = false;
-    }
-
-    [PunRPC]
-    private void Heal( MafiaPlayer targetPlayer )
-    {
-        targetPlayer.IsHealed = true;
+        actionType = MafiaActionType.Heal;
     }
 }

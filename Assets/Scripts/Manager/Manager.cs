@@ -4,6 +4,7 @@ public static class Manager
 {
     public static GameManager Game { get { return GameManager.Instance; } }
     public static MafiaManager Mafia { get { return MafiaManager.Instance; } }
+    public static EventManager Event { get { return EventManager.Instance; } }
     public static DataManager Data { get { return DataManager.Instance; } }
     public static PoolManager Pool { get { return PoolManager.Instance; } }
     public static ResourceManager Resource { get { return ResourceManager.Instance; } }
@@ -15,6 +16,7 @@ public static class Manager
     private static void Initialize()
     {
         GameManager.ReleaseInstance();
+        EventManager.ReleaseInstance();
         DataManager.ReleaseInstance();
         PoolManager.ReleaseInstance();
         ResourceManager.ReleaseInstance();
@@ -23,6 +25,7 @@ public static class Manager
         UIManager.ReleaseInstance();
 
         GameManager.CreateInstance();
+        EventManager.CreateInstance();
         DataManager.CreateInstance();
         PoolManager.CreateInstance();
         ResourceManager.CreateInstance();

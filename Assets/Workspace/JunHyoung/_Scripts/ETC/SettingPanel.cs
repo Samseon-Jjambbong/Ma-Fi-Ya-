@@ -17,6 +17,9 @@ public class SettingPanel : PopUpUI
         exitGameButton.onClick.AddListener(ExitGame);
         bgmSlider.onValueChanged.AddListener(ChangeBGMVol);
         sfxSlider.onValueChanged.AddListener(ChangeSFXVol);
+
+        bgmSlider.value = Manager.Sound.BGMVolme;
+        sfxSlider.value = Manager.Sound.SFXVolme;
     }
 
     void ChangeBGMVol(float val)

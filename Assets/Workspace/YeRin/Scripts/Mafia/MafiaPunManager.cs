@@ -203,6 +203,7 @@ public class MafiaPunManager : MonoBehaviourPunCallbacks
         player.GetComponent<MafiaPlayer>().SetPlayerHouse(playerNumber);
         player.GetComponent<MafiaPlayer>().SetNickName(PhotonNetwork.PlayerList [playerNumber].NickName);
         Manager.Mafia.Player = player.GetComponent<MafiaPlayer>();
+        Manager.Mafia.House = Manager.Mafia.Houses[playerNumber];
     }
 
     private void SpawnHouses()

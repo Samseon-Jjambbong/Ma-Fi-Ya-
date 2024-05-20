@@ -30,7 +30,7 @@ public class MafiaPlayer : MonoBehaviourPun
     [SerializeField] float rotateSpeed;
 
     // 플레이어의 생존 여부
-    private bool isAlive = true;
+    [SerializeField] private bool isAlive;// = false; /////////////////////////////
     public bool IsAlive { get { return isAlive; } }
 
     private Dictionary<int, Player> playerDic;
@@ -61,6 +61,8 @@ public class MafiaPlayer : MonoBehaviourPun
             photonView.RPC("SetColor", RpcTarget.MasterClient, Color.black.r, Color.black.g, Color.black.b);
         }
         walkAudio.Stop();
+
+        Debug.Log(PhotonNetwork.LocalPlayer.GetPlayerRole());
     }
 
     private void FixedUpdate()
@@ -318,5 +320,4 @@ public class MafiaPlayer : MonoBehaviourPun
         speechBubble.SetActive(false);
     }
     #endregion
-
 }

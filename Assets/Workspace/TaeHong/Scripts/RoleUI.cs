@@ -4,6 +4,7 @@ using UnityEngine;
 using Photon.Pun;
 using TMPro;
 using UnityEngine.UI;
+using System;
 
 public class RoleUI : BaseUI
 {
@@ -17,5 +18,8 @@ public class RoleUI : BaseUI
 
         GetUI<Image>("RoleIcon").sprite = data.roleIcon;
         GetUI<TextMeshProUGUI>("RoleName").text = data.roleName;
+
+        InGameChatManager.Instance.isMafia = PhotonNetwork.LocalPlayer.GetPlayerRole() == MafiaRole.Mafia;
+        Debug.Log($"RRRRRRRRRRRRR {InGameChatManager.Instance.isMafia}");
     }
 }

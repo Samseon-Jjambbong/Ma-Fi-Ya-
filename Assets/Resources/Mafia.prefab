@@ -850,6 +850,7 @@ MonoBehaviour:
   movePower: 300
   maxSpeed: 300
   rotateSpeed: 150
+  isAlive: 0
   actionType: 0
 --- !u!114 &5948707589889229996
 MonoBehaviour:

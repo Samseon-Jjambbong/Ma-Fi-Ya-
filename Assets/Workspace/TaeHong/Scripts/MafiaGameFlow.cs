@@ -84,6 +84,20 @@ public class MafiaGameFlow : MonoBehaviourPun
     {
         yield return lightController.ChangePhase();
         Manager.Mafia.IsDay = !Manager.Mafia.IsDay;
+        if (!Manager.Mafia.IsDay)
+        {
+            if (!PhotonNetwork.LocalPlayer.GetPlayerRole().Equals(MafiaRole.Mafia) && Manager.Mafia.Player.IsAlive)
+            {
+                InGameChatManager.Instance.IsChatable = false;
+            }
+        }
+        else
+        {
+            if (!InGameChatManager.Instance.IsChatable)
+            {
+                InGameChatManager.Instance.IsChatable = true;
+            }
+        }
     }
     
     // Night Phase

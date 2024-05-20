@@ -1,34 +1,29 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
-using PhotonHashTable = ExitGames.Client.Photon.Hashtable;
+using System.Collections;
+using System.Collections.Generic;
 using TMPro;
-using Photon.Pun.UtilityScripts;
-using UnityEngine.InputSystem;
-using System;
+using UnityEngine;
+using PhotonHashTable = ExitGames.Client.Photon.Hashtable;
 using Random = UnityEngine.Random;
 
 public class MafiaPunManager : MonoBehaviourPunCallbacks
 {
+    [Header("Components")]
     [SerializeField] TMP_Text infoText;
-    [SerializeField] float CountDownTime;
+    [SerializeField] MafiaRolesSO mafiaRolesSO;
 
+    [Header("Values")]
     [SerializeField] int playerRadius;
     [SerializeField] int houseRadius;
     [SerializeField] List<Color> colorList;
-
-    private Dictionary<int, Player> playerDic;
-
-    [Header("Game Flow")]
+    [SerializeField] float CountDownTime;
     [SerializeField] private int displayRoleTime;
     [SerializeField] private int roleUseTime;
     [SerializeField] private int voteTime;
     [SerializeField] private int skillTime;
 
-    [Header("Game Logic")]
-    [SerializeField] MafiaRolesSO mafiaRolesSO;
+    private Dictionary<int, Player> playerDic;
 
     private void Start()
     {
@@ -41,14 +36,14 @@ public class MafiaPunManager : MonoBehaviourPunCallbacks
         }
     }
 
-    public override void OnPlayerPropertiesUpdate( Player targetPlayer, PhotonHashTable changedProps )
+    public override void OnPlayerPropertiesUpdate(Player targetPlayer, PhotonHashTable changedProps)
     {
-        if ( changedProps.ContainsKey(CustomProperty.LOAD) )
+        if (changedProps.ContainsKey(CustomProperty.LOAD))
         {
             infoText.text = $"{PlayerLoadCount()} / {PhotonNetwork.PlayerList.Length}";
-            if ( PlayerLoadCount() == PhotonNetwork.PlayerList.Length )
+            if (PlayerLoadCount() == PhotonNetwork.PlayerList.Length)
             {
-                if ( PhotonNetwork.IsMasterClient )
+                if (PhotonNetwork.IsMasterClient)
                 {
                     PhotonNetwork.CurrentRoom.SetGameStart(true);
                     PhotonNetwork.CurrentRoom.SetGameStartTime(PhotonNetwork.Time);
@@ -61,9 +56,9 @@ public class MafiaPunManager : MonoBehaviourPunCallbacks
         }
     }
 
-    public override void OnRoomPropertiesUpdate( PhotonHashTable propertiesThatChanged )
+    public override void OnRoomPropertiesUpdate(PhotonHashTable propertiesThatChanged)
     {
-        if ( propertiesThatChanged.ContainsKey(CustomProperty.GAMESTARTTIME) )
+        if (propertiesThatChanged.ContainsKey(CustomProperty.GAMESTARTTIME))
         {
             StartCoroutine(StartTime());
         }
@@ -71,18 +66,18 @@ public class MafiaPunManager : MonoBehaviourPunCallbacks
 
     IEnumerator StartTime()
     {
-        if ( PhotonNetwork.IsMasterClient )
+        if (PhotonNetwork.IsMasterClient)
         {
             SpawnHouses(); // Spawn {PlayerCount} Houses
-            //RandomizeRoles(PhotonNetwork.CurrentRoom.PlayerCount);
-            RandomizeRoles(4); // TODO: CHANGE LATER
+            //AssignRoles(PhotonNetwork.CurrentRoom.PlayerCount);
+            AssignRoles(4); // TODO: CHANGE LATER
         }
 
         double loadTime = PhotonNetwork.CurrentRoom.GetGameStartTime();
-        while ( PhotonNetwork.Time - loadTime < CountDownTime )
+        while (PhotonNetwork.Time - loadTime < CountDownTime)
         {
-            int remainTime = ( int ) ( CountDownTime - ( PhotonNetwork.Time - loadTime ) );
-            infoText.text = ( remainTime + 1 ).ToString();
+            int remainTime = (int) (CountDownTime - (PhotonNetwork.Time - loadTime));
+            infoText.text = (remainTime + 1).ToString();
             yield return null;
         }
 
@@ -96,9 +91,9 @@ public class MafiaPunManager : MonoBehaviourPunCallbacks
     private int PlayerLoadCount()
     {
         int loadCount = 0;
-        foreach ( Player player in PhotonNetwork.PlayerList )
+        foreach (Player player in PhotonNetwork.PlayerList)
         {
-            if ( player.GetLoaded() )
+            if (player.GetLoaded())
             {
                 loadCount++;
             }
@@ -121,10 +116,9 @@ public class MafiaPunManager : MonoBehaviourPunCallbacks
 
     public void GameStart()
     {
-        AssignRole();
         SpawnPlayer();
 
-        if (PhotonNetwork.IsMasterClient ) 
+        if (PhotonNetwork.IsMasterClient)
         {
             StartCoroutine(GameLoop());
         }
@@ -135,49 +129,71 @@ public class MafiaPunManager : MonoBehaviourPunCallbacks
         // Delay
         yield return new WaitForSeconds(1);
 
-        // Display role
+        // Display role 
         photonView.RPC("DisplayRole", RpcTarget.All, displayRoleTime);
-        yield return new WaitForSeconds(displayRoleTime);
+        yield return new WaitUntil(() => Manager.Mafia.displayRoleFinished);
 
+        // Loop
         while (true)
         {
             // Change to night
-            photonView.RPC("StartNightPhase", RpcTarget.All, skillTime);
+            Debug.Log("Night Phase Start");
+            photonView.RPC("StartNightPhase", RpcTarget.All, displayRoleTime);
+            yield return new WaitUntil(() => Manager.Mafia.nightPhaseFinished);
+            Debug.Log("Night Phase End");
 
-            yield return new WaitForSeconds(skillTime + 1);
+            yield return new WaitForSeconds(1);
 
             // Show Night Events
             Debug.Log("Night Events Start");
-            photonView.RPC("ShowNightEvents", RpcTarget.All);
-
-            // Wait until everyone finishes showing events
-            while (PlayerMafiaReadyCount() != PhotonNetwork.PlayerList.Length)
-            {
-                yield return null;
-            }
+            photonView.RPC("ShowNightEvents", RpcTarget.MasterClient);
+            yield return new WaitUntil(() => Manager.Mafia.nightEventsFinished);
             Debug.Log("Night Events End");
 
             yield return new WaitForSeconds(1);
 
+            // Show Night Results
+            Debug.Log("Night Results Start");
+            photonView.RPC("ShowNightResults", RpcTarget.All);
+            yield return new WaitUntil(() => Manager.Mafia.nightResultsFinished);
+            Debug.Log("Night Results End");
+
+            yield return new WaitForSeconds(1);
+
             // Day Phase
+            Debug.Log("Day Phase Start");
             photonView.RPC("StartDayPhase", RpcTarget.All, voteTime);
-            yield return new WaitForSeconds(voteTime + 1);
+            yield return new WaitUntil(() => Manager.Mafia.dayPhaseFinished);
+            Debug.Log("Day Events End");
+              
+            yield return new WaitForSeconds(1);
 
             // Show Vote Result
+            Debug.Log("Show Vote Results Start");
             photonView.RPC("ShowVoteResults", RpcTarget.All);
+            yield return new WaitUntil(() => Manager.Mafia.voteResultsFinished);
+            Debug.Log("Show Vote Results End");
+
+            yield return new WaitForSeconds(1);
+
+            // Reset flags
+            Manager.Mafia.nightPhaseFinished = false;
+            Manager.Mafia.nightEventsFinished = false;
+            Manager.Mafia.dayPhaseFinished = false;
+            Manager.Mafia.voteResultsFinished = false;
         }
     }
 
     private void SpawnPlayer()
     {
-        int angle = 180 / ( Manager.Mafia.PlayerCount - 1 );    // 각 플레이어의 간격의 각도
+        int angle = 180 / (Manager.Mafia.PlayerCount - 1);    // 각 플레이어의 간격의 각도
 
         int playerNumber = -1;
 
         // 플레이어의 게임 입장 순번 찾아내기
         for (int i = 1; i <= playerDic.Count; i++)
         {
-            if ( playerDic [i] == PhotonNetwork.LocalPlayer)
+            if (playerDic[i] == PhotonNetwork.LocalPlayer)
             {
                 playerNumber = i - 1;
             }
@@ -201,16 +217,16 @@ public class MafiaPunManager : MonoBehaviourPunCallbacks
         // PhotonNetwork.Instantiate를 통해 각 플레이어 캐릭터 생성, 센터를 바라보도록 rotation 설정
         GameObject player = PhotonNetwork.Instantiate("Mafia", pos, Quaternion.LookRotation(-pos));
         player.GetComponent<MafiaPlayer>().SetPlayerHouse(playerNumber);
-        player.GetComponent<MafiaPlayer>().SetNickName(PhotonNetwork.PlayerList [playerNumber].NickName);
+        player.GetComponent<MafiaPlayer>().SetNickName(PhotonNetwork.PlayerList[playerNumber].NickName);
         Manager.Mafia.Player = player.GetComponent<MafiaPlayer>();
     }
 
     private void SpawnHouses()
     {
-        int angle = 180 / ( Manager.Mafia.PlayerCount - 1 );    // 각 집의 간격의 각도
+        int angle = 180 / (Manager.Mafia.PlayerCount - 1);    // 각 집의 간격의 각도
 
         int currentAngle = 180;
-        for ( int i = 0; i < Manager.Mafia.PlayerCount; i++ )
+        for (int i = 0; i < Manager.Mafia.PlayerCount; i++)
         {
             if (i == Manager.Mafia.PlayerCount - 1)
             {
@@ -225,12 +241,12 @@ public class MafiaPunManager : MonoBehaviourPunCallbacks
         }
     }
 
-    private void RandomizeRoles(int numPlayers)
+    private void AssignRoles(int numPlayers)
     {
         // Get role pool
         MafiaRole[] roles = mafiaRolesSO.GetRoles(numPlayers);
-        
-        // Shuffle list algorithm
+
+        // Shuffle algorithm
         int n = roles.Length;
         for (int i = n - 1; i > 0; i--)
         {
@@ -243,22 +259,11 @@ public class MafiaPunManager : MonoBehaviourPunCallbacks
             roles[j] = temp;
         }
 
-        int[] arr = new int[roles.Length];
-        for (int i = 0; i < arr.Length; i++)
+        // Assign roles
+        for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
         {
-            arr[i] = (int) roles[i];
+            PhotonNetwork.PlayerList[i].SetPlayerRole(roles[i]);
+            Manager.Mafia.Game.AddPlayer(roles[i]);
         }
-
-        // Update role list on master
-        PhotonNetwork.CurrentRoom.SetMafiaRoleList(arr);
-    }
-
-    private void AssignRole()
-    {
-        int[] roles = PhotonNetwork.CurrentRoom.GetMafiaRoleList();
-        MafiaRole role = (MafiaRole)roles[PhotonNetwork.LocalPlayer.ActorNumber - 1];
-        PhotonNetwork.LocalPlayer.SetPlayerRole(role);
-        Manager.Mafia.Game.AddPlayer(role);
     }
 }
-

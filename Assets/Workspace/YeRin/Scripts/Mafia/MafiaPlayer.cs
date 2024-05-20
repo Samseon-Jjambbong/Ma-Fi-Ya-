@@ -1,12 +1,10 @@
+using Photon.Pun;
+using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
-using Photon.Pun;
-using Photon.Pun.Demo.PunBasics;
-using Photon.Realtime;
 using TMPro;
+using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.UI;
 
 /// <summary>
 /// programmer : Yerin, TaeHong
@@ -15,42 +13,59 @@ using UnityEngine.UI;
 /// </summary>
 public class MafiaPlayer : MonoBehaviourPun
 {
+    [Header("Components")]
     [SerializeField] TMP_Text nickNameText;
     [SerializeField] Rigidbody rigid;
     [SerializeField] Animator animator;
-
     [SerializeField] AudioSource walkAudio;
 
+    [Header("Movement Values")]
     [SerializeField] float movePower;
     [SerializeField] float maxSpeed;
     [SerializeField] float rotateSpeed;
-
-    // 플레이어의 생존 여부
-    private bool isAlive = true;
-    public bool IsAlive { get { return isAlive; } }
-
-    private Dictionary<int, Player> playerDic;
-
-    // Tae Player Logic
-    public MafiaActionType actionType;
-    public MafiaAction actionByThisPlayer;
-    public MafiaActionPQ actionsOnThisPlayer = new MafiaActionPQ();
-
-    private bool skillBlocked;
-    public bool IsMine => photonView.IsMine;
-
     private Vector3 moveDir;
     private float currentSpeed;
 
+    [Header("Properties")]
+    private bool isAlive = true; // 플레이어의 생존 여부
+    public bool IsAlive { get { return isAlive; } }
+
+    [Header("Mafia Logic")]
+    private Dictionary<int, Player> playerDic;
+    public MafiaActionType actionType;
+
+    [Header("States")]
+    private bool skillBlocked;
     private bool isWalking;
+    public bool IsMine => photonView.IsMine;
+    int ID => PhotonNetwork.LocalPlayer.ActorNumber;
+    int Idx => PhotonNetwork.LocalPlayer.ActorNumber - 1;
 
     protected virtual void Start()
     {
         // 플레이어 역할 받기
         playerDic = PhotonNetwork.CurrentRoom.Players;
 
+        if (IsMine)
+        {
+            switch (PhotonNetwork.LocalPlayer.GetPlayerRole())
+            {
+                case MafiaRole.Mafia:
+                    actionType = MafiaActionType.Kill;
+                    break;
+                case MafiaRole.Doctor:
+                    actionType = MafiaActionType.Heal;
+                    break;
+                case MafiaRole.Police:
+                    actionType = MafiaActionType.Block;
+                    break;
+                case MafiaRole.Insane:
+                    actionType = (MafiaActionType) Random.Range(0, 4);
+                    break;
+            }
+        }
 
-        if ( PhotonNetwork.IsMasterClient )
+        if (PhotonNetwork.IsMasterClient)
         {
             photonView.RPC("SetColor", RpcTarget.MasterClient, Color.black.r, Color.black.g, Color.black.b);
         }
@@ -59,7 +74,7 @@ public class MafiaPlayer : MonoBehaviourPun
 
     private void FixedUpdate()
     {
-        if ( photonView.IsMine )
+        if (photonView.IsMine)
         {
             Accelate();
         }
@@ -67,7 +82,7 @@ public class MafiaPlayer : MonoBehaviourPun
 
     private void Update()
     {
-        if ( photonView.IsMine )
+        if (photonView.IsMine)
         {
             Rotate();
         }
@@ -79,71 +94,45 @@ public class MafiaPlayer : MonoBehaviourPun
     }
 
     #region Game Logic
-    [PunRPC] // 집을 선택시 모든 플레이어에게 정보를 보낸다
-    public void OnChooseTarget(int[] serialized)
+    public IEnumerator ShowActionsRoutine()
     {
-        // Deserialize Action
-        MafiaAction action = new MafiaAction(serialized);
-        Debug.Log($"sender: {action.sender}");
-        Debug.Log($"receiver: {action.receiver}");
-        Debug.Log($"action: {action.actionType}");
+        MafiaAction? actionByThisPlayer = null;
+        List<MafiaActionType> actionsOnThisPlayer = new List<MafiaActionType>();
 
-        if(PhotonNetwork.LocalPlayer.ActorNumber == action.sender)
+        // Get actions
+        if (Manager.Mafia.sharedData.sentActionDic.ContainsKey(ID))
         {
-            actionByThisPlayer = action;
-            Debug.Log($"{GetRole()} targeted Player{action.receiver}");
+            actionByThisPlayer = Manager.Mafia.sharedData.sentActionDic[ID];
         }
-        if(PhotonNetwork.LocalPlayer.ActorNumber == action.receiver)
+        if (Manager.Mafia.sharedData.receivedActionDic.ContainsKey(ID))
         {
-            if (action.actionType == MafiaActionType.Block)
-                skillBlocked = true;
-
-            actionsOnThisPlayer.Enqueue(action);
-            Debug.Log($"{action.receiver} got {action.actionType}ed");
-        }
-    }
-
-    [PunRPC] // 플레이어랑 관련된 모든 행동들을 화면에 보여준다
-    public void ShowNightResults()
-    {
-        PhotonNetwork.LocalPlayer.SetMafiaReady(false);
-
-        bool playerDies = false; //결국에 죽는지
-
-        Debug.Log($"Player{PhotonNetwork.LocalPlayer.ActorNumber} Results. Count: {actionsOnThisPlayer.Count}");
-        while (actionsOnThisPlayer.Count > 0)
-        {
-            MafiaAction action = actionsOnThisPlayer.Dequeue();
-            Debug.Log($"Action on this player: {action.actionType}");
-
-            switch (action.actionType)
-            {
-                case MafiaActionType.Block:
-                    // BlockAction();
-                    break;
-                case MafiaActionType.Kill:
-                    // KillAction();
-                    playerDies = true;
-                    break;
-                case MafiaActionType.Heal:
-                    // HealAction();
-                    if (playerDies)
-                    {
-                        //힐 효과 생성
-                    }
-                    playerDies = false;
-                    break;
-            }
+            actionsOnThisPlayer = Manager.Mafia.sharedData.receivedActionDic[ID];
         }
 
-        if (playerDies)
+        // Do Actions
+        if (actionByThisPlayer != null)
         {
-            // 죽었다
-            Debug.Log("Player died");
-            Manager.Mafia.GetComponent<PhotonView>().RPC("PlayerDied", RpcTarget.MasterClient, PhotonNetwork.LocalPlayer.ActorNumber);
+            MafiaAction action = (MafiaAction) actionByThisPlayer;
+            Debug.Log($"Player{ID} did {action.actionType}");
+            yield return Manager.Mafia.PlayerGoRoutine(action);
+        }
+        else
+        {
+            Debug.Log("actionby null");
         }
 
-        PhotonNetwork.LocalPlayer.SetMafiaReady(true);
+        yield return new WaitForSeconds(1);
+
+        foreach (MafiaActionType actionType in actionsOnThisPlayer)
+        {
+            House house = Manager.Mafia.Houses[PhotonNetwork.LocalPlayer.ActorNumber - 1];
+            Debug.Log($"Player{ID} received {actionType}");
+            yield return Manager.Mafia.PlayerComeRoutine(house, actionType);
+            yield return new WaitForSeconds(1);
+        }
+
+        yield return new WaitForSeconds(1);
+        Manager.Mafia.nightEventFinishedCount++;
     }
 
     [PunRPC]
@@ -154,18 +143,18 @@ public class MafiaPlayer : MonoBehaviourPun
     #endregion
 
     #region Photon
-    public void SetPlayerHouse( int playerNumber )
+    public void SetPlayerHouse(int playerNumber)
     {
         photonView.RPC("AddHouseList", RpcTarget.All, playerNumber);
-        Manager.Mafia.Houses [playerNumber].ActivateOutline(false);
+        Manager.Mafia.Houses[playerNumber].ActivateOutline(false);
     }
 
-    private void OnMove( InputValue value )
+    private void OnMove(InputValue value)
     {
         moveDir.x = value.Get<Vector2>().x;
         moveDir.z = value.Get<Vector2>().y;
 
-        if ( photonView.IsMine )
+        if (photonView.IsMine)
         {
             photonView.RPC("Walk", RpcTarget.All);
         }
@@ -173,7 +162,7 @@ public class MafiaPlayer : MonoBehaviourPun
 
     private void Accelate()
     {
-        if ( moveDir.x == 0 && moveDir.z == 0 && isWalking )
+        if (moveDir.x == 0 && moveDir.z == 0 && isWalking)
         {
             photonView.RPC("Walk", RpcTarget.All);
         }
@@ -187,7 +176,7 @@ public class MafiaPlayer : MonoBehaviourPun
             rigid.AddForce(moveDir.z * transform.forward * movePower, ForceMode.Force);
         }
 
-        if ( rigid.velocity.sqrMagnitude > maxSpeed * maxSpeed )
+        if (rigid.velocity.sqrMagnitude > maxSpeed * maxSpeed)
         {
             rigid.velocity = rigid.velocity.normalized * maxSpeed;
         }
@@ -200,22 +189,22 @@ public class MafiaPlayer : MonoBehaviourPun
     }
 
     [PunRPC]
-    private void OnHipHopDance( InputValue value)
+    private void OnHipHopDance(InputValue value)
     {
-        if ( photonView.IsMine )
+        if (photonView.IsMine)
             photonView.RPC("HipHop", RpcTarget.All);
     }
 
     [PunRPC]
-    private void OnRumbaDance( InputValue value )
+    private void OnRumbaDance(InputValue value)
     {
-        if ( photonView.IsMine )
+        if (photonView.IsMine)
             photonView.RPC("Rumba", RpcTarget.All);
     }
 
-    private void OnSillyDance( InputValue value )
+    private void OnSillyDance(InputValue value)
     {
-        if ( photonView.IsMine )
+        if (photonView.IsMine)
             photonView.RPC("Silly", RpcTarget.All);
     }
 
@@ -257,9 +246,9 @@ public class MafiaPlayer : MonoBehaviourPun
     }
 
     [PunRPC]
-    private void AddHouseList( int playerNumber )
+    private void AddHouseList(int playerNumber)
     {
-        Manager.Mafia.Houses [playerNumber].HouseOwner = this;
+        Manager.Mafia.Houses[playerNumber].HouseOwner = this;
     }
 
     public void SetNickName(string nickName)
@@ -267,13 +256,6 @@ public class MafiaPlayer : MonoBehaviourPun
         photonView.RPC("NickName", RpcTarget.All, nickName);
     }
 
-    [PunRPC]
-    private void NickName( string nickName )
-    {
-        nickNameText.text = nickName;
-    }
-    #endregion
-    
     [PunRPC]
     private void SetColor(float r, float g, float b)
     {
@@ -286,4 +268,11 @@ public class MafiaPlayer : MonoBehaviourPun
         }
         GetComponentInChildren<Renderer>().material.color = new Color(r, g, b, 1f);
     }
+
+    [PunRPC]
+    private void NickName(string nickName)
+    {
+        nickNameText.text = nickName;
+    }
+    #endregion
 }

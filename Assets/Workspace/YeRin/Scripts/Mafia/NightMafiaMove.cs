@@ -26,7 +26,7 @@ public class NightMafiaMove : MonoBehaviour
 
     Vector3 targetPos;
 
-    IEnumerator MoveToTargetHouse()
+    public IEnumerator MoveToTargetHouse()
     {
         Vector3 pos = new Vector3(target.transform.position.z, 0, target.transform.position.x);
         targetPos = new Vector3(target.transform.position.x, transform.position.y, target.transform.position.z);

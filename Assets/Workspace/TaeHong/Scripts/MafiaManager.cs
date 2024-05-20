@@ -230,6 +230,7 @@ public class MafiaManager : Singleton<MafiaManager>, IPunObservable
 
         MafiaAction action = (MafiaAction) PlayerAction;
         photonView.RPC("EnqueueAction", RpcTarget.MasterClient, action.Serialize());
+        PlayerAction = null;
     }
 
     [PunRPC] // Called only on MasterClient

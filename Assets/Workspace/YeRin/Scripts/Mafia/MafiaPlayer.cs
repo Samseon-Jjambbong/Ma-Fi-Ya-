@@ -109,7 +109,6 @@ public class MafiaPlayer : MonoBehaviourPun
             actionsOnThisPlayer = Manager.Mafia.sharedData.receivedActionDic[ID];
         }
 
-
         // Do Actions
         if (actionByThisPlayer != null)
         {

@@ -120,6 +120,7 @@ public class MafiaGameFlow : MonoBehaviourPun
         yield return new WaitForSeconds(1);
         yield return new WaitUntil(() => Manager.Mafia.nightEventFinishedCount == Manager.Mafia.ActivePlayerCount());
         Manager.Mafia.nightEventsFinished = true;
+        Manager.Mafia.sharedData.ClearActionInfo();
         Debug.Log("End Night Events");
     }
 

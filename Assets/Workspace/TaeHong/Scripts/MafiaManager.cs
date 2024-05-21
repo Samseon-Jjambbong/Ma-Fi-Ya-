@@ -212,22 +212,25 @@ public class MafiaManager : Singleton<MafiaManager>, IPunObservable
                 continue;
             }
 
-            // Send action info to players
-            switch (action.actionType)
+            // Send action info to players (if not insane)
+            if (PhotonNetwork.PlayerList[action.sender].GetPlayerRole() != MafiaRole.Insane)
             {
-                case MafiaActionType.Block:
-                    sharedData.photonView.RPC("SetBlocked", RpcTarget.All, receiverIdx, true);
-                    break;
-                case MafiaActionType.Kill:
-                    sharedData.photonView.RPC("SetKilled", RpcTarget.All, receiverIdx, true);
-                    break;
-                case MafiaActionType.Heal:
-                    if (sharedData.killedPlayers[receiverIdx] == true)
-                    {
-                        sharedData.photonView.RPC("SetKilled", RpcTarget.All, receiverIdx, false);
-                        sharedData.photonView.RPC("SetHealed", RpcTarget.All, receiverIdx, true);
-                    }
-                    break;
+                switch (action.actionType)
+                {
+                    case MafiaActionType.Block:
+                        sharedData.photonView.RPC("SetBlocked", RpcTarget.All, receiverIdx, true);
+                        break;
+                    case MafiaActionType.Kill:
+                        sharedData.photonView.RPC("SetKilled", RpcTarget.All, receiverIdx, true);
+                        break;
+                    case MafiaActionType.Heal:
+                        if (sharedData.killedPlayers[receiverIdx] == true)
+                        {
+                            sharedData.photonView.RPC("SetKilled", RpcTarget.All, receiverIdx, false);
+                            sharedData.photonView.RPC("SetHealed", RpcTarget.All, receiverIdx, true);
+                        }
+                        break;
+                }
             }
 
             // Add action to shared data

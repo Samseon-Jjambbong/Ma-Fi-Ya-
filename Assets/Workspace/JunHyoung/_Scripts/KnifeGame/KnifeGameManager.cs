@@ -5,6 +5,7 @@ using Photon.Pun.UtilityScripts;
 using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using PhotonHashtable = ExitGames.Client.Photon.Hashtable;
@@ -86,6 +87,7 @@ public class KnifeGameManager : MonoBehaviourPunCallbacks, IPunObservable
         {
             if (PlayerLoadCount() == PhotonNetwork.PlayerList.Length)//로딩 완료
             {
+                infoText.text = $"Wait...";
                 //게임 시작
                 if (PhotonNetwork.IsMasterClient)
                 {
@@ -196,40 +198,25 @@ public class KnifeGameManager : MonoBehaviourPunCallbacks, IPunObservable
         // 플레이어 각도 계산
 
         #region 플레이어 각도 계산
-        int angle = 360 / (PhotonNetwork.CurrentRoom.PlayerCount);    // 각 플레이어의 간격의 각도
+        int playerCount = PhotonNetwork.CurrentRoom.PlayerCount;
+        int angle = 360 / playerCount;    // 각 플레이어의 간격의 각도
 
-        int playerNumber = -1;
+        int playerNumber = playerDic.FirstOrDefault(kv => kv.Value == PhotonNetwork.LocalPlayer).Key - 1;
 
-        // 플레이어의 게임 입장 순번 찾아내기
-        for (int i = 1; i <= playerDic.Count; i++)
-        {
-            if (playerDic[i] == PhotonNetwork.LocalPlayer)
-            {
-                playerNumber = i - 1;
-            }
-        }
-
-        if (playerNumber == -1)
+        if (playerNumber < 0)
         {
             Debug.Log("Can't found LocalPlayer Number");
             return;
         }
 
-        int currentAngle;
-        if (playerNumber == playerDic.Count-1)
-        {
-            currentAngle = 0; // 마지막 플레이어일 때는 0도에 배치
-        }
-        else
-        {
-            currentAngle = 360 - (angle * (playerNumber + 1)); // 다른 플레이어들은 360도에서 차례대로 각도 빼기
-        }
+        int currentAngle = (playerNumber == playerCount - 1) ? 0 : 360 - (angle * (playerNumber + 1));
+        float radianAngle = currentAngle * Mathf.Deg2Rad;
         #endregion
-        Debug.Log(currentAngle);
-        // 순번에 맞는 플레이어의 위치 설정
-        Vector3 pos = new Vector3(Mathf.Cos(currentAngle * Mathf.Deg2Rad) * playerRadius, 2.22f, Mathf.Sin(currentAngle * Mathf.Deg2Rad) * playerRadius);
 
-        // PhotonNetwork.Instantiate를 통해 각 플레이어 캐릭터 생성, 센터를 바라보도록 rotation 설정
+
+        // 순번에 맞는 플레이어의 위치 설정
+        Vector3 pos = new Vector3(Mathf.Cos(radianAngle) * playerRadius, 2.22f, Mathf.Sin(radianAngle) * playerRadius);
+
         // GameObject player = Instantiate(playerprefab, pos, Quaternion.LookRotation(-pos));
         GameObject player = PhotonNetwork.Instantiate("Mafia", pos, Quaternion.LookRotation(-pos));
 

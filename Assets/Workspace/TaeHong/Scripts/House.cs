@@ -69,14 +69,6 @@ public class House : MonoBehaviourPun, IPointerClickHandler, IPointerExitHandler
         voteCountText.text = Manager.Mafia.Votes[houseOwnerId - 1].ToString();
     }
 
-    public void SendActionInfo()
-    {
-        // Send information about who clicked on who's house
-
-        //Manager.Mafia.Player.photonView.RPC("OnChooseTarget", RpcTarget.All, action.Serialize());
-        //Manager.Event.pairEventDic["useSkill"].RaiseEvent((sender, receiver));
-    }
-
     public void Vote()
     {
         Manager.Mafia.photonView.RPC("VoteForPlayer", RpcTarget.All, houseOwnerId);
@@ -125,7 +117,7 @@ public class House : MonoBehaviourPun, IPointerClickHandler, IPointerExitHandler
         {
             skillIcon.gameObject.SetActive(false);
         }
-        if (outline.OutlineParameters.Color == Color.red)
+        if (outline.OutlineParameters.Color != Color.green)
         {
             outline.OutlineParameters.Color = Color.green;
         }

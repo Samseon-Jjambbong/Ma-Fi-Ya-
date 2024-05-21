@@ -2986,6 +2986,21 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5588967625138496660, guid: 49ba8df2be6234b76adf569229417560,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5588967625138496660, guid: 49ba8df2be6234b76adf569229417560,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5588967625138496660, guid: 49ba8df2be6234b76adf569229417560,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8375609889193680097, guid: 49ba8df2be6234b76adf569229417560,
         type: 3}
       propertyPath: m_Name
@@ -3009,9 +3024,12 @@ PrefabInstance:
       propertyPath: m_Name
       value: Directional Light
       objectReference: {fileID: 0}
-    - target: {fileID: 6759196163691537806, guid: a2c4e1633fff14af3b655af1ccc1775c,
-        type: 3}
+    - target: {fileID: 0}
       propertyPath: sceneViewId
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: ObservedComponents.Array.size
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8406492591061833763, guid: a2c4e1633fff14af3b655af1ccc1775c,

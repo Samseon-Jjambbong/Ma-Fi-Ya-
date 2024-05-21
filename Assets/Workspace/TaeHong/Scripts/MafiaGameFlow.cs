@@ -140,12 +140,13 @@ public class MafiaGameFlow : MonoBehaviourPun
         yield return new WaitUntil(() => Manager.Mafia.sharedData.clientFinishedCount == Manager.Mafia.ActivePlayerCount());
         Manager.Mafia.nightEventsFinished = true;
         Manager.Mafia.sharedData.photonView.RPC("ClearActionInfo", RpcTarget.All);
-        // Night -> Day
-        yield return ChangeTimeOfDayRoutine();
     }
 
     private IEnumerator ShowNightResultsRoutine()
     {
+        // Night -> Day
+        yield return ChangeTimeOfDayRoutine();
+
         // Show Players that died last night
         List<int> killed = Manager.Mafia.sharedData.GetKilledPlayers();
         if (killed.Count == 0)

@@ -1,19 +1,27 @@
+using Mafia;
 using Photon.Pun;
 using System.Collections;
+using System.Collections.Generic;
 using Tae;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MafiaGameFlow : MonoBehaviourPun
 {
     [SerializeField] private GameTimer timer;
     [SerializeField] private LightController lightController;
     [SerializeField] private GameObject roleUI;
-    [SerializeField] private TextMeshProUGUI resultsText;
+    [SerializeField] private Button skipVoteButton;
 
     private void Start()
     {
         Manager.Mafia.IsDay = true;
+    }
+
+    public void DisableSkipButton()
+    {
+        skipVoteButton.interactable = false;
     }
 
     #region RPCs
@@ -51,6 +59,12 @@ public class MafiaGameFlow : MonoBehaviourPun
     public void ShowVoteResults()
     {
         StartCoroutine(ShowVoteResultsRoutine());
+    }
+
+    [PunRPC]
+    public void GameOver()
+    {
+        StartCoroutine(GameOverRoutine());
     }
 
     public void ChangeTime()
@@ -131,19 +145,34 @@ public class MafiaGameFlow : MonoBehaviourPun
 
     private IEnumerator ShowNightEventsRoutine()
     {
+        Manager.Mafia.sharedData.photonView.RPC("ResetClientFinishedCount", RpcTarget.All);
         Manager.Mafia.photonView.RPC("ParseActionsAndAssign", RpcTarget.MasterClient);
         yield return new WaitForSeconds(1);
         Manager.Mafia.photonView.RPC("ShowActions", RpcTarget.All);
         yield return new WaitForSeconds(1);
-        yield return new WaitUntil(() => Manager.Mafia.nightEventFinishedCount == Manager.Mafia.ActivePlayerCount());
+        yield return new WaitUntil(() => Manager.Mafia.sharedData.clientFinishedCount == Manager.Mafia.ActivePlayerCount());
         Manager.Mafia.nightEventsFinished = true;
-        Manager.Mafia.sharedData.ClearActionInfo();
+        Manager.Mafia.sharedData.photonView.RPC("ClearActionInfo", RpcTarget.All);
     }
 
     private IEnumerator ShowNightResultsRoutine()
     {
         // Night -> Day
         yield return ChangeTimeOfDayRoutine();
+
+        // Show Players that died last night
+        List<int> killed = Manager.Mafia.sharedData.GetKilledPlayers();
+        if (killed.Count == 0)
+        {
+            Debug.Log("No one died last night");
+        }
+        else
+        {
+            // Show player die animation
+            yield return Manager.Mafia.ShowKilledPlayers(killed);
+        }
+
+        yield return new WaitForSeconds(1);
         Manager.Mafia.nightResultsFinished = true;
     }
 
@@ -154,6 +183,7 @@ public class MafiaGameFlow : MonoBehaviourPun
         EnableChat(true);
 
         // Allow voting for X Seconds
+        skipVoteButton.gameObject.SetActive(true);
         for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
         {
             Manager.Mafia.Houses[i].ShowVoteCount(true);
@@ -165,6 +195,7 @@ public class MafiaGameFlow : MonoBehaviourPun
 
         yield return timer.StartTimer(time);
 
+        skipVoteButton.gameObject.SetActive(false);
         foreach (var house in Manager.Mafia.Houses)
         {
             house.ActivateOutline(false);
@@ -191,9 +222,16 @@ public class MafiaGameFlow : MonoBehaviourPun
         {
             Debug.Log($"Player{voteResult} got kicked");
             // Insert Player kicked coroutine here
-            //Manager.Mafia.photonView.RPC("", RpcTarget.All);
+            yield return Manager.Mafia.animFactory.PlayerKickedActionRoutine(voteResult);
             yield return new WaitUntil(() => Manager.Mafia.voteResultsFinished);
+            Manager.Mafia.sharedData.playerToKick = -1; // Reset value
         }
+    }
+
+    private IEnumerator GameOverRoutine()
+    {
+        //TODO: Add game over stuff
+        yield return null;
     }
 
     #endregion

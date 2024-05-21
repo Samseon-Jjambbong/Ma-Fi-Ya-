@@ -389,7 +389,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 0.03
-  target: {fileID: 0}
+  walkAudio: {fileID: 0}
   animator: {fileID: 1620853073517711642}
 --- !u!114 &5896712377539139787
 MonoBehaviour:

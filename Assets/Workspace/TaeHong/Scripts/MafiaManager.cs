@@ -15,7 +15,10 @@ using Mafia;
 
 public class MafiaManager : Singleton<MafiaManager>, IPunObservable
 {
+    [Header("Components")]
     public SharedData sharedData;
+    public AnimationFactory animFactory;
+    public PhotonView photonView => GetComponent<PhotonView>();
 
     private int playerCount;
     public int PlayerCount => playerCount;
@@ -27,11 +30,6 @@ public class MafiaManager : Singleton<MafiaManager>, IPunObservable
     [SerializeField] private int voteTime;
     [SerializeField] private float skillTime;
 
-    [SerializeField] GameObject nightMafia;
-    public GameObject NightMafia => nightMafia;
-    [SerializeField] Vector3 nightMafiaPos;
-    public Vector3 NightMafiaPos => nightMafiaPos;
-
     [SerializeField] List<House> houses;
     public List<House> Houses { get { return houses; } set { houses = value; } }
     public float SkillTime => skillTime;
@@ -42,32 +40,45 @@ public class MafiaManager : Singleton<MafiaManager>, IPunObservable
     private House house;
     public House House { get; set; }
 
+    [Header("Game Logic")]
     public MafiaGame Game = new MafiaGame();
+    private MafiaResult gameResult = MafiaResult.None;
+    public MafiaResult GameResult => gameResult;
     public event Action VoteCountChanged;
+    public event Action SkipVoteCountChanged;
     private int[] votes;
     public int[] Votes => votes;
+    private int skipVotes;
+    public int SkipVotes => skipVotes;
 
     private MafiaAction? playerAction;
     public MafiaAction? PlayerAction { get { return playerAction; } set { playerAction = value; } }
 
     public MafiaActionPQ MafiaActionPQ = new MafiaActionPQ();
 
-    public PhotonView photonView => GetComponent<PhotonView>();
-
     // Game Loop Flags
     public bool displayRoleFinished;
     public bool nightPhaseFinished;
-    public int nightEventFinishedCount;
     public bool nightEventsFinished;
     public bool nightResultsFinished;
     public bool dayPhaseFinished;
     public bool voteResultsFinished;
-    
+
     private void Start()
     {
         isDay = true;
-        playerCount = PhotonNetwork.CurrentRoom.Players.Count;
+        playerCount = PhotonNetwork.CurrentRoom.PlayerCount;
         votes = new int[playerCount];
+    }
+
+    public void ResetFlags()
+    {
+        displayRoleFinished = false;
+        nightPhaseFinished = false;
+        nightEventsFinished = false;
+        nightResultsFinished = false;
+        dayPhaseFinished = false;
+        voteResultsFinished = false;
     }
 
     public int ActivePlayerCount()
@@ -75,25 +86,90 @@ public class MafiaManager : Singleton<MafiaManager>, IPunObservable
         return sharedData.ActivePlayerCount();
     }
 
-    [PunRPC] // Called only on MasterClient
-    public void PlayerDied(int id)
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
-        bool result = Game.RemovePlayer(PhotonNetwork.PlayerList[id].GetPlayerRole());
-        if (result)
+        if (stream.IsWriting)
         {
-            // civilian win
+            stream.SendNext(isDay);
         }
         else
         {
-            // mafia win
+            isDay = (bool) stream.ReceiveNext();
         }
     }
 
+    public void ActivateHouseOutlines()
+    {
+        for (int i = 0; i < PlayerCount; i++)
+        {
+            if (i == (PhotonNetwork.LocalPlayer.ActorNumber - 1))
+                continue;
+
+            Manager.Mafia.Houses[i].ActivateOutline(true);
+        }
+    }
+
+    public void DeactivateHouseOutlines()
+    {
+        foreach (var house in Manager.Mafia.Houses)
+        {
+            house.ActivateOutline(false);
+        }
+    }
+
+
+    /******************************************************
+    *                    Morning
+    ******************************************************/
+    #region Last Night Results
+    public IEnumerator ShowKilledPlayers(List<int> killed)
+    {
+        Debug.Log($"{killed.Count} killed last night");
+        foreach (int playerID in killed)
+        {
+            Debug.Log($"Player{playerID} got killed");
+            // Show dying animation
+            yield return animFactory.SpawnPlayerDie(Houses[playerID - 1]);
+
+            yield return new WaitForSeconds(1);
+
+            // Show everyone dead player's role
+            // yield return ShowKilledPlayerRole();
+
+            // Set player state as dead
+            sharedData.SetDead(playerID - 1);
+            if (PhotonNetwork.IsMasterClient)
+            {
+                PlayerDied(playerID);
+            }
+
+            yield return new WaitForSeconds(1);
+        }
+    }
+    #endregion
+
+    #region Voting
     [PunRPC]
     public void VoteForPlayer(int playerID)
     {
+        if(playerID == -1)
+        {
+            skipVotes++;
+            SkipVoteCountChanged?.Invoke();
+            return;
+        }
         votes[playerID - 1]++;
         VoteCountChanged?.Invoke();
+    }
+
+    [PunRPC] // Called on players who finished voting
+    public void BlockVotes()
+    {
+        foreach(House house in houses)
+        {
+            house.ActivateOutline(false);
+        }
+        GetComponent<MafiaGameFlow>().DisableSkipButton();
     }
 
     [PunRPC] // Called only on MasterClient
@@ -116,13 +192,6 @@ public class MafiaManager : Singleton<MafiaManager>, IPunObservable
             }
             voted += votes[i];
         }
-
-        // Reset values before returning result
-        for (int i = 0; i < votes.Length; i++)
-        {
-            votes[i] = 0;
-        }
-
         // Return result
         // No one gets kicked if:
         //      - There is a tie for highest votes
@@ -137,90 +206,31 @@ public class MafiaManager : Singleton<MafiaManager>, IPunObservable
         {
             result = highest + 1;
         }
-        
+
+        photonView.RPC("ResetVotes", RpcTarget.All);
         sharedData.photonView.RPC("SetPlayerToKick", RpcTarget.All, result);
     }
 
-
-    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    [PunRPC]
+    public void ResetVotes()
     {
-        if (stream.IsWriting)
+        // Reset values before returning result
+        for (int i = 0; i < votes.Length; i++)
         {
-            stream.SendNext(isDay);
+            votes[i] = 0;
         }
-        else
-        {
-            isDay = (bool) stream.ReceiveNext();
-        }
+        skipVotes = 0;
     }
+    #endregion
 
-    public void ShowMyPlayerMove(House house)
-    {
-        GameObject obj = Instantiate(Manager.Mafia.NightMafia, Manager.Mafia.NightMafiaPos, Manager.Mafia.NightMafia.transform.rotation);
+    #region Vote Results
+    
+    #endregion
 
-        foreach (MafiaPlayer player in FindObjectsOfType<MafiaPlayer>())
-        {
-            if (player.IsMine)
-            {
-                obj.GetComponentInChildren<Renderer>().material.color = player.GetComponentInChildren<Renderer>().material.color;
-            }
-        }
-        NightMafiaMove mafia = obj.GetComponent<NightMafiaMove>();
-
-        mafia.Target = house.gameObject;
-        mafia.MoveToTarget();
-    }
-
-    public void ShowSomebodyMove(House house)
-    {
-        house.MafiaComesHome();
-    }
-
-    public IEnumerator PlayerGoRoutine(MafiaAction action)
-    {
-        GameObject obj = Instantiate(Manager.Mafia.NightMafia, Manager.Mafia.NightMafiaPos, Manager.Mafia.NightMafia.transform.rotation);
-        foreach (MafiaPlayer player in FindObjectsOfType<MafiaPlayer>())
-        {
-            if (player.IsMine)
-            {
-                obj.GetComponentInChildren<Renderer>().material.color = player.GetComponentInChildren<Renderer>().material.color;
-            }
-        }
-        NightMafiaMove mafia = obj.GetComponent<NightMafiaMove>();
-        mafia.Target = Manager.Mafia.Houses[action.receiver - 1].gameObject;
-        return mafia.MoveToTargetHouse();
-        // return mafia.MoveToTarget();
-    }
-
-    public IEnumerator PlayerComeRoutine(House house, MafiaActionType actionType)
-    {
-        GameObject obj = Instantiate(Manager.Mafia.NightMafia, Manager.Mafia.NightMafiaPos, Manager.Mafia.NightMafia.transform.rotation);
-
-        NightMafiaMove mafia = obj.GetComponent<NightMafiaMove>();
-
-        mafia.Target = house.gameObject;
-        return mafia.MoveToTargetHouse();
-    }
-
-    public void ActivateHouseOutlines()
-    {
-        for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
-        {
-            if (i == (PhotonNetwork.LocalPlayer.ActorNumber - 1))
-                continue;
-
-            Manager.Mafia.Houses[i].ActivateOutline(true);
-        }
-    }
-
-    public void DeactivateHouseOutlines()
-    {
-        foreach (var house in Manager.Mafia.Houses)
-        {
-            house.ActivateOutline(false);
-        }
-    }
-
+    /******************************************************
+    *                    Night
+    ******************************************************/
+    #region Player Actions
     public void NotifyAction()
     {
         if (PlayerAction == null)
@@ -230,6 +240,7 @@ public class MafiaManager : Singleton<MafiaManager>, IPunObservable
 
         MafiaAction action = (MafiaAction) PlayerAction;
         photonView.RPC("EnqueueAction", RpcTarget.MasterClient, action.Serialize());
+        PlayerAction = null;
     }
 
     [PunRPC] // Called only on MasterClient
@@ -249,7 +260,7 @@ public class MafiaManager : Singleton<MafiaManager>, IPunObservable
 
         MafiaAction action;
         
-        Debug.Log($"Begin ActionPQ Debug with Count: {Manager.Mafia.MafiaActionPQ.Count}");
+        Debug.Log($"Begin ActionPQ Debug with Count: {MafiaActionPQ.Count}");
         while (MafiaActionPQ.Count > 0)
         {
             action = MafiaActionPQ.Dequeue();
@@ -263,22 +274,25 @@ public class MafiaManager : Singleton<MafiaManager>, IPunObservable
                 continue;
             }
 
-            // Send action info to players
-            switch (action.actionType)
+            // Send action info to players (if not insane)
+            if (PhotonNetwork.CurrentRoom.Players[action.sender].GetPlayerRole() != MafiaRole.Insane)
             {
-                case MafiaActionType.Block:
-                    sharedData.photonView.RPC("SetBlocked", RpcTarget.All, receiverIdx, true);
-                    break;
-                case MafiaActionType.Kill:
-                    sharedData.photonView.RPC("SetDead", RpcTarget.All, receiverIdx, true);
-                    break;
-                case MafiaActionType.Heal:
-                    if (sharedData.deadPlayers[receiverIdx] == true)
-                    {
-                        sharedData.photonView.RPC("SetDead", RpcTarget.All, receiverIdx, false);
-                        sharedData.photonView.RPC("SetHealed", RpcTarget.All, receiverIdx, true);
-                    }
-                    break;
+                switch (action.actionType)
+                {
+                    case MafiaActionType.Block:
+                        sharedData.photonView.RPC("SetBlocked", RpcTarget.All, receiverIdx, true);
+                        break;
+                    case MafiaActionType.Kill:
+                        sharedData.photonView.RPC("SetKilled", RpcTarget.All, receiverIdx, true);
+                        break;
+                    case MafiaActionType.Heal:
+                        if (sharedData.killedPlayers[receiverIdx] == true)
+                        {
+                            sharedData.photonView.RPC("SetKilled", RpcTarget.All, receiverIdx, false);
+                            sharedData.photonView.RPC("SetHealed", RpcTarget.All, receiverIdx, true);
+                        }
+                        break;
+                }
             }
 
             // Add action to shared data
@@ -292,4 +306,16 @@ public class MafiaManager : Singleton<MafiaManager>, IPunObservable
     {
         StartCoroutine(Player.ShowActionsRoutine());
     }
+    #endregion
+
+    /******************************************************
+    *                    Game Over
+    ******************************************************/
+    #region Game Over
+    // Called only on MasterClient
+    public void PlayerDied(int id)
+    {
+        gameResult = Game.RemovePlayer(PhotonNetwork.CurrentRoom.Players[id].GetPlayerRole());
+    }
+    #endregion
 }

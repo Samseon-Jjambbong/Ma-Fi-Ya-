@@ -821,7 +821,7 @@ Animator:
   m_Controller: {fileID: 9100000, guid: dfd0e166642e5764c98adde6ae199d87, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
-  m_ApplyRootMotion: 1
+  m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_WarningMessage: 
@@ -850,7 +850,6 @@ MonoBehaviour:
   movePower: 300
   maxSpeed: 300
   rotateSpeed: 150
-  isAlive: 0
   actionType: 0
 --- !u!114 &5948707589889229996
 MonoBehaviour:

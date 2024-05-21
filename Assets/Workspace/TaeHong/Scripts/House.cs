@@ -21,6 +21,9 @@ public class House : MonoBehaviourPun, IPointerClickHandler, IPointerExitHandler
     [SerializeField] private TextMeshProUGUI voteCountText;
     [SerializeField] private Image skillIcon;
     [SerializeField] private MafiaRoleDataSO dataSO;
+    public Transform entrance;
+    [SerializeField] GameObject healEffect;
+    [SerializeField] GameObject killEffect;
 
     [SerializeField] GameObject speechBubble;
     [SerializeField] TMP_Text bubbleText;
@@ -53,6 +56,7 @@ public class House : MonoBehaviourPun, IPointerClickHandler, IPointerExitHandler
 
     private void OnEnable()
     {
+        voteCountText.text = Manager.Mafia.Votes[houseOwnerId - 1].ToString();
         Manager.Mafia.VoteCountChanged += OnVoteCountChanged;
     }
 
@@ -66,17 +70,10 @@ public class House : MonoBehaviourPun, IPointerClickHandler, IPointerExitHandler
         voteCountText.text = Manager.Mafia.Votes[houseOwnerId - 1].ToString();
     }
 
-    public void SendActionInfo()
-    {
-        // Send information about who clicked on who's house
-
-        //Manager.Mafia.Player.photonView.RPC("OnChooseTarget", RpcTarget.All, action.Serialize());
-        //Manager.Event.pairEventDic["useSkill"].RaiseEvent((sender, receiver));
-    }
-
     public void Vote()
     {
         Manager.Mafia.photonView.RPC("VoteForPlayer", RpcTarget.All, houseOwnerId);
+        Manager.Mafia.photonView.RPC("BlockVotes", PhotonNetwork.LocalPlayer);
     }
 
     // What UI should be shown when a house is clicked
@@ -122,7 +119,7 @@ public class House : MonoBehaviourPun, IPointerClickHandler, IPointerExitHandler
         {
             skillIcon.gameObject.SetActive(false);
         }
-        if (outline.OutlineParameters.Color == Color.red)
+        if (outline.OutlineParameters.Color != Color.green)
         {
             outline.OutlineParameters.Color = Color.green;
         }
@@ -175,20 +172,36 @@ public class House : MonoBehaviourPun, IPointerClickHandler, IPointerExitHandler
         Vote();
     }
 
-    public void MafiaComesHome()
+    public IEnumerator PlayEffect(MafiaActionType mafiaActionType)
     {
-        photonView.RPC("ComesHome", PhotonNetwork.PlayerList[houseOwnerId - 1]);
+        if(mafiaActionType == MafiaActionType.Kill)
+        {
+            yield return PlayKillEffectRoutine(2);
+        }
+        else if(mafiaActionType == MafiaActionType.Heal)
+        {
+
+            yield return PlayHealEffectRoutine(2);
+        }
+        yield return null;
     }
 
-    [PunRPC]
-    private void ComesHome()
+    private IEnumerator PlayKillEffectRoutine(float duration)
     {
-        GameObject obj = Instantiate(Manager.Mafia.NightMafia, Manager.Mafia.NightMafiaPos, Manager.Mafia.NightMafia.transform.rotation);
+        killEffect.SetActive(true);
+        yield return new WaitForSeconds(duration);
+        killEffect.SetActive(false);
+    }
 
-        NightMafiaMove mafia = obj.GetComponent<NightMafiaMove>();
-
-        mafia.Target = gameObject;
-        mafia.MoveToTarget();
+    private IEnumerator PlayHealEffectRoutine(float duration)
+    {
+        // Only play effect if player actually got revived
+        if (Manager.Mafia.sharedData.healedPlayers[houseOwnerId - 1])
+        {
+            healEffect.SetActive(true);
+        }
+        yield return new WaitForSeconds(duration);
+        healEffect.SetActive(false);
     }
 
     [PunRPC]

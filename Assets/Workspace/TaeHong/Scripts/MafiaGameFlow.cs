@@ -5,16 +5,23 @@ using System.Collections.Generic;
 using Tae;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MafiaGameFlow : MonoBehaviourPun
 {
     [SerializeField] private GameTimer timer;
     [SerializeField] private LightController lightController;
     [SerializeField] private GameObject roleUI;
+    [SerializeField] private Button skipVoteButton;
 
     private void Start()
     {
         Manager.Mafia.IsDay = true;
+    }
+
+    public void DisableSkipButton()
+    {
+        skipVoteButton.interactable = false;
     }
 
     #region RPCs
@@ -170,6 +177,7 @@ public class MafiaGameFlow : MonoBehaviourPun
         EnableChat(true);
 
         // Allow voting for X Seconds
+        skipVoteButton.gameObject.SetActive(true);
         for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
         {
             Manager.Mafia.Houses[i].ShowVoteCount(true);
@@ -181,6 +189,7 @@ public class MafiaGameFlow : MonoBehaviourPun
 
         yield return timer.StartTimer(time);
 
+        skipVoteButton.gameObject.SetActive(false);
         foreach (var house in Manager.Mafia.Houses)
         {
             house.ActivateOutline(false);
@@ -207,8 +216,9 @@ public class MafiaGameFlow : MonoBehaviourPun
         {
             Debug.Log($"Player{voteResult} got kicked");
             // Insert Player kicked coroutine here
-            //Manager.Mafia.photonView.RPC("", RpcTarget.All);
+            yield return Manager.Mafia.animFactory.PlayerKickedActionRoutine(voteResult);
             yield return new WaitUntil(() => Manager.Mafia.voteResultsFinished);
+            Manager.Mafia.sharedData.playerToKick = -1; // Reset value
         }
     }
 

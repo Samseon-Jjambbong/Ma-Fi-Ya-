@@ -2850,6 +2850,11 @@ PrefabInstance:
       objectReference: {fileID: 1448853668}
     - target: {fileID: 8540862403624832752, guid: 16272b99ff3764479828701e06741280,
         type: 3}
+      propertyPath: skipVoteButton
+      value: 
+      objectReference: {fileID: 733470816134151913}
+    - target: {fileID: 8540862403624832752, guid: 16272b99ff3764479828701e06741280,
+        type: 3}
       propertyPath: lightController
       value: 
       objectReference: {fileID: 410087043}
@@ -2869,6 +2874,11 @@ PrefabInstance:
     - target: {fileID: 71190183217775413, guid: 49ba8df2be6234b76adf569229417560,
         type: 3}
       propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 71190183217775413, guid: 49ba8df2be6234b76adf569229417560,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1915260987427299324, guid: 49ba8df2be6234b76adf569229417560,
@@ -2974,7 +2984,12 @@ PrefabInstance:
     - target: {fileID: 2039693121047351465, guid: 49ba8df2be6234b76adf569229417560,
         type: 3}
       propertyPath: sceneViewId
-      value: 2
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2457408783836438097, guid: 49ba8df2be6234b76adf569229417560,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2763532896787814073, guid: 49ba8df2be6234b76adf569229417560,
         type: 3}
@@ -3011,6 +3026,18 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 49ba8df2be6234b76adf569229417560, type: 3}
+--- !u!114 &733470816134151913 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8362761510884563538, guid: 49ba8df2be6234b76adf569229417560,
+    type: 3}
+  m_PrefabInstance: {fileID: 733470816134151912}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &2518940959455639473
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3023,14 +3050,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Directional Light
-      objectReference: {fileID: 0}
-    - target: {fileID: 0}
-      propertyPath: sceneViewId
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 0}
-      propertyPath: ObservedComponents.Array.size
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8406492591061833763, guid: a2c4e1633fff14af3b655af1ccc1775c,
         type: 3}

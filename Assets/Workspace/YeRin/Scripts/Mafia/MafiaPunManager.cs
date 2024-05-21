@@ -177,10 +177,7 @@ public class MafiaPunManager : MonoBehaviourPunCallbacks
             yield return new WaitForSeconds(1);
 
             // Reset flags
-            Manager.Mafia.nightPhaseFinished = false;
-            Manager.Mafia.nightEventsFinished = false;
-            Manager.Mafia.dayPhaseFinished = false;
-            Manager.Mafia.voteResultsFinished = false;
+            Manager.Mafia.ResetFlags();
         }
     }
 

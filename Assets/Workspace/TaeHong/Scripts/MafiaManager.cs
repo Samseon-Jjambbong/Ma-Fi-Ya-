@@ -43,8 +43,11 @@ public class MafiaManager : Singleton<MafiaManager>, IPunObservable
     [Header("Game Logic")]
     public MafiaGame Game = new MafiaGame();
     public event Action VoteCountChanged;
+    public event Action SkipVoteCountChanged;
     private int[] votes;
     public int[] Votes => votes;
+    private int skipVotes;
+    public int SkipVotes => skipVotes;
 
     private MafiaAction? playerAction;
     public MafiaAction? PlayerAction { get { return playerAction; } set { playerAction = value; } }
@@ -64,6 +67,16 @@ public class MafiaManager : Singleton<MafiaManager>, IPunObservable
         isDay = true;
         playerCount = PhotonNetwork.CurrentRoom.PlayerCount;
         votes = new int[playerCount];
+    }
+
+    public void ResetFlags()
+    {
+        displayRoleFinished = false;
+        nightPhaseFinished = false;
+        nightEventsFinished = false;
+        nightResultsFinished = false;
+        dayPhaseFinished = false;
+        voteResultsFinished = false;
     }
 
     public int ActivePlayerCount()
@@ -147,8 +160,24 @@ public class MafiaManager : Singleton<MafiaManager>, IPunObservable
     [PunRPC]
     public void VoteForPlayer(int playerID)
     {
+        if(playerID == -1)
+        {
+            skipVotes++;
+            SkipVoteCountChanged?.Invoke();
+            return;
+        }
         votes[playerID - 1]++;
         VoteCountChanged?.Invoke();
+    }
+
+    [PunRPC] // Called on players who finished voting
+    public void BlockVotes()
+    {
+        foreach(House house in houses)
+        {
+            house.ActivateOutline(false);
+        }
+        GetComponent<MafiaGameFlow>().DisableSkipButton();
     }
 
     [PunRPC] // Called only on MasterClient
@@ -176,6 +205,9 @@ public class MafiaManager : Singleton<MafiaManager>, IPunObservable
         for (int i = 0; i < votes.Length; i++)
         {
             votes[i] = 0;
+            skipVotes = 0;
+            VoteCountChanged?.Invoke();
+            SkipVoteCountChanged?.Invoke();
         }
 
         // Return result

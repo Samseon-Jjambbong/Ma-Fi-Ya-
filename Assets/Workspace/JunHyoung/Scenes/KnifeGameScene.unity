@@ -774,7 +774,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: '00 : 00'
+  m_text: ' '
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 827bb8d5a3ce4b849a673921b3214148, type: 2}
   m_sharedMaterial: {fileID: 6179386962543796144, guid: 827bb8d5a3ce4b849a673921b3214148,
@@ -874,7 +874,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &964772563
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -889,11 +889,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   infoText: {fileID: 664978723}
   countDownText: {fileID: 988116411}
+  killScoreBoardUI: {fileID: 0}
+  gameResultUI: {fileID: 0}
   countDownTime: 5
-  gamePlayTime: 120
+  gamePlayTime: 30
   playerprefab: {fileID: 7385372275995568296, guid: cc2487f5c42ffc54e82da4f171d807cc,
     type: 3}
-  playerRadius: 20
+  playerRadius: 16
   colorList: []
 --- !u!4 &964772564
 Transform:
@@ -1363,7 +1365,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1520204787
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1378,7 +1380,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerprefab: {fileID: 7385372275995568296, guid: cc2487f5c42ffc54e82da4f171d807cc,
     type: 3}
-  maxPlayer: 8
+  maxPlayer: 2
   playerCount: 0
   playerRadius: 20
 --- !u!4 &1520204788
@@ -1403,14 +1405,14 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1520204786}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f1f347a729477ea40b1402ac07ca1944, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   USERNAME: KnifeTest
   ROOMNAME: KnifeTEST
-  chatManager: {fileID: 3358787734568406658}
+  chatManager: {fileID: 8426369548764434793}
   knifeGameManager: {fileID: 964772563}
 --- !u!1 &1527486849
 GameObject:
@@ -2045,9 +2047,9 @@ RectTransform:
   m_Father: {fileID: 1606070376407368903}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -17, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &2764524021834869292
 GameObject:
@@ -2177,36 +2179,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &3358787734568406658
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8314246196624148016}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5f56e66f323359445a189bf73487cbb8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isChatable: 1
-  chatEntry: {fileID: 5421346314347557905, guid: a998f93255ee6a9419a173a6a5388b1e,
-    type: 3}
-  contents: {fileID: 7954621487152736836}
-  rectTransform: {fileID: 2378113239498884219}
-  inputField: {fileID: 7930655897195139414}
-  buttonFixSize: {fileID: 4725293709969571926}
-  nickNameColor: {r: 0, g: 0, b: 0, a: 1}
-  mafiaMessageColor: {r: 1, g: 0, b: 0, a: 1}
-  ghostMessageColor: {r: 0, g: 0.062930584, b: 1, a: 1}
-  systemMessageColor: {r: 1, g: 0.8305459, b: 0, a: 1}
-  isGhost: 0
-  isMafia: 0
-  isDay: 1
-  sizeState: 2
-  deafaultSize: {x: 640, y: 400}
-  maxSize: {x: 640, y: 900}
-  minSize: {x: 640, y: 250}
 --- !u!1 &3424261649465417764
 GameObject:
   m_ObjectHideFlags: 0
@@ -2511,7 +2483,7 @@ RectTransform:
   m_Father: {fileID: 6886306983636698514}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -2545,84 +2517,6 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
---- !u!1001 &5556852021709859436
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 486385873706670545, guid: cc2487f5c42ffc54e82da4f171d807cc,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 486385873706670545, guid: cc2487f5c42ffc54e82da4f171d807cc,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.8
-      objectReference: {fileID: 0}
-    - target: {fileID: 486385873706670545, guid: cc2487f5c42ffc54e82da4f171d807cc,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 486385873706670545, guid: cc2487f5c42ffc54e82da4f171d807cc,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 486385873706670545, guid: cc2487f5c42ffc54e82da4f171d807cc,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 486385873706670545, guid: cc2487f5c42ffc54e82da4f171d807cc,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 486385873706670545, guid: cc2487f5c42ffc54e82da4f171d807cc,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 486385873706670545, guid: cc2487f5c42ffc54e82da4f171d807cc,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 486385873706670545, guid: cc2487f5c42ffc54e82da4f171d807cc,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 180
-      objectReference: {fileID: 0}
-    - target: {fileID: 486385873706670545, guid: cc2487f5c42ffc54e82da4f171d807cc,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7347766516483423332, guid: cc2487f5c42ffc54e82da4f171d807cc,
-        type: 3}
-      propertyPath: sceneViewId
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7385372275995568296, guid: cc2487f5c42ffc54e82da4f171d807cc,
-        type: 3}
-      propertyPath: m_Name
-      value: '@Player'
-      objectReference: {fileID: 0}
-    - target: {fileID: 7385372275995568296, guid: cc2487f5c42ffc54e82da4f171d807cc,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: cc2487f5c42ffc54e82da4f171d807cc, type: 3}
 --- !u!222 &5572556493752587718
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3056,7 +2950,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0.000061035156}
-  m_SizeDelta: {x: 0, y: -115}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &7956042800886552964
 MonoBehaviour:
@@ -3167,14 +3061,14 @@ GameObject:
   - component: {fileID: 2378113239498884219}
   - component: {fileID: 4154185125876056223}
   - component: {fileID: 8426369548764434792}
-  - component: {fileID: 3358787734568406658}
+  - component: {fileID: 8426369548764434793}
   m_Layer: 5
   m_Name: InGameChatPannel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &8426369548764434792
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3205,6 +3099,30 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &8426369548764434793
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8314246196624148016}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4572fb1a6cf02fe40bd95ef0956d4c11, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  chatEntry: {fileID: 5421346314347557905, guid: a998f93255ee6a9419a173a6a5388b1e,
+    type: 3}
+  contents: {fileID: 7954621487152736836}
+  rectTransform: {fileID: 2378113239498884219}
+  inputField: {fileID: 7930655897195139414}
+  buttonFixSize: {fileID: 4725293709969571926}
+  nickNameColor: {r: 0, g: 0, b: 0, a: 1}
+  systemMessageColor: {r: 1, g: 0, b: 0, a: 1}
+  sizeState: 2
+  deafaultSize: {x: 640, y: 400}
+  maxSize: {x: 640, y: 900}
+  minSize: {x: 640, y: 250}
 --- !u!222 &8491052774076811048
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3255,7 +3173,6 @@ SceneRoots:
   m_Roots:
   - {fileID: 255075926}
   - {fileID: 1560711907}
-  - {fileID: 5556852021709859436}
   - {fileID: 224107648}
   - {fileID: 1302755710}
   - {fileID: 964772564}

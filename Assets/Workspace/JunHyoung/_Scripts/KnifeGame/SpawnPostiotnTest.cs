@@ -17,8 +17,8 @@ public class SpawnPostiotnTest : MonoBehaviour
     {
         for(int i = 0; i < maxPlayer; i++)
         {
-            SpawnPlayer();
             playerCount++;
+            SpawnPlayer();
         }
     }
 
@@ -36,7 +36,7 @@ public class SpawnPostiotnTest : MonoBehaviour
 
 
         int currentAngle;
-        if (playerCount == maxPlayer)
+        if (playerCount == maxPlayer-1)
         {
             currentAngle = 0; // 마지막 플레이어일 때는 0도에 배치
         }

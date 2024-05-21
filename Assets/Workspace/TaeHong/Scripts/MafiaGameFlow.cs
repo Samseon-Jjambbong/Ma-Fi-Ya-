@@ -61,6 +61,12 @@ public class MafiaGameFlow : MonoBehaviourPun
         StartCoroutine(ShowVoteResultsRoutine());
     }
 
+    [PunRPC]
+    public void GameOver()
+    {
+        StartCoroutine(GameOverRoutine());
+    }
+
     public void ChangeTime()
     {
         StartCoroutine(ChangeTimeOfDayRoutine());
@@ -220,6 +226,12 @@ public class MafiaGameFlow : MonoBehaviourPun
             yield return new WaitUntil(() => Manager.Mafia.voteResultsFinished);
             Manager.Mafia.sharedData.playerToKick = -1; // Reset value
         }
+    }
+
+    private IEnumerator GameOverRoutine()
+    {
+        //TODO: Add game over stuff
+        yield return null;
     }
 
     #endregion

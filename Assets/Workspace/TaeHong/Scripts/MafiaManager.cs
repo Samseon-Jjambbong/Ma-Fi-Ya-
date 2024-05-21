@@ -42,6 +42,8 @@ public class MafiaManager : Singleton<MafiaManager>, IPunObservable
 
     [Header("Game Logic")]
     public MafiaGame Game = new MafiaGame();
+    private MafiaResult gameResult = MafiaResult.None;
+    public MafiaResult GameResult => gameResult;
     public event Action VoteCountChanged;
     public event Action SkipVoteCountChanged;
     private int[] votes;
@@ -82,20 +84,6 @@ public class MafiaManager : Singleton<MafiaManager>, IPunObservable
     public int ActivePlayerCount()
     {
         return sharedData.ActivePlayerCount();
-    }
-
-    [PunRPC] // Called only on MasterClient
-    public void PlayerDied(int id)
-    {
-        bool result = Game.RemovePlayer(PhotonNetwork.CurrentRoom.Players[id].GetPlayerRole());
-        if (result)
-        {
-            // civilian win
-        }
-        else
-        {
-            // mafia win
-        }
     }
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
@@ -150,6 +138,10 @@ public class MafiaManager : Singleton<MafiaManager>, IPunObservable
 
             // Set player state as dead
             sharedData.SetDead(playerID - 1);
+            if (PhotonNetwork.IsMasterClient)
+            {
+                PlayerDied(playerID);
+            }
 
             yield return new WaitForSeconds(1);
         }
@@ -313,6 +305,17 @@ public class MafiaManager : Singleton<MafiaManager>, IPunObservable
     public void ShowActions()
     {
         StartCoroutine(Player.ShowActionsRoutine());
+    }
+    #endregion
+
+    /******************************************************
+    *                    Game Over
+    ******************************************************/
+    #region Game Over
+    // Called only on MasterClient
+    public void PlayerDied(int id)
+    {
+        gameResult = Game.RemovePlayer(PhotonNetwork.CurrentRoom.Players[id].GetPlayerRole());
     }
     #endregion
 }

@@ -160,6 +160,16 @@ public class MafiaPunManager : MonoBehaviourPunCallbacks
 
             yield return new WaitForSeconds(1);
 
+            // Check Game Over
+            Debug.Log("Checking Game Over...");
+            if(Manager.Mafia.GameResult != MafiaResult.None)
+            {
+                photonView.RPC("GameOver", RpcTarget.All);
+                Debug.Log($"Game Over: {Manager.Mafia.GameResult}");
+                yield break;
+            }
+            Debug.Log("Game not over");
+
             // Day Phase
             Debug.Log("Day Phase Start");
             photonView.RPC("StartDayPhase", RpcTarget.All, voteTime);
@@ -175,6 +185,16 @@ public class MafiaPunManager : MonoBehaviourPunCallbacks
             Debug.Log("Show Vote Results End");
 
             yield return new WaitForSeconds(1);
+
+            // Check Game Over
+            Debug.Log("Checking Game Over...");
+            if (Manager.Mafia.GameResult != MafiaResult.None)
+            {
+                photonView.RPC("GameOver", RpcTarget.All);
+                Debug.Log($"Game Over: {Manager.Mafia.GameResult}");
+                yield break;
+            }
+            Debug.Log("Game not over");
 
             // Reset flags
             Manager.Mafia.ResetFlags();

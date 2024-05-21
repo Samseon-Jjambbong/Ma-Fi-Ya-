@@ -186,19 +186,13 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 2693300}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &7285975 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6262941369119067680, guid: 4f9154a150d7f4675b7a9be4a5d50325,
+--- !u!114 &7285978 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5192069066501684733, guid: 4f9154a150d7f4675b7a9be4a5d50325,
     type: 3}
   m_PrefabInstance: {fileID: 209884203}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &7285978
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7285975}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: da17653680dcaa846918c72220e1138c, type: 3}
@@ -781,26 +775,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1937569810058278737, guid: 4f9154a150d7f4675b7a9be4a5d50325,
-        type: 3}
-      propertyPath: m_Material
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 2219441974894099964, guid: 4f9154a150d7f4675b7a9be4a5d50325,
-        type: 3}
-      propertyPath: m_LocalScale.x
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 2219441974894099964, guid: 4f9154a150d7f4675b7a9be4a5d50325,
-        type: 3}
-      propertyPath: m_LocalScale.y
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 2219441974894099964, guid: 4f9154a150d7f4675b7a9be4a5d50325,
-        type: 3}
-      propertyPath: m_LocalScale.z
-      value: 2
-      objectReference: {fileID: 0}
     - target: {fileID: 2219441974894099964, guid: 4f9154a150d7f4675b7a9be4a5d50325,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -809,7 +783,7 @@ PrefabInstance:
     - target: {fileID: 2219441974894099964, guid: 4f9154a150d7f4675b7a9be4a5d50325,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2.2
+      value: 1.81
       objectReference: {fileID: 0}
     - target: {fileID: 2219441974894099964, guid: 4f9154a150d7f4675b7a9be4a5d50325,
         type: 3}
@@ -851,11 +825,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2672586719227129963, guid: 4f9154a150d7f4675b7a9be4a5d50325,
-        type: 3}
-      propertyPath: m_CollisionDetection
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 6262941369119067680, guid: 4f9154a150d7f4675b7a9be4a5d50325,
         type: 3}
       propertyPath: m_Name
@@ -864,11 +833,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 6262941369119067680, guid: 4f9154a150d7f4675b7a9be4a5d50325,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 7285978}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4f9154a150d7f4675b7a9be4a5d50325, type: 3}
 --- !u!1001 &215481764
 PrefabInstance:
@@ -6250,6 +6215,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: NightMafia
       objectReference: {fileID: 0}
+    - target: {fileID: 1431149641445412417, guid: 65d4b57782f2ec34cad60f4970171dc9,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1565044775069587853, guid: 65d4b57782f2ec34cad60f4970171dc9,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -8071,7 +8041,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerPrefab: {fileID: 1431149641445412417, guid: 65d4b57782f2ec34cad60f4970171dc9,
     type: 3}
-  centerSpawnPoint: {x: 0.4, y: 1.8652331, z: -1.02}
+  centerSpawnPoint: {x: 0, y: 1.8652331, z: 0}
+  spring: {fileID: 7285978}
 --- !u!1001 &1442032950
 PrefabInstance:
   m_ObjectHideFlags: 0

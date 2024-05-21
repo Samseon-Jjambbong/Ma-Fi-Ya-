@@ -201,7 +201,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 10
-  jumpForce: 50
+  jumpForce: 100
   walkAudio: {fileID: -2084988151863268250}
   animator: {fileID: 2562161904207927451}
 --- !u!82 &-2084988151863268250

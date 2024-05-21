@@ -9,7 +9,6 @@ public class MafiaGameFlow : MonoBehaviourPun
     [SerializeField] private GameTimer timer;
     [SerializeField] private LightController lightController;
     [SerializeField] private GameObject roleUI;
-    [SerializeField] private TextMeshProUGUI resultsText;
 
     private void Start()
     {

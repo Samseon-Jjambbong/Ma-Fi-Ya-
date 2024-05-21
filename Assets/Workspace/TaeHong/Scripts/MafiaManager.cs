@@ -18,6 +18,7 @@ public class MafiaManager : Singleton<MafiaManager>, IPunObservable
     [Header("Components")]
     public SharedData sharedData;
     public AnimationFactory animFactory;
+    private MafiaGameFlow gameFlow;
     public PhotonView photonView => GetComponent<PhotonView>();
 
     private int playerCount;
@@ -66,6 +67,7 @@ public class MafiaManager : Singleton<MafiaManager>, IPunObservable
 
     private void Start()
     {
+        gameFlow = GetComponent<MafiaGameFlow>();
         isDay = true;
         playerCount = PhotonNetwork.CurrentRoom.PlayerCount;
         votes = new int[playerCount];
@@ -134,7 +136,7 @@ public class MafiaManager : Singleton<MafiaManager>, IPunObservable
             yield return new WaitForSeconds(1);
 
             // Show everyone dead player's role
-            // yield return ShowKilledPlayerRole();
+            yield return gameFlow.RemovedPlayerRoleRoutine(playerID);
 
             // Set player state as dead
             sharedData.SetDead(playerID - 1);
@@ -169,7 +171,7 @@ public class MafiaManager : Singleton<MafiaManager>, IPunObservable
         {
             house.ActivateOutline(false);
         }
-        GetComponent<MafiaGameFlow>().DisableSkipButton();
+        gameFlow.DisableSkipButton();
     }
 
     [PunRPC] // Called only on MasterClient

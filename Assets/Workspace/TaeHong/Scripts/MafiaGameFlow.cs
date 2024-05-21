@@ -11,7 +11,7 @@ public class MafiaGameFlow : MonoBehaviourPun
 {
     [SerializeField] private GameTimer timer;
     [SerializeField] private LightController lightController;
-    [SerializeField] private GameObject roleUI;
+    [SerializeField] private RoleUI roleUI;
     [SerializeField] private Button skipVoteButton;
 
     private void Start()
@@ -88,12 +88,22 @@ public class MafiaGameFlow : MonoBehaviourPun
 
     #region Coroutines
     // Display Role for X seconds
-    IEnumerator DisplayRoleRoutine(int time)
+    private IEnumerator DisplayRoleRoutine(int time)
     {
-        roleUI.SetActive(true);
+        roleUI.gameObject.SetActive(true);
+        roleUI.InitBegin();
         yield return timer.StartTimer(time);
-        roleUI.SetActive(false);
+        roleUI.gameObject.SetActive(false);
         Manager.Mafia.displayRoleFinished = true;
+    }
+
+    // Display Kicked/Killed Player's Role for X Seconds
+    public IEnumerator RemovedPlayerRoleRoutine(int playerID)
+    {
+        roleUI.gameObject.SetActive(true);
+        roleUI.InitDead(playerID);
+        yield return timer.StartTimer(3);
+        roleUI.gameObject.SetActive(false);
     }
 
     // Day/Night Light Changer
@@ -170,6 +180,7 @@ public class MafiaGameFlow : MonoBehaviourPun
         {
             // Show player die animation
             yield return Manager.Mafia.ShowKilledPlayers(killed);
+            yield return new WaitForSeconds(1);
         }
 
         yield return new WaitForSeconds(1);
@@ -224,6 +235,7 @@ public class MafiaGameFlow : MonoBehaviourPun
             // Insert Player kicked coroutine here
             yield return Manager.Mafia.animFactory.PlayerKickedActionRoutine(voteResult);
             yield return new WaitUntil(() => Manager.Mafia.voteResultsFinished);
+            yield return RemovedPlayerRoleRoutine(voteResult);
             Manager.Mafia.sharedData.playerToKick = -1; // Reset value
         }
     }

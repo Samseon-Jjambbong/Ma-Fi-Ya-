@@ -2559,7 +2559,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &541480241
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3455,7 +3455,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &663192571
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7038,7 +7038,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1284738031
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8026,7 +8026,6 @@ MonoBehaviour:
   timer: {fileID: 421478242}
   lightController: {fileID: 410087043}
   roleUI: {fileID: 1448853668}
-  resultsText: {fileID: 0}
 --- !u!114 &1424524251
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9942,7 +9941,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1779677903
 MonoBehaviour:
   m_ObjectHideFlags: 0

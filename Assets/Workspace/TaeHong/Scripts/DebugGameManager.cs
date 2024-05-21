@@ -34,8 +34,8 @@ namespace Tae
 
         public void SpawnNightMafia(int houseIdx)
         {
-            //StartCoroutine(animFactory.SpawnPlayerGo(houses[2], houses[3]));
-            //StartCoroutine(animFactory.SpawnPlayerCome(houses[3]));
+            StartCoroutine(animFactory.PlayerGoActionRoutine(new MafiaAction(2, 3, (MafiaActionType)1)));
+            StartCoroutine(animFactory.PlayerComeActionRoutine(1, (MafiaActionType) 1));
         }
 
         public void ShowPlayerDeath(int houseIdx)
@@ -65,6 +65,7 @@ namespace Tae
             
                 houses.Add(house);
             }
+            Manager.Mafia.Houses = houses;
         }
     }
 }

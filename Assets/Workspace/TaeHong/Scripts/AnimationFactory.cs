@@ -9,7 +9,6 @@ public class AnimationFactory : MonoBehaviour
     [SerializeField] GameObject playerPrefab;
     [SerializeField] Vector3 centerSpawnPoint;
     [SerializeField] Spring spring;
-    [SerializeField] 
 
     // Player : go to house > use skill > come back
     public IEnumerator PlayerGoActionRoutine(MafiaAction action)
@@ -20,9 +19,11 @@ public class AnimationFactory : MonoBehaviour
         //player.GetComponentInChildren<Renderer>().material.color = PhotonNetwork.LocalPlayer.GetPlayerColor();
         player.GetComponentInChildren<Renderer>().material.color = Color.green;
         yield return player.MoveToTargetHouse(target);
+        player.gameObject.SetActive(false);
         yield return target.PlayEffect(action.actionType);
+        player.gameObject.SetActive(true);
         yield return player.MoveToTargetHouse(origin);
-        Destroy(player);
+        Destroy(player.gameObject);
     }
 
     // Dark Player : spawn in center > come to my house > use skill
@@ -31,7 +32,7 @@ public class AnimationFactory : MonoBehaviour
         House target = Manager.Mafia.Houses[houseOwnerId - 1];
         NightMafiaMove player = Instantiate(playerPrefab, centerSpawnPoint, Quaternion.identity).GetComponent<NightMafiaMove>();
         yield return player.MoveToTargetHouse(target);
-        Destroy(player);
+        Destroy(player.gameObject);
         yield return target.PlayEffect(actionType);
     }
 
@@ -61,8 +62,8 @@ public class AnimationFactory : MonoBehaviour
     {
         Vector3 spawnPoint = house.entrance.position + house.entrance.transform.forward + Vector3.up;
         Quaternion spawnRotation = Quaternion.LookRotation(house.entrance.forward);
-        //NightMafiaMove player = PhotonNetwork.InstantiateRoomObject("NightMafia", spawnPoint, spawnRotation).GetComponent<NightMafiaMove>();
-        NightMafiaMove player = Instantiate(playerPrefab, spawnPoint, spawnRotation).GetComponent<NightMafiaMove>();
+        NightMafiaMove player = PhotonNetwork.InstantiateRoomObject("NightMafia", spawnPoint, spawnRotation).GetComponent<NightMafiaMove>();
+       //NightMafiaMove player = Instantiate(playerPrefab, spawnPoint, spawnRotation).GetComponent<NightMafiaMove>();
 
         yield return player.DieAnimation();
     }

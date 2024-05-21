@@ -10,7 +10,7 @@ public class DebugKnifeGame : MonoBehaviourPunCallbacks
     [SerializeField] string USERNAME;
     [SerializeField] string ROOMNAME;
 
-    [SerializeField] InGameChatManager chatManager;
+    [SerializeField] MafiaGameChatManager chatManager;
     [SerializeField] KnifeGameManager knifeGameManager;
 
     private void Awake()

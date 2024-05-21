@@ -23,15 +23,13 @@ namespace Tae
         [SerializeField] private int playerCount = 4;
         [SerializeField] private GameObject housePrefab;
         [SerializeField] AnimationFactory animFactory;
+        [SerializeField] Spring spring;
 
         private void Start()
         {
             SpawnHouses();
             SpawnNightMafia(0);
-            ShowPlayerDeath(0);
-            ShowPlayerDeath(1);
-            ShowPlayerDeath(2);
-            ShowPlayerDeath(3);
+            ShowPlayerKicked();
         }
 
         public void SpawnNightMafia(int houseIdx)
@@ -43,6 +41,12 @@ namespace Tae
         public void ShowPlayerDeath(int houseIdx)
         {
             StartCoroutine(animFactory.SpawnPlayerDie(houses[houseIdx]));
+        }
+
+        public void ShowPlayerKicked()
+        {
+            StartCoroutine(animFactory.PlayerKickedActionRoutine(houses[1]));
+
         }
         
         private void SpawnHouses()

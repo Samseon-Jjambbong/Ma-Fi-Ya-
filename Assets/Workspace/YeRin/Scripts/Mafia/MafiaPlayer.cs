@@ -122,7 +122,7 @@ public class MafiaPlayer : MonoBehaviourPun
         {
             MafiaAction action = (MafiaAction) actionByThisPlayer;
             Debug.Log($"Player{ID} did {action.actionType}");
-            yield return Manager.Mafia.animFactory.SpawnPlayerGo(action);
+            yield return Manager.Mafia.animFactory.PlayerGoActionRoutine(action);
         }
 
         yield return new WaitForSeconds(1);
@@ -130,7 +130,7 @@ public class MafiaPlayer : MonoBehaviourPun
         foreach (MafiaActionType actionType in actionsOnThisPlayer)
         {
             Debug.Log($"Player{ID} received {actionType}");
-            yield return Manager.Mafia.animFactory.SpawnPlayerCome(ID, actionType);
+            yield return Manager.Mafia.animFactory.PlayerComeActionRoutine(ID, actionType);
             yield return new WaitForSeconds(1);
         }
 

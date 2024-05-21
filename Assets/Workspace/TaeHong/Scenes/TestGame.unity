@@ -2205,7 +2205,6 @@ MonoBehaviour:
   timer: {fileID: 421478242}
   lightController: {fileID: 410087043}
   roleUI: {fileID: 1448853668}
-  resultsText: {fileID: 0}
 --- !u!114 &1424524251
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3189,6 +3188,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1937569810058278737, guid: 4f9154a150d7f4675b7a9be4a5d50325,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2219441974894099964, guid: 4f9154a150d7f4675b7a9be4a5d50325,
         type: 3}
       propertyPath: m_LocalPosition.x

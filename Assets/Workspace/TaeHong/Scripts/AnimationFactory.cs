@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 
-public class AnimationFactory : MonoBehaviour
+public class AnimationFactory : MonoBehaviourPun
 {
     [Header("Components")]
     [SerializeField] GameObject playerPrefab;
@@ -41,7 +41,7 @@ public class AnimationFactory : MonoBehaviour
     {
         House house = Manager.Mafia.Houses[playerID - 1];
         Vector3 spawnPoint = house.entrance.position + house.entrance.transform.forward + Vector3.up;
-        NightMafiaMove player = PhotonNetwork.InstantiateRoomObject("NightMafia", spawnPoint, Quaternion.identity).GetComponent<NightMafiaMove>();
+        NightMafiaMove player = PhotonNetwork.InstantiateRoomObject("DayMafia", spawnPoint, Quaternion.identity).GetComponent<NightMafiaMove>();
         yield return player.MoveToTargetPos(centerSpawnPoint);
         spring.Pop();
         yield return StartCoroutine(player.Fly());
@@ -58,12 +58,11 @@ public class AnimationFactory : MonoBehaviour
     }
 
     // Dead Player : spawn in house entrance > faint
-    public IEnumerator SpawnPlayerDie(House house) // Called only once by master
+    public IEnumerator SpawnPlayerDie(House house)
     {
         Vector3 spawnPoint = house.entrance.position + house.entrance.transform.forward + Vector3.up;
         Quaternion spawnRotation = Quaternion.LookRotation(house.entrance.forward);
-        NightMafiaMove player = PhotonNetwork.InstantiateRoomObject("NightMafia", spawnPoint, spawnRotation).GetComponent<NightMafiaMove>();
-       //NightMafiaMove player = Instantiate(playerPrefab, spawnPoint, spawnRotation).GetComponent<NightMafiaMove>();
+        NightMafiaMove player = Instantiate(playerPrefab, spawnPoint, spawnRotation).GetComponent<NightMafiaMove>();
 
         yield return player.DieAnimation();
     }

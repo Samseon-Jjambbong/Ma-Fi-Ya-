@@ -44,7 +44,7 @@ public class NightMafiaMove : MonoBehaviour
         animator.Play("Walk");
         walkAudio.Play();
 
-        while ((int)transform.position.x != (int)targetPos.x)
+        while ((targetPos - transform.position).magnitude > 1f)
         {
             transform.position = Vector3.MoveTowards(transform.position, targetPos, moveSpeed * Time.deltaTime);
             yield return null;
@@ -53,7 +53,7 @@ public class NightMafiaMove : MonoBehaviour
 
     public IEnumerator DieAnimation()
     {
-        animator.Play("Die");
+        animator.SetTrigger("Die");
         yield return new WaitForSeconds(3);
     }
 
@@ -64,7 +64,7 @@ public class NightMafiaMove : MonoBehaviour
         animator.Play("Walk");
         walkAudio.Play();
 
-        while ((targetPos - transform.position).magnitude > 0.1f)
+        while ((targetPos - transform.position).magnitude > 0.5f)
         {
             transform.position = Vector3.MoveTowards(transform.position, targetPos, moveSpeed * Time.deltaTime);
             yield return null;

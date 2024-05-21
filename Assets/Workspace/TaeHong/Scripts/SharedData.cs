@@ -107,10 +107,9 @@ namespace Mafia
             return killed;
         }
 
-        [PunRPC]
-        public void SetDead(int idx, bool dead)
+        public void SetDead(int idx)
         {
-            deadPlayers[idx] = dead;
+            deadPlayers[idx] = true;
         }
 
         [PunRPC]
@@ -119,6 +118,7 @@ namespace Mafia
             int playerCount = PhotonNetwork.CurrentRoom.Players.Count;
             blockedPlayers = new bool[playerCount];
             healedPlayers = new bool[playerCount];
+            killedPlayers = new bool[playerCount];
         }
         #endregion
 

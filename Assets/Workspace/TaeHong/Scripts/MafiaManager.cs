@@ -200,16 +200,6 @@ public class MafiaManager : Singleton<MafiaManager>, IPunObservable
             }
             voted += votes[i];
         }
-
-        // Reset values before returning result
-        for (int i = 0; i < votes.Length; i++)
-        {
-            votes[i] = 0;
-            skipVotes = 0;
-            VoteCountChanged?.Invoke();
-            SkipVoteCountChanged?.Invoke();
-        }
-
         // Return result
         // No one gets kicked if:
         //      - There is a tie for highest votes
@@ -224,13 +214,25 @@ public class MafiaManager : Singleton<MafiaManager>, IPunObservable
         {
             result = highest + 1;
         }
-        
+
+        photonView.RPC("ResetVotes", RpcTarget.All);
         sharedData.photonView.RPC("SetPlayerToKick", RpcTarget.All, result);
+    }
+
+    [PunRPC]
+    public void ResetVotes()
+    {
+        // Reset values before returning result
+        for (int i = 0; i < votes.Length; i++)
+        {
+            votes[i] = 0;
+        }
+        skipVotes = 0;
     }
     #endregion
 
     #region Vote Results
-
+    
     #endregion
 
     /******************************************************

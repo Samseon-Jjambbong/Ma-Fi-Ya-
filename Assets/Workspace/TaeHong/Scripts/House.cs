@@ -56,6 +56,7 @@ public class House : MonoBehaviourPun, IPointerClickHandler, IPointerExitHandler
 
     private void OnEnable()
     {
+        voteCountText.text = Manager.Mafia.Votes[houseOwnerId - 1].ToString();
         Manager.Mafia.VoteCountChanged += OnVoteCountChanged;
     }
 

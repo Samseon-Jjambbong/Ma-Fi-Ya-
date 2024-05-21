@@ -10,11 +10,17 @@ public class SkipVoteButton : BaseUI
     Button button;
     TextMeshProUGUI text;
 
-    void Start()
+    protected override void Awake()
     {
+        base.Awake();
         button = GetUI<Button>("Skip Vote Button");
         text = GetUI<TextMeshProUGUI>("Skip Count Text");
-        text.text = "0";
+    }
+
+    private void OnEnable()
+    {
+        button.interactable = true;
+        text.text = Manager.Mafia.SkipVotes.ToString();
         button.onClick.AddListener(OnPressed);
         Manager.Mafia.SkipVoteCountChanged += OnVoteCountChanged;
     }

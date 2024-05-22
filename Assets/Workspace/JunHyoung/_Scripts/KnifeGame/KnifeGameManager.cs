@@ -7,6 +7,8 @@ using TMPro;
 using UnityEngine;
 using PhotonHashtable = ExitGames.Client.Photon.Hashtable;
 
+public enum KnifeLength { Short, Middle, Long }
+
 public class KnifeGameManager : MonoBehaviourPunCallbacks, IPunObservable
 {
     private static KnifeGameManager instance;
@@ -230,6 +232,7 @@ public class KnifeGameManager : MonoBehaviourPunCallbacks, IPunObservable
         GameObject player = PhotonNetwork.Instantiate("Knife", pos, Quaternion.LookRotation(-pos)); //플레이어
 
         player.GetComponent<PlayerController>().SetNickName(PhotonNetwork.PlayerList[playerNumber].NickName);
+        player.GetComponent<PlayerController>().photonView.RPC("SetWeapon", RpcTarget.MasterClient, KnifeLength.Short);
 
         //색깔 설정 - 은 플레이어에서 ㄹ
     }

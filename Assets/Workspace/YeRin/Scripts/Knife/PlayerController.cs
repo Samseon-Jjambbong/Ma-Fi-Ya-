@@ -263,5 +263,44 @@ public class PlayerController : MonoBehaviourPun
     {
         photonView.RPC("NickName", RpcTarget.All, nickName);
     }
+
+    [PunRPC]
+    private void SetWeapon(KnifeLength length)
+    {
+        if (PhotonNetwork.IsMasterClient)
+        {
+            switch (Random.Range(0, 3))
+            {
+                case 1:
+                    shortKnife.gameObject.SetActive(true);
+                    length = KnifeLength.Short;
+                    break;
+                case 2:
+                    middleKnife.gameObject.SetActive(true);
+                    length = KnifeLength.Middle;
+                    break;
+                case 3:
+                    longKnife.gameObject.SetActive(true);
+                    length = KnifeLength.Long;
+                    break;
+            }
+
+            photonView.RPC("SetWeapon", RpcTarget.Others, length);
+            return;
+        }
+
+        switch (length)
+        {
+            case KnifeLength.Short:
+                shortKnife.gameObject.SetActive(true);
+                break;
+            case KnifeLength.Middle:
+                middleKnife.gameObject.SetActive(true);
+                break;
+            case KnifeLength.Long:
+                longKnife.gameObject.SetActive(true);
+                break;
+        }
+    }
     #endregion
 }

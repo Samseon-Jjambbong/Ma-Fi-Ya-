@@ -30,6 +30,6 @@ EditorBuildSettings:
     path: Assets/Workspace/YeRin/Scene/TestGame_Ye.unity
     guid: d78fe423babdd7849a7baa37c725d07f
   - enabled: 1
-    path: Assets/Workspace/JunHyoung/Scenes/KnifeGameScene.unity
-    guid: 8dc96d9fd63d0b74fa86756948fce23f
+    path: Assets/Workspace/YeRin/Scene/KnifeGameScene_Ye.unity
+    guid: 1504c7c05d582274482ecc0ebde270b5
   m_configObjects: {}

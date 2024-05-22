@@ -62,7 +62,11 @@ public class RoomPanel : MonoBehaviour
     {
         PhotonNetwork.CurrentRoom.IsOpen = false;
         PhotonNetwork.CurrentRoom.IsVisible = false;
-        PhotonNetwork.LoadLevel("TestGame"); //모드에 따라 다른 씬 전환 작업 할 것
+
+        if (PhotonNetwork.CurrentRoom.GetGameMode().Equals(GameMode.Mafia))
+            PhotonNetwork.LoadLevel("TestGame");
+        else if (PhotonNetwork.CurrentRoom.GetGameMode().Equals(GameMode.Knife))
+            PhotonNetwork.LoadLevel("KnifeGameScene_Ye");
     }
 
     public void PlayerEnterRoom(Player newPlayer)

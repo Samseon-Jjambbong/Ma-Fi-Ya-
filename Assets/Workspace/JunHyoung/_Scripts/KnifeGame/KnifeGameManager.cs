@@ -216,7 +216,9 @@ public class KnifeGameManager : MonoBehaviourPunCallbacks, IPunObservable
         // GameObject player = Instantiate(playerprefab, pos, Quaternion.LookRotation(-pos));
         GameObject player = PhotonNetwork.Instantiate("Knife", pos, Quaternion.LookRotation(-pos)); //플레이어
 
-        //색깔 설정 - 은 플레이어에서 
+        player.GetComponent<PlayerController>().SetNickName(PhotonNetwork.PlayerList[playerNumber].NickName);
+
+        //색깔 설정 - 은 플레이어에서 ㄹ
     }
 
 

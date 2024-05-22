@@ -411,7 +411,7 @@ GameObject:
   - component: {fileID: 1875658268755677816}
   - component: {fileID: 4538538458309965467}
   - component: {fileID: 6397769675571585004}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: nickName
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -559,7 +559,7 @@ GameObject:
   - component: {fileID: 5675820414982804383}
   - component: {fileID: 4184008032022886108}
   - component: {fileID: 5526166156249709045}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: playerName
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -919,7 +919,7 @@ GameObject:
   - component: {fileID: 3140933527721411041}
   - component: {fileID: 6630621585518604253}
   - component: {fileID: 713678459115510290}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Knife
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1133,11 +1133,16 @@ MonoBehaviour:
   animator: {fileID: 8627719391966619918}
   walkAudio: {fileID: 713678459115510290}
   movePower: 20
-  rotateSpeed: 100
+  rotateSpeed: 8
   isWalking: 0
   shortKnife: {fileID: 7324432728231609592}
   middleKnife: {fileID: 1720272600417815618}
   longKnife: {fileID: 5207565752375231602}
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 64
+  range: 3.6
+  angle: 150
 --- !u!82 &713678459115510290
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1575,6 +1580,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Long Wp1
       objectReference: {fileID: 0}
+    - target: {fileID: 7383148191026597442, guid: b5a0a3811a3b73c489d50e6a49b0d761,
+        type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1670,6 +1680,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Short Wp1
       objectReference: {fileID: 0}
+    - target: {fileID: 6776764398648675912, guid: 50db0d3dd9d7e34468a55c24690365ef,
+        type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1699,6 +1714,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Medium Wp1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4746294247368687635, guid: 60b466acf093c9e4497d6be20e978bd9,
+        type: 3}
+      propertyPath: m_Layer
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4746294247368687635, guid: 60b466acf093c9e4497d6be20e978bd9,
         type: 3}

@@ -18,8 +18,8 @@ public class KnifeGameManager : MonoBehaviourPunCallbacks, IPunObservable
     // 게임 타이머 설정 : default 120초
 
     [Header("UI")]
-    [SerializeField] KnifeGameScoreBoard killScoreBoardUI;
-    [SerializeField] GameObject gameResultUI;
+    [SerializeField] KnifeGameScoreBoard scoreBoardUI;
+    [SerializeField] KnifeGameResultBoard gameResultUI;
 
 
     [Header("GameSettings")]
@@ -27,7 +27,8 @@ public class KnifeGameManager : MonoBehaviourPunCallbacks, IPunObservable
     [SerializeField] float gamePlayTime = 120f;
 
     [Header("Sounds")]
-    [SerializeField] AudioClip knifeGameBGM;
+    [SerializeField] AudioClip gameReadyBGM;
+    [SerializeField] AudioClip InGameBGM;
     [SerializeField] AudioClip gameStartSFX;
     [SerializeField] AudioClip gameFinishSFX;
     // 플레이어 리스폰 설정
@@ -63,16 +64,19 @@ public class KnifeGameManager : MonoBehaviourPunCallbacks, IPunObservable
         PhotonNetwork.LocalPlayer.SetLoaded(true);
         playerDic = new Dictionary<int, Player>();
         playerDic = PhotonNetwork.CurrentRoom.Players;
-
-        Manager.Sound.PlayBGM(knifeGameBGM);
+        Manager.Sound.PlayBGM(gameReadyBGM);
     }
 
     //for turn on/off ScoreBoardUI
+    /// <summary>
+    /// 게임 흐름에 따라 ScoreBoard 를 띄워줘도 될지 안될지 설정. 
+    /// </summary>
+    bool isSBInteractable; 
     public void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Tab))
+        if (Input.GetKeyDown(KeyCode.Tab) && isSBInteractable)
         {
-            killScoreBoardUI.gameObject.SetActive(!killScoreBoardUI.gameObject.activeSelf);
+            scoreBoardUI.ActivePanel();
         }
     }
     #endregion
@@ -157,16 +161,17 @@ public class KnifeGameManager : MonoBehaviourPunCallbacks, IPunObservable
         //게임 시작시 필요한 로직들
         countDownText.text = "";
         Manager.Sound.PlaySFX(gameStartSFX);
+        Manager.Sound.PlayBGM(InGameBGM);
         StartCoroutine(GameTimer());
     }
 
     IEnumerator GameTimer()
     {
         PhotonNetwork.CurrentRoom.SetGameStartTime(PhotonNetwork.Time);
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(0.2f);
         double loadTime = PhotonNetwork.CurrentRoom.GetGameStartTime();
-
         //게임 플레이 카운트 다운
+        isSBInteractable = true;
         while (PhotonNetwork.Time - loadTime < gamePlayTime)
         {
             int reamainTime = (int) (gamePlayTime - (PhotonNetwork.Time - loadTime));
@@ -175,20 +180,23 @@ public class KnifeGameManager : MonoBehaviourPunCallbacks, IPunObservable
         }
 
         //게임 종료 루틴
+        GameFinish();
+    }
+
+    void GameFinish()
+    {
+        isSBInteractable = false;
         countDownText.color = Color.red;
         countDownText.text = "Finish!!";
         Manager.Sound.PlaySFX(gameFinishSFX);
+        
         //플레이어 조작 OFF
-
-        if (PhotonNetwork.IsMasterClient)
-        {
+        
             //킬스코어 기반으로 점수 계산
-            //CalculateScore();
+            // CalculateScore();
             // int score = 0;
             // Firebase DB에 점수 추가
             // FirebaseManager.UpdateRecord(score);
-
-        }
 
         // 게임 종료 UI POPUP
     }
@@ -219,19 +227,9 @@ public class KnifeGameManager : MonoBehaviourPunCallbacks, IPunObservable
         Vector3 pos = new Vector3(Mathf.Cos(radianAngle) * playerRadius, 2.22f, Mathf.Sin(radianAngle) * playerRadius);
 
         // GameObject player = Instantiate(playerprefab, pos, Quaternion.LookRotation(-pos));
-        GameObject player = PhotonNetwork.Instantiate("Mafia", pos, Quaternion.LookRotation(-pos)); //플레이어
+        GameObject player = PhotonNetwork.Instantiate("Knife", pos, Quaternion.LookRotation(-pos)); //플레이어
 
         //색깔 설정 - 은 플레이어에서 
-    }
-
-
-    private void CalculateScore()
-    {
-        foreach (var player in playerDic.Values)
-        {
-            player.GetPlayerKillCount();
-            player.GetPlayerDeathCount();
-        }
     }
 
     /******************************************************

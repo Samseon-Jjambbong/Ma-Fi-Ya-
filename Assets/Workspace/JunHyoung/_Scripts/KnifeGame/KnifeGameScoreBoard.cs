@@ -6,6 +6,7 @@ using UnityEngine;
 using PhotonHashtable = ExitGames.Client.Photon.Hashtable;
 public class KnifeGameScoreBoard : MonoBehaviourPunCallbacks
 {
+    [SerializeField] GameObject panel;
     [SerializeField] RectTransform content;
     [SerializeField] UserKillDeathEntry entryPrefab;
 
@@ -14,15 +15,20 @@ public class KnifeGameScoreBoard : MonoBehaviourPunCallbacks
     Dictionary<int, UserKillDeathEntry> entryDic;
     UserKillDeathEntry changedEntry;
 
-    public override void OnEnable()
+    bool isInit = false;
+
+    public void ActivePanel()
     {
-        base.OnEnable();
-     
-        InitScoreBoard();
+        if (!isInit)
+            InitScoreBoard();
+
+        panel.SetActive(!panel.gameObject.activeSelf); 
     }
 
     void InitScoreBoard()
     {
+        isInit= true;
+        entryDic = new Dictionary<int, UserKillDeathEntry>();
         playerDic = KnifeGameManager.Instance.PlayerDic;
 
         foreach (var player in playerDic.Values)
@@ -32,7 +38,7 @@ public class KnifeGameScoreBoard : MonoBehaviourPunCallbacks
             entryDic.Add(player.ActorNumber, entry);
         }
     }
-
+    
     public override void OnPlayerPropertiesUpdate(Player targetPlayer, PhotonHashtable changedProps)
     {
         if (changedProps.ContainsKey(CustomPropertyExtensions.KILL) || changedProps.ContainsKey(CustomPropertyExtensions.DEATH))
@@ -41,4 +47,5 @@ public class KnifeGameScoreBoard : MonoBehaviourPunCallbacks
             changedEntry.UpdateEntry(targetPlayer.GetPlayerKillCount(), targetPlayer.GetPlayerDeathCount());
         }
     }
+
 }

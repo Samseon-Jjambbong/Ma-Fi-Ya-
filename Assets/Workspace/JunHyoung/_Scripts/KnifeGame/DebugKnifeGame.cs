@@ -4,6 +4,7 @@ using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class DebugKnifeGame : MonoBehaviourPunCallbacks
 {
@@ -13,6 +14,10 @@ public class DebugKnifeGame : MonoBehaviourPunCallbacks
     [SerializeField] KnifeGameChatManager chatManager;
     [SerializeField] KnifeGameManager knifeGameManager;
 
+
+    [SerializeField] Button debugButton1;
+    [SerializeField] Button debugButton2;
+
     private void Awake()
     {
         if (PhotonNetwork.NetworkingClient.LoadBalancingPeer.PeerState != PeerStateValue.Disconnected) // 접속중이 아닐 때만 로그인
@@ -20,6 +25,11 @@ public class DebugKnifeGame : MonoBehaviourPunCallbacks
         USERNAME = $"DebugPlayer {Random.Range(1000, 10000)}";
         PhotonNetwork.LocalPlayer.NickName = USERNAME;
         PhotonNetwork.ConnectUsingSettings();
+
+        if (debugButton1 != null)
+            debugButton1.onClick.AddListener(PlayerKill);
+        if (debugButton2 != null)
+            debugButton2.onClick.AddListener(PlayerDeath);
     }
 
 
@@ -34,7 +44,17 @@ public class DebugKnifeGame : MonoBehaviourPunCallbacks
     {
         chatManager.gameObject.SetActive(true);
         knifeGameManager.gameObject.SetActive(true);
+    }
 
-        KnifeGameManager.Instance.StartGameRoutine();
+    void PlayerKill()
+    {
+        Debug.Log($"cut Kill Count {PhotonNetwork.LocalPlayer.GetPlayerKillCount()}");
+        PhotonNetwork.LocalPlayer.AddPlayerKillCount(); 
+    }
+
+    private void PlayerDeath()
+    {
+        Debug.Log($"cur Death Count {PhotonNetwork.LocalPlayer.GetPlayerDeathCount()}");
+        PhotonNetwork.LocalPlayer.AddPlayerDeathCount();
     }
 }

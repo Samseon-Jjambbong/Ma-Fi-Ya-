@@ -257,7 +257,7 @@ public class MafiaPunManager : MonoBehaviourPunCallbacks
             Debug.Log("Checking Game Over...");
             if(Manager.Mafia.GameResult != MafiaResult.None)
             {
-                photonView.RPC("GameOver", RpcTarget.All);
+                photonView.RPC("GameOver", RpcTarget.All, (int)Manager.Mafia.GameResult);
                 Debug.Log($"Game Over: {Manager.Mafia.GameResult}");
                 yield break;
             }

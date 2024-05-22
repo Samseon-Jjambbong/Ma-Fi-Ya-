@@ -14,6 +14,7 @@ public class MafiaGameFlow : MonoBehaviourPun
     [SerializeField] private RoleUI roleUI;
     [SerializeField] private Button skipVoteButton;
     [SerializeField] private WinLoseUI winLoseUI;
+    [SerializeField] string MenuSceneName;
 
     private void Start()
     {
@@ -61,9 +62,9 @@ public class MafiaGameFlow : MonoBehaviourPun
     }
 
     [PunRPC]
-    public void GameOver()
+    public void GameOver(int gameResult)
     {
-        StartCoroutine(GameOverRoutine());
+        StartCoroutine(GameOverRoutine(gameResult));
     }
 
     public void ChangeTime()
@@ -247,10 +248,38 @@ public class MafiaGameFlow : MonoBehaviourPun
         }
     }
 
-    private IEnumerator GameOverRoutine()
+    private IEnumerator GameOverRoutine(int gameResult)
     {
-        //TODO: Add game over stuff
-        yield return null;
+        MafiaResult result = (MafiaResult) gameResult;
+        // 내가 마피아면
+        if (PhotonNetwork.LocalPlayer.GetPlayerRole() == MafiaRole.Mafia)
+        {
+            if (result == MafiaResult.MafiaWin)
+            {
+                winLoseUI.ShowWin(100);
+            }
+            else
+            {
+                winLoseUI.ShowLose(100);
+            }
+        }
+        // 내가 시민이면
+        else
+        {
+            if (result == MafiaResult.MafiaWin)
+            {
+                winLoseUI.ShowLose(100);
+            }
+            else
+            {
+                winLoseUI.ShowWin(100);
+            }
+        }
+        
+        yield return new WaitForSeconds(3);
+
+        // Go back to lobby scene
+        Manager.Scene.LoadScene(MenuSceneName);
     }
 
     #endregion

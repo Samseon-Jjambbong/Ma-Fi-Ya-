@@ -2849,6 +2849,11 @@ PrefabInstance:
       objectReference: {fileID: 733470816134151915}
     - target: {fileID: 8540862403624832752, guid: 16272b99ff3764479828701e06741280,
         type: 3}
+      propertyPath: MenuSceneName
+      value: MenuSceneWithUI
+      objectReference: {fileID: 0}
+    - target: {fileID: 8540862403624832752, guid: 16272b99ff3764479828701e06741280,
+        type: 3}
       propertyPath: skipVoteButton
       value: 
       objectReference: {fileID: 733470816134151913}

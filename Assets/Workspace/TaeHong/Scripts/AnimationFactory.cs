@@ -41,8 +41,9 @@ public class AnimationFactory : MonoBehaviourPun
     {
         House house = Manager.Mafia.Houses[playerID - 1];
         Vector3 spawnPoint = house.entrance.position + house.entrance.transform.forward + Vector3.up;
-        NightMafiaMove player = PhotonNetwork.InstantiateRoomObject("DayMafia", spawnPoint, Quaternion.identity).GetComponent<NightMafiaMove>();
+        NightMafiaMove player = Instantiate(playerPrefab, spawnPoint, Quaternion.identity).GetComponent<NightMafiaMove>();
         yield return player.MoveToTargetPos(centerSpawnPoint);
+        yield return new WaitForSeconds(1);
         spring.Pop();
         yield return StartCoroutine(player.Fly());
     }

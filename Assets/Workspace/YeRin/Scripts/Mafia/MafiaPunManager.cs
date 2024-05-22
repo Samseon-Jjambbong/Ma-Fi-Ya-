@@ -273,6 +273,7 @@ public class MafiaPunManager : MonoBehaviourPunCallbacks
 
             // Show Vote Result
             Debug.Log("Show Vote Results Start");
+            photonView.RPC("CountVotes", RpcTarget.MasterClient);
             int voteResult = Manager.Mafia.sharedData.playerToKick;
             Debug.Log($"Vote Result : {voteResult}");
             if (voteResult != -1)

@@ -225,7 +225,6 @@ public class MafiaGameFlow : MonoBehaviourPun
         }
 
         EnableChat(false);
-        Manager.Mafia.photonView.RPC("CountVotes", RpcTarget.MasterClient);
         Manager.Mafia.dayPhaseFinished = true;
     }
 

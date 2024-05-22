@@ -214,7 +214,7 @@ public class KnifeGameManager : MonoBehaviourPunCallbacks, IPunObservable
         Vector3 pos = new Vector3(Mathf.Cos(radianAngle) * playerRadius, 2.22f, Mathf.Sin(radianAngle) * playerRadius);
 
         // GameObject player = Instantiate(playerprefab, pos, Quaternion.LookRotation(-pos));
-        GameObject player = PhotonNetwork.Instantiate("Mafia", pos, Quaternion.LookRotation(-pos)); //플레이어
+        GameObject player = PhotonNetwork.Instantiate("Knife", pos, Quaternion.LookRotation(-pos)); //플레이어
 
         //색깔 설정 - 은 플레이어에서 
     }

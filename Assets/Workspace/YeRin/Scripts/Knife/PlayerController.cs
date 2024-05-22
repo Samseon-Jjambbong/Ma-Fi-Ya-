@@ -78,14 +78,12 @@ public class PlayerController : MonoBehaviourPun
         transform.Rotate(Vector3.up, moveDir.x * rotateSpeed * Time.deltaTime);
     }
 
-    [PunRPC]
     private void OnHipHopDance(InputValue value)
     {
         if (photonView.IsMine)
             photonView.RPC("HipHop", RpcTarget.All);
     }
 
-    [PunRPC]
     private void OnRumbaDance(InputValue value)
     {
         if (photonView.IsMine)
@@ -106,6 +104,7 @@ public class PlayerController : MonoBehaviourPun
         walkAudio.Play();
     }
 
+    [PunRPC]
     private void WalkStop()
     {
         animator.Play("Idle");
@@ -113,13 +112,13 @@ public class PlayerController : MonoBehaviourPun
         walkAudio.Stop();
     }
 
-    [PunRPC]
     private void OnAttack()
     {
         if (photonView.IsMine)
-            Attack();
+            photonView.RPC("Attack", RpcTarget.All);
     }
 
+    [PunRPC]
     private void Attack()
     {
         if (shortKnife.activeSelf)
@@ -140,16 +139,19 @@ public class PlayerController : MonoBehaviourPun
         }
     }
 
+    [PunRPC]
     private void HipHop()
     {
         animator.SetTrigger("hipHop");
     }
 
+    [PunRPC]
     private void Rumba()
     {
         animator.SetTrigger("rumba");
     }
 
+    [PunRPC]
     private void Silly()
     {
         animator.SetTrigger("silly");

@@ -62,6 +62,7 @@ public class RoomPanel : MonoBehaviour
     {
         PhotonNetwork.CurrentRoom.IsOpen = false;
         PhotonNetwork.CurrentRoom.IsVisible = false;
+
         if (PhotonNetwork.CurrentRoom.GetGameMode().Equals(GameMode.Mafia))
             PhotonNetwork.LoadLevel("TestGame");
         else if (PhotonNetwork.CurrentRoom.GetGameMode().Equals(GameMode.Knife))

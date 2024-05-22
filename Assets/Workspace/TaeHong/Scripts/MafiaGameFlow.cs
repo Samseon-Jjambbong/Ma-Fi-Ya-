@@ -91,14 +91,14 @@ public class MafiaGameFlow : MonoBehaviourPun
         {
             if (!PhotonNetwork.LocalPlayer.GetPlayerRole().Equals(MafiaRole.Mafia) && Manager.Mafia.Player.IsAlive)
             {
-                InGameChatManager.Instance.IsChatable = false;
+                MafiaGameChatManager.Instance.IsChatable = false;
             }
         }
         else
         {
-            if (!InGameChatManager.Instance.IsChatable)
+            if (!MafiaGameChatManager.Instance.IsChatable)
             {
-                InGameChatManager.Instance.IsChatable = true;
+                MafiaGameChatManager.Instance.IsChatable = true;
             }
         }
     }

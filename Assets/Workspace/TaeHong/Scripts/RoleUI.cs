@@ -19,7 +19,7 @@ public class RoleUI : BaseUI
         GetUI<Image>("RoleIcon").sprite = data.roleIcon;
         GetUI<TextMeshProUGUI>("RoleName").text = data.roleName;
 
-        InGameChatManager.Instance.isMafia = PhotonNetwork.LocalPlayer.GetPlayerRole() == MafiaRole.Mafia;
-        Debug.Log($"RRRRRRRRRRRRR {InGameChatManager.Instance.isMafia}");
+        MafiaGameChatManager.Instance.isMafia = PhotonNetwork.LocalPlayer.GetPlayerRole() == MafiaRole.Mafia;
+        Debug.Log($"RRRRRRRRRRRRR {MafiaGameChatManager.Instance.isMafia}");
     }
 }

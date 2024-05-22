@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class DebugInGameChat : MonoBehaviour
 {
-    [SerializeField] InGameChatManager panel;
+    [SerializeField] MafiaGameChatManager panel;
     [SerializeField] Light sun;
 
     [SerializeField] Button button1;

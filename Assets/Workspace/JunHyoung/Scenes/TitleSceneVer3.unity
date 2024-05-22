@@ -3491,7 +3491,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &920711695
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3587,7 +3587,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcb0de1ef4679084ca558eb90ea37c74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneName: ChangeSceneTest
+  sceneName: KnifeGameScene
   button: {fileID: 683068861}
   button2: {fileID: 0}
 --- !u!1001 &952633446
@@ -7894,6 +7894,26 @@ PrefabInstance:
       propertyPath: m_hasFontAssetChanged
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4169829461927439803, guid: 9ac340f7dfc8a8949a83fc506e021842,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 75
+      objectReference: {fileID: 0}
+    - target: {fileID: 4169829461927439803, guid: 9ac340f7dfc8a8949a83fc506e021842,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 75
+      objectReference: {fileID: 0}
+    - target: {fileID: 4169829461927439803, guid: 9ac340f7dfc8a8949a83fc506e021842,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -50
+      objectReference: {fileID: 0}
+    - target: {fileID: 4169829461927439803, guid: 9ac340f7dfc8a8949a83fc506e021842,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -50
+      objectReference: {fileID: 0}
     - target: {fileID: 4505819765115583625, guid: 9ac340f7dfc8a8949a83fc506e021842,
         type: 3}
       propertyPath: m_AnchorMax.x
@@ -7916,13 +7936,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4505819765115583625, guid: 9ac340f7dfc8a8949a83fc506e021842,
         type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 75
+      objectReference: {fileID: 0}
+    - target: {fileID: 4505819765115583625, guid: 9ac340f7dfc8a8949a83fc506e021842,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 75
+      objectReference: {fileID: 0}
+    - target: {fileID: 4505819765115583625, guid: 9ac340f7dfc8a8949a83fc506e021842,
+        type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -250
+      value: -150
       objectReference: {fileID: 0}
     - target: {fileID: 4505819765115583625, guid: 9ac340f7dfc8a8949a83fc506e021842,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -100
+      value: -50
       objectReference: {fileID: 0}
     - target: {fileID: 5176485350288334950, guid: 9ac340f7dfc8a8949a83fc506e021842,
         type: 3}

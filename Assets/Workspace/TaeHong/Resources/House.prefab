@@ -1190,7 +1190,6 @@ MonoBehaviour:
   houseOwner: {fileID: 0}
   houseOwnerId: 0
   visitorId: 0
-  debugMode: 0
 --- !u!114 &7400318162097117840
 MonoBehaviour:
   m_ObjectHideFlags: 0

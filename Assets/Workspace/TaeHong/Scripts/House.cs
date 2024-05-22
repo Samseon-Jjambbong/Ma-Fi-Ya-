@@ -96,7 +96,7 @@ public class House : MonoBehaviourPun, IPointerClickHandler, IPointerExitHandler
     public void ActivateOutline(bool activate)
     {
         // Check if owner is dead
-        if (PhotonNetwork.PlayerList[houseOwnerId].GetDead())
+        if (PhotonNetwork.CurrentRoom.Players[houseOwnerId].GetDead())
             return;
 
         if (activate == false)

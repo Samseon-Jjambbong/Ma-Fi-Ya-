@@ -83,6 +83,8 @@ public class MafiaGame
 {
     private int numMafias;
     private int numCivilians;
+    public int NumMafias => numMafias;
+    public int NumCivs => numCivilians;
 
     public void AddPlayer(MafiaRole role)
     {
@@ -106,7 +108,7 @@ public class MafiaGame
         else
         {
             numCivilians--;
-            if (numMafias == numCivilians)
+            if (numMafias >= numCivilians)
             {
                 return MafiaResult.MafiaWin;
             }

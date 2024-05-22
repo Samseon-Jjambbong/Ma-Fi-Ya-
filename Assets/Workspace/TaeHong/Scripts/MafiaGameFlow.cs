@@ -198,6 +198,9 @@ public class MafiaGameFlow : MonoBehaviourPun
     // Allow Chat and voting for X Seconds
     private IEnumerator DayPhaseRoutine(int time)
     {
+        if (PhotonNetwork.LocalPlayer.GetDead())
+            yield break;
+
         // Allow chat for everyone
         EnableChat(true);
 

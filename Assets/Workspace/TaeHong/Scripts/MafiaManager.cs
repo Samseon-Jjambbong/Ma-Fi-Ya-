@@ -305,7 +305,9 @@ public class MafiaManager : Singleton<MafiaManager>, IPunObservable
     public void PlayerDied(int id)
     {
         PhotonNetwork.PlayerList[id].SetDead(true);
+        Debug.Log($"Game result before: {gameResult}, Mafias : {Game.NumMafias}, Civs : {Game.NumCivs}");
         gameResult = Game.RemovePlayer(PhotonNetwork.CurrentRoom.Players[id].GetPlayerRole());
+        Debug.Log($"Game result after: {gameResult}, Mafias : {Game.NumMafias}, Civs : {Game.NumCivs}");
     }
     #endregion
 

@@ -21,4 +21,13 @@ public class UserKillDeathEntry : MonoBehaviour
         this.killCount.text = killCount.ToString();
         this.deathCount.text = deathCount.ToString();
     }
+
+    public int GetKillCount()
+    {
+        return int.Parse(killCount.text);
+    }
+    public int GetDeathCount()
+    {
+        return int.Parse(deathCount.text);
+    }
 }

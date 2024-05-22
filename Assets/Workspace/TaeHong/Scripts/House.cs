@@ -50,12 +50,6 @@ public class House : MonoBehaviourPun, IPointerClickHandler, IPointerExitHandler
         voteCountText.text = Manager.Mafia.Votes[houseOwnerId - 1].ToString();
     }
 
-    public void Vote()
-    {
-        Manager.Mafia.photonView.RPC("VoteForPlayer", RpcTarget.All, houseOwnerId);
-        Manager.Mafia.photonView.RPC("BlockVotes", PhotonNetwork.LocalPlayer);
-    }
-
     // What UI should be shown when a house is clicked
     public void OnPointerClick(PointerEventData eventData)
     {
@@ -154,6 +148,12 @@ public class House : MonoBehaviourPun, IPointerClickHandler, IPointerExitHandler
         }
 
         Vote();
+    }
+
+    public void Vote()
+    {
+        Manager.Mafia.photonView.RPC("VoteForPlayer", RpcTarget.All, houseOwnerId);
+        Manager.Mafia.photonView.RPC("BlockVotes", PhotonNetwork.LocalPlayer);
     }
 
     public IEnumerator PlayEffect(MafiaActionType mafiaActionType)

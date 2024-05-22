@@ -26,9 +26,6 @@ public class MafiaManager : Singleton<MafiaManager>, IPunObservable
 
     private bool isDay;
     public bool IsDay { get; set; }
-    [SerializeField] private int displayRoleTime;
-    [SerializeField] private int roleUseTime;
-    [SerializeField] private int voteTime;
     [SerializeField] private float skillTime;
 
     [SerializeField] List<House> houses;
@@ -157,18 +154,25 @@ public class MafiaManager : Singleton<MafiaManager>, IPunObservable
     [PunRPC] // Called only on MasterClient
     public void CountVotes() // Return playerID or -1 if none
     {
+        // DEBUG:
+        Debug.Log("Counting Votes:");
+        for (int i = 0; i < votes.Length; i++)
+        {
+            Debug.Log($"Player {i + 1} got {votes[i]} votes.");
+        }
+
         // Look for candidate with highest votes
-        int highest = votes[0];
+        int highestIdx = 0;
         int count = 1;
-        int voted = 0;
+        int voted = votes[0];
         for(int i = 1; i < votes.Length; i++)
         {
-            if (votes[i] > votes[highest])
+            if (votes[i] > votes[highestIdx])
             {
-                highest = i;
+                highestIdx = i;
                 count = 1;
             }
-            if (votes[i] == votes[highest])
+            else if (votes[i] == votes[highestIdx])
             {
                 count++;
             }
@@ -179,15 +183,15 @@ public class MafiaManager : Singleton<MafiaManager>, IPunObservable
         //      - There is a tie for highest votes
         //      - Skipped votes > highest vote
         int result;
-        int skipped = Manager.Mafia.ActivePlayerCount() - voted;
-        if (count > 1 || skipped > votes[highest])
+        if (count > 1 || skipVotes > votes[highestIdx])
         {
             result = -1;
         }
         else
         {
-            result = highest + 1;
+            result = highestIdx + 1;
         }
+        Debug.Log($"Result: {result}");
 
         photonView.RPC("ResetVotes", RpcTarget.All);
         sharedData.photonView.RPC("SetPlayerToKick", RpcTarget.All, result);
@@ -304,7 +308,7 @@ public class MafiaManager : Singleton<MafiaManager>, IPunObservable
     // Called only on MasterClient
     public void PlayerDied(int id)
     {
-        PhotonNetwork.PlayerList[id].SetDead(true);
+        PhotonNetwork.CurrentRoom.Players[id].SetDead(true);
         Debug.Log($"Game result before: {gameResult}, Mafias : {Game.NumMafias}, Civs : {Game.NumCivs}");
         gameResult = Game.RemovePlayer(PhotonNetwork.CurrentRoom.Players[id].GetPlayerRole());
         Debug.Log($"Game result after: {gameResult}, Mafias : {Game.NumMafias}, Civs : {Game.NumCivs}");

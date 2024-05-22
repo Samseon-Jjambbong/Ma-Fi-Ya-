@@ -56,9 +56,9 @@ public class MafiaGameFlow : MonoBehaviourPun
     }
 
     [PunRPC]
-    public void ShowVoteResults()
+    public void ShowVoteResults(int voteResult)
     {
-        StartCoroutine(ShowVoteResultsRoutine());
+        StartCoroutine(ShowVoteResultsRoutine(voteResult));
     }
 
     [PunRPC]
@@ -229,29 +229,14 @@ public class MafiaGameFlow : MonoBehaviourPun
         Manager.Mafia.dayPhaseFinished = true;
     }
 
-    private IEnumerator ShowVoteResultsRoutine()
+    private IEnumerator ShowVoteResultsRoutine(int voteResult)
     {
-        // Show vote result on everyone's screen
-        int voteResult = Manager.Mafia.sharedData.playerToKick;
-        Debug.Log($"Vote Result : {voteResult}");
-        if (voteResult == -1)
-        {
-            Debug.Log("No one got kicked");
-            Manager.Mafia.voteResultsFinished = true;
-            yield break;
-        }
-        else
-        {
-            Debug.Log($"Player{voteResult} got kicked");
-            // Insert Player kicked coroutine here
-            yield return Manager.Mafia.animFactory.PlayerKickedActionRoutine(voteResult);
-            yield return new WaitForSeconds(1);
-            //yield return new WaitUntil(() => Manager.Mafia.voteResultsFinished);
-            yield return RemovedPlayerRoleRoutine(voteResult);
-            Manager.Mafia.ApplyVoteResult(voteResult);
-            yield return new WaitForSeconds(1);
-            Manager.Mafia.voteResultsFinished = true;
-        }
+        yield return Manager.Mafia.animFactory.PlayerKickedActionRoutine(voteResult);
+        yield return new WaitForSeconds(1);
+        yield return RemovedPlayerRoleRoutine(voteResult);
+        Manager.Mafia.ApplyVoteResult(voteResult);
+        yield return new WaitForSeconds(1);
+        Manager.Mafia.voteResultsFinished = true;
     }
 
     private IEnumerator GameOverRoutine(int gameResult)

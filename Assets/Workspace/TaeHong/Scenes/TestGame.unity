@@ -2762,6 +2762,21 @@ PrefabInstance:
       propertyPath: infoText
       value: 
       objectReference: {fileID: 421478241}
+    - target: {fileID: 3761031624598095292, guid: 16272b99ff3764479828701e06741280,
+        type: 3}
+      propertyPath: voteTime
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 3761031624598095292, guid: 16272b99ff3764479828701e06741280,
+        type: 3}
+      propertyPath: skillTime
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 3761031624598095292, guid: 16272b99ff3764479828701e06741280,
+        type: 3}
+      propertyPath: roleUseTime
+      value: 20
+      objectReference: {fileID: 0}
     - target: {fileID: 4274996574515606696, guid: 16272b99ff3764479828701e06741280,
         type: 3}
       propertyPath: spring

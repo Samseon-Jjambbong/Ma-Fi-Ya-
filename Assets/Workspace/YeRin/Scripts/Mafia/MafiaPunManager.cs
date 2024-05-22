@@ -273,8 +273,20 @@ public class MafiaPunManager : MonoBehaviourPunCallbacks
 
             // Show Vote Result
             Debug.Log("Show Vote Results Start");
-            photonView.RPC("ShowVoteResults", RpcTarget.All);
-            yield return new WaitUntil(() => Manager.Mafia.voteResultsFinished);
+            int voteResult = Manager.Mafia.sharedData.playerToKick;
+            Debug.Log($"Vote Result : {voteResult}");
+            if (voteResult != -1)
+            {
+                Debug.Log($"Player{voteResult} got kicked");
+                photonView.RPC("ShowVoteResults", RpcTarget.All, voteResult);
+                yield return new WaitUntil(() => Manager.Mafia.voteResultsFinished);
+            }
+            else
+            {
+                Debug.Log("No one got kicked");
+                yield return new WaitForSeconds(3);
+            }
+            
             Debug.Log("Show Vote Results End");
 
             yield return new WaitForSeconds(1);

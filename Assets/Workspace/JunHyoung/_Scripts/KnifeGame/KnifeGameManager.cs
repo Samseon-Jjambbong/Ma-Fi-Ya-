@@ -18,7 +18,7 @@ public class KnifeGameManager : MonoBehaviourPunCallbacks, IPunObservable
     // 게임 타이머 설정 : default 120초
 
     [Header("UI")]
-    [SerializeField] GameObject killScoreBoardUI;
+    [SerializeField] KnifeGameScoreBoard killScoreBoardUI;
     [SerializeField] GameObject gameResultUI;
 
 
@@ -32,12 +32,6 @@ public class KnifeGameManager : MonoBehaviourPunCallbacks, IPunObservable
     [SerializeField] AudioClip gameFinishSFX;
     // 플레이어 리스폰 설정
 
-
-
-    // 플레이어 스코어(킬,데스 관리) - Player Custom Properties?
-
-
-
     // 플레이어 스코어 랭킹
 
     // 떨어졌을 때 사망처리
@@ -50,6 +44,8 @@ public class KnifeGameManager : MonoBehaviourPunCallbacks, IPunObservable
     /******************************************************
     *                    Unity Events
     ******************************************************/
+    #region Unity Events
+
     void Awake()
     {
         if (instance == null)
@@ -71,6 +67,15 @@ public class KnifeGameManager : MonoBehaviourPunCallbacks, IPunObservable
         Manager.Sound.PlayBGM(knifeGameBGM);
     }
 
+    //for turn on/off ScoreBoardUI
+    public void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Tab))
+        {
+            killScoreBoardUI.gameObject.SetActive(!killScoreBoardUI.gameObject.activeSelf);
+        }
+    }
+    #endregion
     /******************************************************
     *                     PunCallbacks
     ******************************************************/

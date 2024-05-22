@@ -5,14 +5,20 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+/// <summary>
+/// Programmer : Yerin
+/// 
+/// About player control in Knife Game Mode
+/// </summary>
 public class PlayerController : MonoBehaviourPun
 {
     [Header("Components")]
     [SerializeField] TMP_Text nickNameText;
-    //[SerializeField] Rigidbody rigid;
     [SerializeField] CharacterController controller;
     [SerializeField] Animator animator;
     [SerializeField] AudioSource walkAudio;
+
+    public TMP_Text Name => nickNameText;
 
     //[SerializeField] GameObject speechBubble;
     //[SerializeField] TMP_Text bubbleText;
@@ -28,11 +34,22 @@ public class PlayerController : MonoBehaviourPun
     [SerializeField] GameObject middleKnife;
     [SerializeField] GameObject longKnife;
 
+    [SerializeField] LayerMask layerMask;
+    [SerializeField] float range;
+    [SerializeField, Range(0, 360)] float angle;
+
+    private float preAngle;
+    private float cosAngle;
+    private float CosAngle;
+
+    Collider[] colliders = new Collider[20];
+
     private Vector3 moveDir;
 
     private void Start()
     {
         walkAudio.Stop();
+        SetWeaponLength();
     }
 
     private void FixedUpdate()
@@ -51,6 +68,7 @@ public class PlayerController : MonoBehaviourPun
         }
     }
 
+    #region Move
     private void OnMove(InputValue value)
     {
         moveDir.x = value.Get<Vector2>().x;
@@ -75,9 +93,27 @@ public class PlayerController : MonoBehaviourPun
 
     private void Rotate()
     {
-        transform.Rotate(Vector3.up, moveDir.x * rotateSpeed * Time.deltaTime);
+        transform.Rotate(Vector3.up, moveDir.x * rotateSpeed * 100f * Time.deltaTime);
     }
 
+    [PunRPC]
+    private void WalkStart()
+    {
+        animator.Play("Walk");
+        isWalking = true;
+        walkAudio.Play();
+    }
+
+    [PunRPC]
+    private void WalkStop()
+    {
+        animator.Play("Idle");
+        isWalking = false;
+        walkAudio.Stop();
+    }
+    #endregion
+
+    #region Dance
     private void OnHipHopDance(InputValue value)
     {
         if (photonView.IsMine)
@@ -97,21 +133,43 @@ public class PlayerController : MonoBehaviourPun
     }
 
     [PunRPC]
-    private void WalkStart()
+    private void HipHop()
     {
-        animator.Play("Walk");
-        isWalking = true;
-        walkAudio.Play();
+        animator.SetTrigger("hipHop");
     }
 
     [PunRPC]
-    private void WalkStop()
+    private void Rumba()
     {
-        animator.Play("Idle");
-        isWalking = false;
-        walkAudio.Stop();
+        animator.SetTrigger("rumba");
     }
 
+    [PunRPC]
+    private void Silly()
+    {
+        animator.SetTrigger("silly");
+    }
+    #endregion
+
+    #region Attack
+    private void SetWeaponLength()
+    {
+        if (shortKnife.activeSelf)
+        {
+        }
+        else if (middleKnife.activeSelf)
+        {
+            range = range * 2;
+        }
+        else if (longKnife.activeSelf)
+        {
+            range = range * 3;
+        }
+        else
+        {
+            Debug.Log("No Weapon");
+        }
+    }
     private void OnAttack()
     {
         if (photonView.IsMine)
@@ -137,25 +195,35 @@ public class PlayerController : MonoBehaviourPun
         {
             Debug.Log("No Weapon");
         }
+
+        AttackRange();
     }
 
-    [PunRPC]
-    private void HipHop()
+    private void AttackRange()
     {
-        animator.SetTrigger("hipHop");
-    }
+        int size = Physics.OverlapSphereNonAlloc(transform.position, range, colliders, layerMask);
+        for (int i = 0; i < size; i++)
+        {
+            Vector3 dirToTarget = (colliders[i].transform.position - transform.position).normalized;
+            if (Vector3.Dot(transform.forward, dirToTarget) < CosAngle)
+                continue;
 
-    [PunRPC]
-    private void Rumba()
-    {
-        animator.SetTrigger("rumba");
+            PlayerController player = colliders[i].GetComponent<PlayerController>();
+            if (player.gameObject == gameObject)
+            {
+                continue;
+            }
+            // 바로 죽음
+            Debug.Log($"{player.Name.text} die");
+        }
     }
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, range);
+    }
+    #endregion
 
-    [PunRPC]
-    private void Silly()
-    {
-        animator.SetTrigger("silly");
-    }
 
     [PunRPC]
     private void NickName(string nickName)

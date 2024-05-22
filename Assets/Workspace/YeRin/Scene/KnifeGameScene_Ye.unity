@@ -1276,11 +1276,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   infoText: {fileID: 664978723}
   countDownText: {fileID: 988116411}
-  killScoreBoardUI: {fileID: 0}
-  gameResultUI: {fileID: 0}
+  scoreBoardUI: {fileID: 0}
   countDownTime: 5
   gamePlayTime: 30
-  knifeGameBGM: {fileID: 8300000, guid: e9d2563098de4c44db2f9fded8cefe35, type: 3}
+  gameReadyBGM: {fileID: 0}
+  InGameBGM: {fileID: 0}
   gameStartSFX: {fileID: 8300000, guid: 85f9007a3068b8a4e82cc634f0bf37d1, type: 3}
   gameFinishSFX: {fileID: 8300000, guid: c1aa550c36050fb4da11350d48a40668, type: 3}
   playerRadius: 16
@@ -1593,84 +1593,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac0b09e7857660247b1477e93731de29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1001 &1129103198
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 2443767379782046113, guid: 4ececa0d7afb1da40b4662a7bbd5baa8,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0.53971434
-      objectReference: {fileID: 0}
-    - target: {fileID: 2443767379782046113, guid: 4ececa0d7afb1da40b4662a7bbd5baa8,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.7784283
-      objectReference: {fileID: 0}
-    - target: {fileID: 2443767379782046113, guid: 4ececa0d7afb1da40b4662a7bbd5baa8,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -1.0681553
-      objectReference: {fileID: 0}
-    - target: {fileID: 2443767379782046113, guid: 4ececa0d7afb1da40b4662a7bbd5baa8,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2443767379782046113, guid: 4ececa0d7afb1da40b4662a7bbd5baa8,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2443767379782046113, guid: 4ececa0d7afb1da40b4662a7bbd5baa8,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2443767379782046113, guid: 4ececa0d7afb1da40b4662a7bbd5baa8,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2443767379782046113, guid: 4ececa0d7afb1da40b4662a7bbd5baa8,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2443767379782046113, guid: 4ececa0d7afb1da40b4662a7bbd5baa8,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 180
-      objectReference: {fileID: 0}
-    - target: {fileID: 2443767379782046113, guid: 4ececa0d7afb1da40b4662a7bbd5baa8,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6447724147924093600, guid: 4ececa0d7afb1da40b4662a7bbd5baa8,
-        type: 3}
-      propertyPath: m_Name
-      value: Knife
-      objectReference: {fileID: 0}
-    - target: {fileID: 6447724147924093600, guid: 4ececa0d7afb1da40b4662a7bbd5baa8,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6784668538430839319, guid: 4ececa0d7afb1da40b4662a7bbd5baa8,
-        type: 3}
-      propertyPath: sceneViewId
-      value: 1
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 4ececa0d7afb1da40b4662a7bbd5baa8, type: 3}
 --- !u!1 &1225341716
 GameObject:
   m_ObjectHideFlags: 0
@@ -2108,6 +2030,8 @@ MonoBehaviour:
   ROOMNAME: KnifeTEST
   chatManager: {fileID: 8426369548764434793}
   knifeGameManager: {fileID: 964772563}
+  debugButton1: {fileID: 0}
+  debugButton2: {fileID: 0}
 --- !u!1 &1527486849
 GameObject:
   m_ObjectHideFlags: 0
@@ -3485,9 +3409,9 @@ RectTransform:
   m_Father: {fileID: 1606070376407368903}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -17, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &2764524021834869292
 GameObject:
@@ -4148,7 +4072,7 @@ RectTransform:
   m_Father: {fileID: 6886306983636698514}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -4980,7 +4904,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0.000061035156}
-  m_SizeDelta: {x: 0, y: -115}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &7956042800886552964
 MonoBehaviour:
@@ -5098,7 +5022,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &8426369548764434792
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5243,4 +5167,3 @@ SceneRoots:
   - {fileID: 964772564}
   - {fileID: 1520204788}
   - {fileID: 1225341720}
-  - {fileID: 1129103198}

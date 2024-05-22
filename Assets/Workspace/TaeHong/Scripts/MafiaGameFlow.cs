@@ -263,7 +263,7 @@ public class MafiaGameFlow : MonoBehaviourPun
             }
             else
             {
-                winLoseUI.ShowLose(100);
+                winLoseUI.ShowLose(50);
             }
         }
         // 내가 시민이면
@@ -271,7 +271,7 @@ public class MafiaGameFlow : MonoBehaviourPun
         {
             if (result == MafiaResult.MafiaWin)
             {
-                winLoseUI.ShowLose(100);
+                winLoseUI.ShowLose(50);
             }
             else
             {

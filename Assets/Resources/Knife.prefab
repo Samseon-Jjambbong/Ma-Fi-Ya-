@@ -1172,7 +1172,7 @@ MonoBehaviour:
   canMove: 0
   shortKnife: {fileID: 7324432728231609592}
   middleKnife: {fileID: 1720272600417815618}
-  longKnife: {fileID: 5207565752375231602}
+  longKnife: {fileID: 858563763648759619}
   layerMask:
     serializedVersion: 2
     m_Bits: 64
@@ -1620,17 +1620,16 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7383148191026597442, guid: b5a0a3811a3b73c489d50e6a49b0d761,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b5a0a3811a3b73c489d50e6a49b0d761, type: 3}
---- !u!1 &5207565752375231602 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7383148191026597442, guid: b5a0a3811a3b73c489d50e6a49b0d761,
-    type: 3}
-  m_PrefabInstance: {fileID: 3328946672673065520}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &8145464827904842155 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6861315700050449307, guid: b5a0a3811a3b73c489d50e6a49b0d761,
@@ -1718,6 +1717,11 @@ PrefabInstance:
     - target: {fileID: 6776764398648675912, guid: 50db0d3dd9d7e34468a55c24690365ef,
         type: 3}
       propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6776764398648675912, guid: 50db0d3dd9d7e34468a55c24690365ef,
+        type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

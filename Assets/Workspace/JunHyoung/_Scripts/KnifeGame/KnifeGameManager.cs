@@ -1,7 +1,4 @@
 using Photon.Pun;
-using Photon.Pun.Demo.Cockpit;
-using Photon.Pun.Demo.PunBasics;
-using Photon.Pun.UtilityScripts;
 using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
@@ -29,25 +26,27 @@ public class KnifeGameManager : MonoBehaviourPunCallbacks, IPunObservable
     [SerializeField] float countDownTime;
     [SerializeField] float gamePlayTime = 120f;
 
-
+    [Header("Sounds")]
+    [SerializeField] AudioClip knifeGameBGM;
+    [SerializeField] AudioClip gameStartSFX;
+    [SerializeField] AudioClip gameFinishSFX;
     // 플레이어 리스폰 설정
 
 
 
     // 플레이어 스코어(킬,데스 관리) - Player Custom Properties?
-    
+
 
 
     // 플레이어 스코어 랭킹
 
     // 떨어졌을 때 사망처리
 
-    
-    [SerializeField] GameObject playerprefab; //for Debugs
-    [SerializeField] int playerRadius;
+    [SerializeField] int playerRadius; // 스폰 거리 간격
 
     [SerializeField] List<Color> colorList;
-    [SerializeField] Dictionary<int, Player> playerDic;
+    private Dictionary<int, Player> playerDic;
+    public Dictionary<int, Player> PlayerDic { get { return playerDic; } }
     /******************************************************
     *                    Unity Events
     ******************************************************/
@@ -68,13 +67,8 @@ public class KnifeGameManager : MonoBehaviourPunCallbacks, IPunObservable
         PhotonNetwork.LocalPlayer.SetLoaded(true);
         playerDic = new Dictionary<int, Player>();
         playerDic = PhotonNetwork.CurrentRoom.Players;
-        Debug.Log(PhotonNetwork.CurrentRoom.Players);
 
-        colorList = new List<Color> ();
-        for (int i = 0; i < playerDic.Count; i++)
-        {
-            colorList.Add(new Color(Random.value, Random.value, Random.value, 1f));
-        }
+        Manager.Sound.PlayBGM(knifeGameBGM);
     }
 
     /******************************************************
@@ -133,6 +127,7 @@ public class KnifeGameManager : MonoBehaviourPunCallbacks, IPunObservable
         return loadcount;
     }
 
+    //for Debug
     public void StartGameRoutine()
     {
         Debug.Log("Debugging StartRoutine...");
@@ -156,7 +151,8 @@ public class KnifeGameManager : MonoBehaviourPunCallbacks, IPunObservable
         countDownText.text = "Start!";
         //게임 시작시 필요한 로직들
         countDownText.text = "";
-        StartCoroutine (GameTimer());
+        Manager.Sound.PlaySFX(gameStartSFX);
+        StartCoroutine(GameTimer());
     }
 
     IEnumerator GameTimer()
@@ -176,16 +172,16 @@ public class KnifeGameManager : MonoBehaviourPunCallbacks, IPunObservable
         //게임 종료 루틴
         countDownText.color = Color.red;
         countDownText.text = "Finish!!";
-
+        Manager.Sound.PlaySFX(gameFinishSFX);
         //플레이어 조작 OFF
 
         if (PhotonNetwork.IsMasterClient)
         {
             //킬스코어 기반으로 점수 계산
-
-           // int score = 0;
+            //CalculateScore();
+            // int score = 0;
             // Firebase DB에 점수 추가
-           // FirebaseManager.UpdateRecord(score);
+            // FirebaseManager.UpdateRecord(score);
 
         }
 
@@ -218,9 +214,19 @@ public class KnifeGameManager : MonoBehaviourPunCallbacks, IPunObservable
         Vector3 pos = new Vector3(Mathf.Cos(radianAngle) * playerRadius, 2.22f, Mathf.Sin(radianAngle) * playerRadius);
 
         // GameObject player = Instantiate(playerprefab, pos, Quaternion.LookRotation(-pos));
-        GameObject player = PhotonNetwork.Instantiate("Mafia", pos, Quaternion.LookRotation(-pos));
+        GameObject player = PhotonNetwork.Instantiate("Mafia", pos, Quaternion.LookRotation(-pos)); //플레이어
 
         //색깔 설정 - 은 플레이어에서 
+    }
+
+
+    private void CalculateScore()
+    {
+        foreach (var player in playerDic.Values)
+        {
+            player.GetPlayerKillCount();
+            player.GetPlayerDeathCount();
+        }
     }
 
     /******************************************************

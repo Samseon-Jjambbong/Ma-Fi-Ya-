@@ -62,7 +62,7 @@ public class RoomPanel : MonoBehaviour
     {
         PhotonNetwork.CurrentRoom.IsOpen = false;
         PhotonNetwork.CurrentRoom.IsVisible = false;
-        PhotonNetwork.LoadLevel("TestGame");
+        PhotonNetwork.LoadLevel("TestGame"); //모드에 따라 다른 씬 전환 작업 할 것
     }
 
     public void PlayerEnterRoom(Player newPlayer)

@@ -22,6 +22,7 @@ public class PlayerController : MonoBehaviourPun
     [SerializeField] GameObject speechBubble;
     [SerializeField] TMP_Text bubbleText;
     [SerializeField] LayerMask deathZone;
+    [SerializeField] SpriteRenderer flatArrow;
 
     public TMP_Text Name => nickNameText;
 
@@ -57,6 +58,11 @@ public class PlayerController : MonoBehaviourPun
         walkAudio.Stop();
         SetWeaponLength();
         playerSpawnPos = transform.position;
+
+        if (photonView.IsMine)
+        {
+            flatArrow.color = new Color(0, 255, 0);
+        }
     }
 
     private void FixedUpdate()

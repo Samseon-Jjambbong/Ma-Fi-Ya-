@@ -139,7 +139,7 @@ public class KnifeGameChatManager : MonoBehaviourPunCallbacks, IChatClientListen
         Debug.Log("Publish to default channnel");
         chatClient.PublishMessage(curChannelName, new ChatData(userName, inputField.text, nickNameColor));
         //PhotonNetwork.LocalPlayer.SetMafiaReady(true);  <- 이거 뭐에 쓰는거임?
-        //KnifeGameChatManager.Instance.Player.photonView.RPC("OpenSpeechBubble", RpcTarget.All, userName, inputField.text);
+        KnifeGameManager.Instance.Player.photonView.RPC("OpenSpeechBubble", RpcTarget.All, userName, inputField.text);
 
         inputField.text = "";
         inputField.ActivateInputField();

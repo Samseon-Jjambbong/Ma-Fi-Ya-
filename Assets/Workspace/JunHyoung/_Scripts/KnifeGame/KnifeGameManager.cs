@@ -14,6 +14,9 @@ public class KnifeGameManager : MonoBehaviourPunCallbacks, IPunObservable
     private static KnifeGameManager instance;
     public static KnifeGameManager Instance { get { return instance; } }
 
+    PlayerController player;
+    public PlayerController Player { get { return player; } set { player = value; } }
+
     [Header("Components")]
     [SerializeField] TextMeshProUGUI infoText;
     [SerializeField] TextMeshProUGUI countDownText;
@@ -230,6 +233,8 @@ public class KnifeGameManager : MonoBehaviourPunCallbacks, IPunObservable
 
         // GameObject player = Instantiate(playerprefab, pos, Quaternion.LookRotation(-pos));
         GameObject player = PhotonNetwork.Instantiate("Knife", pos, Quaternion.LookRotation(-pos)); //플레이어
+
+        this.player = player.GetComponent<PlayerController>();
 
         player.GetComponent<PlayerController>().SetNickName(PhotonNetwork.PlayerList[playerNumber].NickName);
         player.GetComponent<PlayerController>().photonView.RPC("SetWeapon", RpcTarget.MasterClient, KnifeLength.Short);

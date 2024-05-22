@@ -18,11 +18,11 @@ public class PlayerController : MonoBehaviourPun
     [SerializeField] Animator animator;
     [SerializeField] AudioSource walkAudio;
     [SerializeField] GameObject playerModel;
+    [SerializeField] GameObject speechBubble;
+    [SerializeField] TMP_Text bubbleText;
 
     public TMP_Text Name => nickNameText;
 
-    //[SerializeField] GameObject speechBubble;
-    //[SerializeField] TMP_Text bubbleText;
     [SerializeField] Vector3 playerSpawnPos;
     [SerializeField] float movePower;
     [SerializeField] float rotateSpeed;
@@ -48,6 +48,7 @@ public class PlayerController : MonoBehaviourPun
     Collider[] colliders = new Collider[20];
 
     private Vector3 moveDir;
+    Coroutine bubble;
 
     private void Start()
     {
@@ -249,6 +250,31 @@ public class PlayerController : MonoBehaviourPun
         yield return new WaitForSeconds(3f);
 
         playerModel.SetActive(true);
+    }
+    #endregion
+
+    #region Speech Bubble
+    [PunRPC]
+    public void OpenSpeechBubble(string userName, string sendText)
+    {
+        if (speechBubble.activeSelf)
+        {
+            StopCoroutine(bubble);
+        }
+        else
+        {
+            speechBubble.SetActive(true);
+        }
+
+        bubbleText.text = $"<#333333>{userName}</color>\n<#666666>{sendText}</color>";
+
+        bubble = StartCoroutine(CloseSpeechBubble());
+    }
+    IEnumerator CloseSpeechBubble()
+    {
+        yield return new WaitForSeconds(3f);
+
+        speechBubble.SetActive(false);
     }
     #endregion
 

@@ -205,8 +205,15 @@ public class MafiaManager : Singleton<MafiaManager>, IPunObservable
     }
     #endregion
 
-    #region Vote Results
-    
+    #region Vote Result
+    public void ApplyVoteResult(int voteResult)
+    {
+        if (PhotonNetwork.IsMasterClient)
+        {
+            PlayerDied(voteResult);
+            sharedData.playerToKick = -1; // Reset value
+        }
+    }
     #endregion
 
     /******************************************************
@@ -297,6 +304,7 @@ public class MafiaManager : Singleton<MafiaManager>, IPunObservable
     // Called only on MasterClient
     public void PlayerDied(int id)
     {
+        PhotonNetwork.PlayerList[id].SetDead(true);
         gameResult = Game.RemovePlayer(PhotonNetwork.CurrentRoom.Players[id].GetPlayerRole());
     }
     #endregion

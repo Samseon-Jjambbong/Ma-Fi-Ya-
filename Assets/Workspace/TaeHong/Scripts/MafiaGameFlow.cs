@@ -242,9 +242,12 @@ public class MafiaGameFlow : MonoBehaviourPun
             Debug.Log($"Player{voteResult} got kicked");
             // Insert Player kicked coroutine here
             yield return Manager.Mafia.animFactory.PlayerKickedActionRoutine(voteResult);
-            yield return new WaitUntil(() => Manager.Mafia.voteResultsFinished);
+            yield return new WaitForSeconds(1);
+            //yield return new WaitUntil(() => Manager.Mafia.voteResultsFinished);
             yield return RemovedPlayerRoleRoutine(voteResult);
-            Manager.Mafia.sharedData.playerToKick = -1; // Reset value
+            Manager.Mafia.ApplyVoteResult(voteResult);
+            yield return new WaitForSeconds(1);
+            Manager.Mafia.voteResultsFinished = true;
         }
     }
 

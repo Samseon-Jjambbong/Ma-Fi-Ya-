@@ -36,7 +36,7 @@ public static class CustomPropertyExtensions
 
     public static void AddPlayerDeathCount(this Player player)
     {
-        PhotonHashtable properties = new PhotonHashtable { { KILL, GetPlayerDeathCount(player) + 1 } };
+        PhotonHashtable properties = new PhotonHashtable { { DEATH, GetPlayerDeathCount(player) + 1 } };
         player.SetCustomProperties(properties);
     }
 }

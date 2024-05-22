@@ -1,4 +1,5 @@
 using Photon.Pun;
+using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -20,6 +21,7 @@ public class PlayerController : MonoBehaviourPun
     [SerializeField] GameObject playerModel;
     [SerializeField] GameObject speechBubble;
     [SerializeField] TMP_Text bubbleText;
+    [SerializeField] LayerMask deathZone;
 
     public TMP_Text Name => nickNameText;
 
@@ -241,6 +243,7 @@ public class PlayerController : MonoBehaviourPun
 
     IEnumerator DieState()
     {
+        controller.enabled = false;
         yield return new WaitForSeconds(1f);
 
         playerModel.SetActive(false);
@@ -249,7 +252,17 @@ public class PlayerController : MonoBehaviourPun
 
         yield return new WaitForSeconds(3f);
 
+        controller.enabled = true;
         playerModel.SetActive(true);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (deathZone.Contain(other.gameObject.layer))
+        {
+            playerModel.SetActive(false);
+            photonView.RPC("Die", RpcTarget.All);
+        }
     }
     #endregion
 

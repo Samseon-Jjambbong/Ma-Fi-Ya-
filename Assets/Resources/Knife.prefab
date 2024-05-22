@@ -1168,11 +1168,14 @@ MonoBehaviour:
   playerModel: {fileID: 4497683877635771514}
   speechBubble: {fileID: 1031744686304650466}
   bubbleText: {fileID: 7096773574225907193}
+  deathZone:
+    serializedVersion: 2
+    m_Bits: 128
   playerSpawnPos: {x: 0, y: 0, z: 0}
   movePower: 20
   rotateSpeed: 8
   isWalking: 0
-  canMove: 0
+  canMove: 1
   shortKnife: {fileID: 7324432728231609592}
   middleKnife: {fileID: 1720272600417815618}
   longKnife: {fileID: 858563763648759619}

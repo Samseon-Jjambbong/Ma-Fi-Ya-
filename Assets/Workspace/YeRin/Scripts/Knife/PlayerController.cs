@@ -220,6 +220,8 @@ public class PlayerController : MonoBehaviourPun
             // 바로 죽음
             Debug.Log($"{player.Name.text} die");
             player.photonView.RPC("Die", RpcTarget.All);
+
+            PhotonNetwork.LocalPlayer.AddPlayerKillCount();
         }
     }
     private void OnDrawGizmos()
@@ -230,12 +232,6 @@ public class PlayerController : MonoBehaviourPun
     #endregion
 
     #region Die
-    /*public void Die()
-    {
-        if (photonView.IsMine)
-            photonView.RPC("ChangeActive", RpcTarget.All);
-    }*/
-
     [PunRPC]
     private void Die()
     {
@@ -247,6 +243,7 @@ public class PlayerController : MonoBehaviourPun
         yield return new WaitForSeconds(1f);
 
         playerModel.SetActive(false);
+        PhotonNetwork.LocalPlayer.AddPlayerDeathCount();
         transform.position = playerSpawnPos;
 
         yield return new WaitForSeconds(3f);

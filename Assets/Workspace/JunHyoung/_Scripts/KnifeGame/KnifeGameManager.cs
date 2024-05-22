@@ -19,7 +19,7 @@ public class KnifeGameManager : MonoBehaviourPunCallbacks, IPunObservable
 
     [Header("UI")]
     [SerializeField] KnifeGameScoreBoard scoreBoardUI;
-    [SerializeField] KnifeGameResultBoard gameResultUI;
+    //[SerializeField] KnifeGameResultBoard gameResultUI;
 
 
     [Header("GameSettings")]

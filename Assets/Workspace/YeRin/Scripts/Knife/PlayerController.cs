@@ -17,17 +17,20 @@ public class PlayerController : MonoBehaviourPun
     [SerializeField] CharacterController controller;
     [SerializeField] Animator animator;
     [SerializeField] AudioSource walkAudio;
+    [SerializeField] GameObject playerModel;
 
     public TMP_Text Name => nickNameText;
 
     //[SerializeField] GameObject speechBubble;
     //[SerializeField] TMP_Text bubbleText;
-
+    [SerializeField] Vector3 playerSpawnPos;
     [SerializeField] float movePower;
     [SerializeField] float rotateSpeed;
 
     [Header("States")]
     [SerializeField] private bool isWalking;
+    [SerializeField] private bool canMove;
+    public bool CanMove { get { return canMove; } set { canMove = value; } }
 
     [Header("Knife")]
     [SerializeField] GameObject shortKnife;
@@ -50,6 +53,7 @@ public class PlayerController : MonoBehaviourPun
     {
         walkAudio.Stop();
         SetWeaponLength();
+        playerSpawnPos = transform.position;
     }
 
     private void FixedUpdate()
@@ -215,6 +219,7 @@ public class PlayerController : MonoBehaviourPun
             }
             // 바로 죽음
             Debug.Log($"{player.Name.text} die");
+            player.photonView.RPC("Die", RpcTarget.All);
         }
     }
     private void OnDrawGizmos()
@@ -224,15 +229,42 @@ public class PlayerController : MonoBehaviourPun
     }
     #endregion
 
+    #region Die
+    /*public void Die()
+    {
+        if (photonView.IsMine)
+            photonView.RPC("ChangeActive", RpcTarget.All);
+    }*/
 
+    [PunRPC]
+    private void Die()
+    {
+        StartCoroutine(DieState());
+    }
+
+    IEnumerator DieState()
+    {
+        yield return new WaitForSeconds(1f);
+
+        playerModel.SetActive(false);
+        transform.position = playerSpawnPos;
+
+        yield return new WaitForSeconds(3f);
+
+        playerModel.SetActive(true);
+    }
+    #endregion
+
+    #region etx
     [PunRPC]
     private void NickName(string nickName)
     {
         nickNameText.text = nickName;
     }
 
-    public void SetNickName(string nickName)   // PhotonNetwork.PlayerList[playerNumber].NickName
+    public void SetNickName(string nickName)
     {
         photonView.RPC("NickName", RpcTarget.All, nickName);
     }
+    #endregion
 }

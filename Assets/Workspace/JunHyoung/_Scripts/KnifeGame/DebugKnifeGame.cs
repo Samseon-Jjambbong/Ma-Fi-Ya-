@@ -48,13 +48,11 @@ public class DebugKnifeGame : MonoBehaviourPunCallbacks
 
     void PlayerKill()
     {
-        Debug.Log($"cut Kill Count {PhotonNetwork.LocalPlayer.GetPlayerKillCount()}");
         PhotonNetwork.LocalPlayer.AddPlayerKillCount(); 
     }
 
     private void PlayerDeath()
     {
-        Debug.Log($"cur Death Count {PhotonNetwork.LocalPlayer.GetPlayerDeathCount()}");
         PhotonNetwork.LocalPlayer.AddPlayerDeathCount();
     }
 }

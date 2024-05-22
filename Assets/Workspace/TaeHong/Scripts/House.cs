@@ -24,35 +24,16 @@ public class House : MonoBehaviourPun, IPointerClickHandler, IPointerExitHandler
     public Transform entrance;
     [SerializeField] GameObject healEffect;
     [SerializeField] GameObject killEffect;
-
     [SerializeField] GameObject speechBubble;
     [SerializeField] TMP_Text bubbleText;
-
-    Coroutine bubble;
 
     [Header("Mafia")]
     [SerializeField] private MafiaPlayer houseOwner;
     public MafiaPlayer HouseOwner { get { return houseOwner; } set { houseOwner = value; } }
-
     public int houseOwnerId;
     [SerializeField] private int visitorId;
 
-
-    [Header("Misc")]
-    public bool debugMode;
-
-    private void Start()
-    {
-        if (debugMode)
-        {
-            ActivateOutline(true);
-        }
-
-        //if (PhotonNetwork.IsMasterClient)
-        //{
-        //    photonView.RPC("AddList", RpcTarget.All);
-        //}
-    }
+    Coroutine bubble;
 
     private void OnEnable()
     {

@@ -1,12 +1,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// Enums
 public enum MafiaActionType { Block, Kill, Heal }
-
 public enum MafiaRole { Mafia, Doctor, Police, Insane }
-
 public enum MafiaResult { None, MafiaWin, CivilianWin }
 
+// Classes/Structs
 public struct MafiaAction
 {
     public int sender;

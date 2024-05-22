@@ -13,17 +13,16 @@ public class MafiaGameFlow : MonoBehaviourPun
     [SerializeField] private LightController lightController;
     [SerializeField] private RoleUI roleUI;
     [SerializeField] private Button skipVoteButton;
+    [SerializeField] private WinLoseUI winLoseUI;
 
     private void Start()
     {
         Manager.Mafia.IsDay = true;
     }
 
-    public void DisableSkipButton()
-    {
-        skipVoteButton.interactable = false;
-    }
-
+    /******************************************************
+    *                    RPCs + Methods
+    ******************************************************/
     #region RPCs
     [PunRPC]
     public void DisplayRole(int time)
@@ -72,6 +71,11 @@ public class MafiaGameFlow : MonoBehaviourPun
         StartCoroutine(ChangeTimeOfDayRoutine());
     }
 
+    public void DisableSkipButton()
+    {
+        skipVoteButton.interactable = false;
+    }
+
     public void EnableChat(bool enable)
     {
         if (enable)
@@ -86,6 +90,9 @@ public class MafiaGameFlow : MonoBehaviourPun
 
     #endregion
 
+    /******************************************************
+    *                    Coroutines
+    ******************************************************/
     #region Coroutines
     // Display Role for X seconds
     private IEnumerator DisplayRoleRoutine(int time)

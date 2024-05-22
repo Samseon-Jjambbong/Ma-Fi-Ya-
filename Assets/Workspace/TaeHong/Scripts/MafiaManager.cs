@@ -100,26 +100,6 @@ public class MafiaManager : Singleton<MafiaManager>, IPunObservable
         }
     }
 
-    public void ActivateHouseOutlines()
-    {
-        for (int i = 0; i < PlayerCount; i++)
-        {
-            if (i == (PhotonNetwork.LocalPlayer.ActorNumber - 1))
-                continue;
-
-            Manager.Mafia.Houses[i].ActivateOutline(true);
-        }
-    }
-
-    public void DeactivateHouseOutlines()
-    {
-        foreach (var house in Manager.Mafia.Houses)
-        {
-            house.ActivateOutline(false);
-        }
-    }
-
-
     /******************************************************
     *                    Morning
     ******************************************************/
@@ -318,6 +298,30 @@ public class MafiaManager : Singleton<MafiaManager>, IPunObservable
     public void PlayerDied(int id)
     {
         gameResult = Game.RemovePlayer(PhotonNetwork.CurrentRoom.Players[id].GetPlayerRole());
+    }
+    #endregion
+
+    /******************************************************
+    *                    Utils
+    ******************************************************/
+    #region Utils
+    public void ActivateHouseOutlines()
+    {
+        for (int i = 0; i < PlayerCount; i++)
+        {
+            if (i == (PhotonNetwork.LocalPlayer.ActorNumber - 1))
+                continue;
+
+            Manager.Mafia.Houses[i].ActivateOutline(true);
+        }
+    }
+
+    public void DeactivateHouseOutlines()
+    {
+        foreach (var house in Manager.Mafia.Houses)
+        {
+            house.ActivateOutline(false);
+        }
     }
     #endregion
 }

@@ -101,6 +101,9 @@ public class MafiaPlayer : MonoBehaviourPun
         return PhotonNetwork.LocalPlayer.GetPlayerRole();
     }
 
+    /******************************************************
+    *                    Game Logic
+    ******************************************************/
     #region Game Logic
     public IEnumerator ShowActionsRoutine()
     {
@@ -145,6 +148,9 @@ public class MafiaPlayer : MonoBehaviourPun
     }
     #endregion
 
+    /******************************************************
+    *                    Photon
+    ******************************************************/
     #region Photon
     public void SetPlayerHouse(int playerNumber)
     {
@@ -279,6 +285,9 @@ public class MafiaPlayer : MonoBehaviourPun
     }
     #endregion
 
+    /******************************************************
+    *                    Speech Bubble
+    ******************************************************/
     #region Speech Bubble
 
     [PunRPC]

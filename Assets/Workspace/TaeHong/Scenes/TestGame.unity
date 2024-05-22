@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028326, g: 0.22571333, b: 0.30692202, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -2844,6 +2844,11 @@ PrefabInstance:
       objectReference: {fileID: 733470816134151914}
     - target: {fileID: 8540862403624832752, guid: 16272b99ff3764479828701e06741280,
         type: 3}
+      propertyPath: winLoseUI
+      value: 
+      objectReference: {fileID: 733470816134151915}
+    - target: {fileID: 8540862403624832752, guid: 16272b99ff3764479828701e06741280,
+        type: 3}
       propertyPath: skipVoteButton
       value: 
       objectReference: {fileID: 733470816134151913}
@@ -3047,6 +3052,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5ce95007c4170497fbd5128379efb989, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &733470816134151915 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7204279629849811241, guid: 49ba8df2be6234b76adf569229417560,
+    type: 3}
+  m_PrefabInstance: {fileID: 733470816134151912}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3010e863fc31b4eceb4a9f94919230de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1001 &2518940959455639473

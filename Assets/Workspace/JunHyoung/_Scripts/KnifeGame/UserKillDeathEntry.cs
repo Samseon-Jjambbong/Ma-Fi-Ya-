@@ -15,4 +15,10 @@ public class UserKillDeathEntry : MonoBehaviour
         this.killCount.text = killCount.ToString();
         this.deathCount.text = deathCount.ToString();
     }
+
+    public void UpdateEntry(int killCount, int deathCount)
+    {
+        this.killCount.text = killCount.ToString();
+        this.deathCount.text = deathCount.ToString();
+    }
 }

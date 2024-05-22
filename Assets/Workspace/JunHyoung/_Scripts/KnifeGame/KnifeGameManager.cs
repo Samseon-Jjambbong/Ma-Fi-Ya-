@@ -40,6 +40,7 @@ public class KnifeGameManager : MonoBehaviourPunCallbacks, IPunObservable
     [SerializeField] int playerRadius; // 스폰 거리 간격
 
     [SerializeField] List<Color> colorList;
+    private PlayerController curPlayerController;
     private Dictionary<int, Player> playerDic;
     public Dictionary<int, Player> PlayerDic { get { return playerDic; } }
     /******************************************************
@@ -170,7 +171,9 @@ public class KnifeGameManager : MonoBehaviourPunCallbacks, IPunObservable
         PhotonNetwork.CurrentRoom.SetGameStartTime(PhotonNetwork.Time);
         yield return new WaitForSeconds(0.2f);
         double loadTime = PhotonNetwork.CurrentRoom.GetGameStartTime();
-        //게임 플레이 카운트 다운
+
+        //게임 플레이 카운트 다운 시작
+        //curPlayerController.CanMove = true;
         isSBInteractable = true;
         while (PhotonNetwork.Time - loadTime < gamePlayTime)
         {
@@ -189,16 +192,12 @@ public class KnifeGameManager : MonoBehaviourPunCallbacks, IPunObservable
         countDownText.color = Color.red;
         countDownText.text = "Finish!!";
         Manager.Sound.PlaySFX(gameFinishSFX);
-        
+
         //플레이어 조작 OFF
-        
-            //킬스코어 기반으로 점수 계산
-            // CalculateScore();
-            // int score = 0;
-            // Firebase DB에 점수 추가
-            // FirebaseManager.UpdateRecord(score);
+        //curPlayerController.CanMove = false;
 
         // 게임 종료 UI POPUP
+        gameResultUI.gameObject.SetActive(true);
     }
 
     // 플레이어 초기 스폰 설정
@@ -225,13 +224,10 @@ public class KnifeGameManager : MonoBehaviourPunCallbacks, IPunObservable
 
         // 순번에 맞는 플레이어의 위치 설정
         Vector3 pos = new Vector3(Mathf.Cos(radianAngle) * playerRadius, 2.22f, Mathf.Sin(radianAngle) * playerRadius);
-
-        // GameObject player = Instantiate(playerprefab, pos, Quaternion.LookRotation(-pos));
         GameObject player = PhotonNetwork.Instantiate("Knife", pos, Quaternion.LookRotation(-pos)); //플레이어
-
-        player.GetComponent<PlayerController>().SetNickName(PhotonNetwork.PlayerList[playerNumber].NickName);
-
-        //색깔 설정 - 은 플레이어에서 ㄹ
+        curPlayerController = player.GetComponent<PlayerController>();
+        curPlayerController.SetNickName(PhotonNetwork.PlayerList[playerNumber].NickName);
+        //curPlayerController.CanMove = false;
     }
 
     /******************************************************

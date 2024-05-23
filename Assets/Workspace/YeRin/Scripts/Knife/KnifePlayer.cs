@@ -33,7 +33,7 @@ public class KnifePlayer : MonoBehaviourPun
 
     [Header("States")]
     [SerializeField] private bool isWalking;
-    [SerializeField] private bool canMove;
+    [SerializeField] private bool canMove = false;
     public bool CanMove { get { return canMove; } set { canMove = value; } }
 
     [Header("Knife")]
@@ -69,6 +69,7 @@ public class KnifePlayer : MonoBehaviourPun
 
     private void FixedUpdate()
     {
+
         if (photonView.IsMine)
         {
             Accelate();
@@ -87,6 +88,8 @@ public class KnifePlayer : MonoBehaviourPun
     private void OnMove(InputValue value)
     {
         moveDir.x = value.Get<Vector2>().x;
+        if (!canMove)
+            return;
         moveDir.z = value.Get<Vector2>().y;
 
         if (photonView.IsMine)
@@ -103,6 +106,8 @@ public class KnifePlayer : MonoBehaviourPun
             photonView.RPC("WalkStop", RpcTarget.All);
         }
 
+        if (controller.enabled == false)
+            return;
         controller.Move(transform.forward * moveDir.z * movePower * Time.deltaTime);
     }
 

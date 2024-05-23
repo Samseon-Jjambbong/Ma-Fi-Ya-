@@ -1626,11 +1626,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   infoText: {fileID: 174269613}
   countDownText: {fileID: 451691793}
-  killScoreBoardUI: {fileID: 0}
+  scoreBoardUI: {fileID: 0}
   gameResultUI: {fileID: 0}
+  weaponUI: {fileID: 0}
   countDownTime: 0
   gamePlayTime: 120
-  knifeGameBGM: {fileID: 0}
+  gameReadyBGM: {fileID: 0}
+  InGameBGM: {fileID: 0}
   gameStartSFX: {fileID: 0}
   gameFinishSFX: {fileID: 0}
   playerRadius: 0
@@ -3034,6 +3036,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Knife
+      objectReference: {fileID: 0}
+    - target: {fileID: 6447724147924093600, guid: 4ececa0d7afb1da40b4662a7bbd5baa8,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6784668538430839319, guid: 4ececa0d7afb1da40b4662a7bbd5baa8,
+        type: 3}
+      propertyPath: sceneViewId
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

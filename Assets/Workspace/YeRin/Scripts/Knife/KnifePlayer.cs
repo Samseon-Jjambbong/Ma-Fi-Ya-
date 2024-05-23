@@ -193,11 +193,14 @@ public class KnifePlayer : MonoBehaviourPun
     private void OnAttack()
     {
         if (photonView.IsMine)
-            photonView.RPC("Attack", RpcTarget.All);
+        {
+            photonView.RPC("AttackAnimation", RpcTarget.All);
+            photonView.RPC("Attack", RpcTarget.MasterClient, transform.position, photonView.ViewID);
+        }
     }
 
     [PunRPC]
-    private void Attack()
+    private void AttackAnimation()
     {
         if (shortKnife.activeSelf)
         {
@@ -215,13 +218,13 @@ public class KnifePlayer : MonoBehaviourPun
         {
             Debug.Log("No Weapon");
         }
-
-        AttackRange();
     }
 
-    private void AttackRange()
+    [PunRPC]
+    private void Attack(Vector3 attackerPos, int attackerID)
     {
-        int size = Physics.OverlapSphereNonAlloc(transform.position, range, colliders, layerMask);
+        int size = Physics.OverlapSphereNonAlloc(attackerPos, range, colliders, layerMask);
+        Debug.Log($"overlap coliders {size}");
         for (int i = 0; i < size; i++)
         {
             Vector3 dirToTarget = (colliders[i].transform.position - transform.position).normalized;
@@ -229,17 +232,10 @@ public class KnifePlayer : MonoBehaviourPun
                 continue;
 
             KnifePlayer player = colliders[i].GetComponent<KnifePlayer>();
-            if (player.gameObject == gameObject)
+            if (player != null && player.photonView.ViewID != attackerID)
             {
-                continue;
+                photonView.RPC("HandleHit", RpcTarget.All, player.photonView.ViewID);
             }
-            // 바로 죽음
-            Debug.Log($"{player.Name.text} die");
-            player.photonView.RPC("Die", RpcTarget.All);
-
-            KillLogData log = new KillLogData(nickNameText.text, player.Name.text, 1);
-            PhotonNetwork.RaiseEvent(KillLogEventCode, log, raiseEventOptions, SendOptions.SendReliable);
-            PhotonNetwork.LocalPlayer.AddPlayerKillCount();
         }
     }
     private void OnDrawGizmos()
@@ -250,6 +246,24 @@ public class KnifePlayer : MonoBehaviourPun
     #endregion
 
     #region Die
+    [PunRPC]
+    private void HandleHit(int targetViewID)
+    {
+        KnifePlayer player = PhotonView.Find(targetViewID).GetComponent<KnifePlayer>();
+        if (player != null)
+        {
+            Debug.Log($"{player.Name.text} die");
+            player.photonView.RPC("Die", RpcTarget.All);
+
+            if (photonView.IsMine)
+            {
+                KillLogData log = new KillLogData(nickNameText.text, player.Name.text, 1);
+                PhotonNetwork.RaiseEvent(KillLogEventCode, log, raiseEventOptions, SendOptions.SendReliable);
+                PhotonNetwork.LocalPlayer.AddPlayerKillCount();
+            }
+        }
+    }
+
     [PunRPC]
     private void Die()
     {
@@ -276,7 +290,7 @@ public class KnifePlayer : MonoBehaviourPun
         if (deathZone.Contain(other.gameObject.layer))
         {
             playerModel.SetActive(false);
-            photonView.RPC("Die", RpcTarget.All);
+            photonView.RPC("Die", RpcTarget.All, photonView.ViewID);
             KillLogData log = new KillLogData(nickNameText.text);
             PhotonNetwork.RaiseEvent(KillLogEventCode, log, raiseEventOptions, SendOptions.SendReliable);
         }

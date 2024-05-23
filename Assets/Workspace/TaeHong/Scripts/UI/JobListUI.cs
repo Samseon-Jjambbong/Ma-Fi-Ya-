@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Police : MonoBehaviour
+public class JobListUI : MonoBehaviour
 {
     // Start is called before the first frame update
     void Start()

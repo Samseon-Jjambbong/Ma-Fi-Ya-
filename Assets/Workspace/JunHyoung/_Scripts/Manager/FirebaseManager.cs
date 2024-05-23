@@ -259,34 +259,9 @@ public class FirebaseManager : MonoBehaviour
 
         bool workFlag = true;
         //Get Data From Database
-        DB
-             .GetReference(PATH).Child(Auth.CurrentUser.UserId)
-             .GetValueAsync().ContinueWithOnMainThread(task =>
-             {
-                 if ( task.IsFaulted )
-                 {
-                     Debug.LogError($"DB GetValueAsync Faulted : {task.Exception}");
-                     workFlag = false;
-                     return;
-                 }
-                 if ( task.IsCanceled )
-                 {
-                     Debug.LogError($"DB SetValueAsync Canceled");
-                     workFlag = false;
-                     return;
-                 }
+        GetUserData();
 
-                 DataSnapshot snapshot = task.Result;
-                 if ( snapshot.Exists )
-                 {
-                     string json = snapshot.GetRawJsonValue();
-                     Debug.Log(json);
-                     userData = JsonUtility.FromJson<UserData>(json);
-
-                     Debug.Log($"{userData.Name}");
-                     return;
-                 }
-             });
+        Debug.Log($"Cur Data | Name: {userData.Name} , Score :{userData.score}, Count:{userData.playCount}");
 
         //Update UserData Value
 
@@ -295,6 +270,8 @@ public class FirebaseManager : MonoBehaviour
 
         userData.playCount++;
         userData.score += score;
+
+        Debug.Log($"Updated Data | Name: {userData.Name} , Score :{userData.score}, Count:{userData.playCount}");
 
         //Update Database
         string json = JsonUtility.ToJson(userData);

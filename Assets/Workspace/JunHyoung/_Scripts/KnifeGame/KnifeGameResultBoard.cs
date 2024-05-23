@@ -29,7 +29,7 @@ public class KnifeGameResultBoard : MonoBehaviour
     {
         InitResultBoard();
         CalculateScore();
-        UpdateToDB();
+        //UpdateToDB();
     }
 
     private List<Player> sortedPlayers;

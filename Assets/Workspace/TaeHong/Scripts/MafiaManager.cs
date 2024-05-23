@@ -132,14 +132,14 @@ public class MafiaManager : Singleton<MafiaManager>, IPunObservable
     [PunRPC]
     public void VoteForPlayer(int playerID)
     {
-        if(playerID == -1)
+        voteCount++;
+        if (playerID == -1)
         {
             skipVotes++;
             SkipVoteCountChanged?.Invoke();
             return;
         }
         votes[playerID - 1]++;
-        voteCount++;
         VoteCountChanged?.Invoke();
     }
 

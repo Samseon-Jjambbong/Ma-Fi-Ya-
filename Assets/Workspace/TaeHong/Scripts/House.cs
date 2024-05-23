@@ -156,6 +156,7 @@ public class House : MonoBehaviourPun, IPointerClickHandler
 
         if (activate == false)
         {
+            useSkillUI.gameObject.SetActive(false);
             skillIcon.gameObject.SetActive(false);
         }
         if (outline.OutlineParameters.Color != Color.green)

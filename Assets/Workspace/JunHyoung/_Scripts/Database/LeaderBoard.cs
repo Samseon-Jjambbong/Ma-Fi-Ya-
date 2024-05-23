@@ -99,19 +99,13 @@ public class LeaderBoard : MonoBehaviour
 
                  DataSnapshot snapshot = task.Result;
 
-                 foreach ( Transform child in contents )
-                 {
-                     Destroy(child.gameObject);  //삭제 생성 대신 더 좋은 방안 생각해 개선할것...
-                                                 // => 풀링 해둔 뒤 disable 하고 enable 하면서 세팅?
-                 }
-
                  int rank = ( int ) snapshot.ChildrenCount;
                  foreach ( var item in snapshot.Children )
                  {
                      string json = item.GetRawJsonValue();
                      UserData data = JsonUtility.FromJson<UserData>(json);
                      string name = data.Name;
-                     int score = data.winCount;
+                     int score = data.score;
                      var userRank = Instantiate(prefab, contents);
                      
                      userRank.Set(rank, name, score);

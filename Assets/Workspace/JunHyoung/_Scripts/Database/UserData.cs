@@ -10,7 +10,7 @@ public class UserData
     public int level;
     public int score;
 
-    public UserData() { this.Name = "NONAME"; this.playCount = 0; this.winCount = 0;  this.level = 1; this.score = 1000; }
+    public UserData() { this.Name = "Null"; this.playCount = 0; this.winCount = 0;  this.level = 1; this.score = 0; }
 
     public UserData( string nickName)
     {
@@ -18,6 +18,6 @@ public class UserData
         this.playCount = 0;
         this.winCount = 0;
         this.level = 1;
-        this.score = 1000;
+        this.score = 0;
     }
 }

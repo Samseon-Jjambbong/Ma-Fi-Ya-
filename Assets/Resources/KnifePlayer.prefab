@@ -784,10 +784,46 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ShowLayerWeightsInspector: 1
   ShowParameterInspector: 1
-  m_SynchronizeParameters: []
+  m_SynchronizeParameters:
+  - Type: 9
+    SynchronizeType: 0
+    Name: hipHop
+  - Type: 9
+    SynchronizeType: 0
+    Name: silly
+  - Type: 9
+    SynchronizeType: 0
+    Name: rumba
+  - Type: 4
+    SynchronizeType: 0
+    Name: walk
+  - Type: 9
+    SynchronizeType: 0
+    Name: shortAttack1
+  - Type: 9
+    SynchronizeType: 0
+    Name: shortAttack2
+  - Type: 9
+    SynchronizeType: 0
+    Name: middleAttack1
+  - Type: 9
+    SynchronizeType: 0
+    Name: middleAttack2
+  - Type: 9
+    SynchronizeType: 0
+    Name: longAttack1
+  - Type: 9
+    SynchronizeType: 0
+    Name: longAttack2
   m_SynchronizeLayers:
   - SynchronizeType: 0
     LayerIndex: 0
+  - SynchronizeType: 0
+    LayerIndex: 1
+  - SynchronizeType: 0
+    LayerIndex: 2
+  - SynchronizeType: 0
+    LayerIndex: 3
 --- !u!114 &5822618404914555838
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1575,7 +1611,7 @@ PrefabInstance:
     - target: {fileID: 1176959734298227649, guid: ddd4b8c6eb00029408d55f8ca5de30b0,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 1176959734298227649, guid: ddd4b8c6eb00029408d55f8ca5de30b0,
         type: 3}

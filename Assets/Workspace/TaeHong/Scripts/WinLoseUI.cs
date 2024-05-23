@@ -18,12 +18,12 @@ public class WinLoseUI : BaseUI
     public void ShowWin(int points)
     {
         Win.SetActive(true);
-        GetUI<TextMeshProUGUI>("Win Point Text").text = points.ToString();
+        GetUI<TextMeshProUGUI>("Win Point Text").text = $"+{points}P"; ;
     }
 
     public void ShowLose(int points)
     {
         Lose.SetActive(true);
-        GetUI<TextMeshProUGUI>("Win Point Text").text = points.ToString();
+        GetUI<TextMeshProUGUI>("Lose Point Text").text = $"+{points}P";
     }
 }

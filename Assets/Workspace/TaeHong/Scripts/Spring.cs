@@ -4,15 +4,15 @@ using UnityEngine;
 
 public class Spring : MonoBehaviour
 {
-    // Start is called before the first frame update
+    Animator animator;
+    
     void Start()
     {
-        
+        animator = GetComponent<Animator>();
     }
 
-    // Update is called once per frame
-    void Update()
+    public void Pop()
     {
-        
+        animator.Play("Pop");
     }
 }

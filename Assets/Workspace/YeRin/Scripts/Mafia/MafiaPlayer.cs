@@ -42,8 +42,8 @@ public class MafiaPlayer : MonoBehaviourPun
     private bool skillBlocked;
     private bool isWalking;
     public bool IsMine => photonView.IsMine;
-    int ID => PhotonNetwork.LocalPlayer.ActorNumber;
-    int Idx => PhotonNetwork.LocalPlayer.ActorNumber - 1;
+    public int ID => PhotonNetwork.LocalPlayer.ActorNumber;
+    public int Idx => PhotonNetwork.LocalPlayer.ActorNumber - 1;
 
     Coroutine bubble;
 
@@ -66,7 +66,7 @@ public class MafiaPlayer : MonoBehaviourPun
                     actionType = MafiaActionType.Block;
                     break;
                 case MafiaRole.Insane:
-                    actionType = (MafiaActionType) Random.Range(0, 4);
+                    actionType = Random.Range(0f, 1f) <= 0.5f ? MafiaActionType.Block : MafiaActionType.Heal;
                     break;
             }
         }
@@ -101,6 +101,9 @@ public class MafiaPlayer : MonoBehaviourPun
         return PhotonNetwork.LocalPlayer.GetPlayerRole();
     }
 
+    /******************************************************
+    *                    Game Logic
+    ******************************************************/
     #region Game Logic
     public IEnumerator ShowActionsRoutine()
     {
@@ -122,25 +125,20 @@ public class MafiaPlayer : MonoBehaviourPun
         {
             MafiaAction action = (MafiaAction) actionByThisPlayer;
             Debug.Log($"Player{ID} did {action.actionType}");
-            yield return Manager.Mafia.PlayerGoRoutine(action);
-        }
-        else
-        {
-            Debug.Log("actionby null");
+            yield return Manager.Mafia.animFactory.PlayerGoActionRoutine(action);
         }
 
         yield return new WaitForSeconds(1);
 
         foreach (MafiaActionType actionType in actionsOnThisPlayer)
         {
-            House house = Manager.Mafia.Houses[PhotonNetwork.LocalPlayer.ActorNumber - 1];
             Debug.Log($"Player{ID} received {actionType}");
-            yield return Manager.Mafia.PlayerComeRoutine(house, actionType);
+            yield return Manager.Mafia.animFactory.PlayerComeActionRoutine(ID, actionType);
             yield return new WaitForSeconds(1);
         }
 
         yield return new WaitForSeconds(1);
-        Manager.Mafia.nightEventFinishedCount++;
+        Manager.Mafia.sharedData.photonView.RPC("ClientFinished", RpcTarget.All);
     }
 
     [PunRPC]
@@ -150,6 +148,9 @@ public class MafiaPlayer : MonoBehaviourPun
     }
     #endregion
 
+    /******************************************************
+    *                    Photon
+    ******************************************************/
     #region Photon
     public void SetPlayerHouse(int playerNumber)
     {
@@ -265,6 +266,12 @@ public class MafiaPlayer : MonoBehaviourPun
     }
 
     [PunRPC]
+    private void NickName(string nickName)
+    {
+        nickNameText.text = nickName;
+    }
+
+    [PunRPC]
     private void SetColor(float r, float g, float b)
     {
         if (PhotonNetwork.IsMasterClient)
@@ -282,6 +289,9 @@ public class MafiaPlayer : MonoBehaviourPun
     }
     #endregion
 
+    /******************************************************
+    *                    Speech Bubble
+    ******************************************************/
     #region Speech Bubble
 
     [PunRPC]

@@ -821,7 +821,7 @@ Animator:
   m_Controller: {fileID: 9100000, guid: dfd0e166642e5764c98adde6ae199d87, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
-  m_ApplyRootMotion: 1
+  m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_WarningMessage: 
@@ -1379,7 +1379,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8309140892801614069}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
   m_Name: 
@@ -1599,6 +1599,11 @@ PrefabInstance:
     - target: {fileID: 1955471105706691491, guid: 004b7d3ef83712b41aac35c083398f81,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2335443417489835517, guid: 004b7d3ef83712b41aac35c083398f81,
+        type: 3}
+      propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3367926151971573946, guid: 004b7d3ef83712b41aac35c083398f81,

@@ -10,16 +10,34 @@ public class RoleUI : BaseUI
 {
     [SerializeField] MafiaRoleDataSO dataSO;
 
-    private void OnEnable()
+    public void InitBegin()
     {
         MafiaRole playerRole = PhotonNetwork.LocalPlayer.GetPlayerRole();
-        MafiaRoleData data = dataSO.GetData(playerRole);
-        Debug.Log(playerRole);
+        MafiaRoleData data;
+
+        // If insane, don't reveal
+        if(playerRole == MafiaRole.Insane)
+        {
+            data = dataSO.GetData(Manager.Mafia.Player.actionType);
+        }
+        else
+        {
+            data = dataSO.GetData(playerRole);
+        }
 
         GetUI<Image>("RoleIcon").sprite = data.roleIcon;
         GetUI<TextMeshProUGUI>("RoleName").text = data.roleName;
+    }
 
-        MafiaGameChatManager.Instance.isMafia = PhotonNetwork.LocalPlayer.GetPlayerRole() == MafiaRole.Mafia;
-        Debug.Log($"RRRRRRRRRRRRR {MafiaGameChatManager.Instance.isMafia}");
+    public void InitDead(int playerID)
+    {
+        MafiaRole playerRole = PhotonNetwork.CurrentRoom.Players[playerID].GetPlayerRole();
+        MafiaRoleData data = dataSO.GetData(playerRole);
+
+
+        GetUI<TextMeshProUGUI>("Text Top").text = $"{PhotonNetwork.CurrentRoom.Players[playerID].NickName}의 직업은";
+        GetUI<Image>("RoleIcon").sprite = data.roleIcon;
+        GetUI<TextMeshProUGUI>("RoleName").text = data.roleName;
+
     }
 }

@@ -1,10 +1,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// Enums
 public enum MafiaActionType { Block, Kill, Heal }
-
 public enum MafiaRole { Mafia, Doctor, Police, Insane }
+public enum MafiaResult { None, MafiaWin, CivilianWin }
 
+// Classes/Structs
 public struct MafiaAction
 {
     public int sender;
@@ -81,33 +83,36 @@ public class MafiaGame
 {
     private int numMafias;
     private int numCivilians;
+    public int NumMafias => numMafias;
+    public int NumCivs => numCivilians;
 
     public void AddPlayer(MafiaRole role)
     {
         if (role == MafiaRole.Mafia)
             numMafias++;
-        numCivilians++;
+        else
+            numCivilians++;
     }
 
-    public bool RemovePlayer(MafiaRole removedRole) // True == Civilian Win, False == Mafia Win
+    public MafiaResult RemovePlayer(MafiaRole removedRole) // True == Civilian Win, False == Mafia Win
     {
         if (removedRole == MafiaRole.Mafia)
         {
             numMafias--;
             if (numMafias == 0)
             {
-                return true;
+                return MafiaResult.CivilianWin;
             }
-            return false;
+            return MafiaResult.None;
         }
         else
         {
             numCivilians--;
-            if (numMafias == numCivilians)
+            if (numMafias >= numCivilians)
             {
-                return false;
+                return MafiaResult.MafiaWin;
             }
-            return true;
+            return MafiaResult.None;
         }
     }
 }

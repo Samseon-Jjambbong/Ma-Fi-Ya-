@@ -206,14 +206,15 @@ public class MafiaGameFlow : MonoBehaviourPun
 
         // Allow voting for X Seconds
         skipVoteButton.gameObject.SetActive(true);
-        for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
-        {
-            Manager.Mafia.Houses[i].ShowVoteCount(true);
-            if (i == (PhotonNetwork.LocalPlayer.ActorNumber - 1))
-                continue;
+        Manager.Mafia.ActivateHouseOutlines();
+        //for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
+        //{
+        //    Manager.Mafia.Houses[i].ShowVoteCount(true);
+        //    if (i == (PhotonNetwork.LocalPlayer.ActorNumber - 1))
+        //        continue;
 
-            Manager.Mafia.Houses[i].ActivateOutline(true);
-        }
+        //    Manager.Mafia.Houses[i].ActivateOutline(true);
+        //}
 
         Debug.Log("Voting started");
 
@@ -226,11 +227,13 @@ public class MafiaGameFlow : MonoBehaviourPun
         Debug.Log("Voting finished");
 
         skipVoteButton.gameObject.SetActive(false);
-        foreach (var house in Manager.Mafia.Houses)
-        {
-            house.ActivateOutline(false);
-            house.ShowVoteCount(false);
-        }
+        Manager.Mafia.DeactivateHouseOutlines();
+        //foreach (var house in Manager.Mafia.Houses)
+        //{
+        //    house.ActivateOutline(false);
+        //    house.ShowVoteCount(false);
+        //    house.HideUI();
+        //}
 
         EnableChat(false);
         Manager.Mafia.dayPhaseFinished = true;

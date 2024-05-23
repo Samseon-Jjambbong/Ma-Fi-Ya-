@@ -155,7 +155,7 @@ public class MafiaPlayer : MonoBehaviourPun
     public void SetPlayerHouse(int playerNumber)
     {
         photonView.RPC("AddHouseList", RpcTarget.All, playerNumber);
-        Manager.Mafia.Houses[playerNumber].ActivateOutline(false);
+        Manager.Mafia.Houses[playerNumber].DeactivateOutline();
     }
 
     private void OnMove(InputValue value)

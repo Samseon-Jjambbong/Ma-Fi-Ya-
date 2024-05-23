@@ -25,7 +25,7 @@ public class MafiaManager : Singleton<MafiaManager>, IPunObservable
     public int PlayerCount => playerCount;
 
     private bool isDay;
-    public bool IsDay { get; set; }
+    public bool IsDay { get => isDay; set => isDay = value; }
     [SerializeField] private float skillTime;
 
     [SerializeField] List<House> houses;
@@ -146,10 +146,7 @@ public class MafiaManager : Singleton<MafiaManager>, IPunObservable
     [PunRPC] // Called on players who finished voting
     public void BlockVotes()
     {
-        foreach(House house in houses)
-        {
-            house.ActivateOutline(false);
-        }
+        DeactivateHouseOutlines();
         gameFlow.DisableSkipButton();
     }
 
@@ -325,10 +322,15 @@ public class MafiaManager : Singleton<MafiaManager>, IPunObservable
     {
         for (int i = 0; i < PlayerCount; i++)
         {
+            // Skip if
+            // house is client's
             if (i == (PhotonNetwork.LocalPlayer.ActorNumber - 1))
                 continue;
+            // house owner is dead
+            if (PhotonNetwork.CurrentRoom.Players[i + 1].GetDead())
+                continue;
 
-            Manager.Mafia.Houses[i].ActivateOutline(true);
+            Houses[i].ActivateOutline();
         }
     }
 
@@ -336,7 +338,7 @@ public class MafiaManager : Singleton<MafiaManager>, IPunObservable
     {
         foreach (var house in Manager.Mafia.Houses)
         {
-            house.ActivateOutline(false);
+            house.DeactivateOutline();
         }
     }
     #endregion

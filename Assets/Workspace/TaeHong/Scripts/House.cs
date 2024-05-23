@@ -66,6 +66,9 @@ public class House : MonoBehaviourPun, IPointerClickHandler
         // Day = Vote
         if (Manager.Mafia.IsDay)
         {
+            if (outline.OutlineParameters.Color == Color.yellow)
+                return;
+
             // Click
             if (!voteUI.gameObject.activeInHierarchy)
             {
@@ -122,7 +125,7 @@ public class House : MonoBehaviourPun, IPointerClickHandler
                 continue;
             }
 
-            house.ActivateOutline(false); // Turn off other house outlines
+            house.DeactivateOutline(); // Turn off other house outlines
         }
     }
 
@@ -132,12 +135,12 @@ public class House : MonoBehaviourPun, IPointerClickHandler
         {
             if (house.HouseOwner == houseOwner)
             {
-                voteUI.gameObject.SetActive(false);
+                HideUI();
                 outline.OutlineParameters.Color = Color.yellow;
                 continue;
             }
 
-            house.ActivateOutline(false);
+            house.DeactivateOutline();
         }
 
         Vote();
@@ -153,23 +156,37 @@ public class House : MonoBehaviourPun, IPointerClickHandler
     *                    UI Display
     ******************************************************/
     // Outline makes house clickable
-    public void ActivateOutline(bool activate)
+    public void ActivateOutline()
     {
-        // Check if owner is dead
-        if (PhotonNetwork.CurrentRoom.Players[houseOwnerId].GetDead())
-            return;
-
-        if (activate == false)
+        if (Manager.Mafia.IsDay)
         {
-            useSkillUI.gameObject.SetActive(false);
+            HideUI();
+            ShowVoteCount(false);
+        }
+        else
+        {
+            HideUI();
             skillIcon.gameObject.SetActive(false);
         }
-        if (outline.OutlineParameters.Color != Color.green)
-        {
-            outline.OutlineParameters.Color = Color.green;
-        }
 
-        outline.enabled = activate;
+        outline.OutlineParameters.Color = Color.green;
+        outline.enabled = true;
+    }
+
+    public void DeactivateOutline()
+    {
+        if (Manager.Mafia.IsDay)
+        {
+            HideUI();
+            ShowVoteCount(false);
+        }
+        else
+        {
+            HideUI();
+            skillIcon.gameObject.SetActive(false);
+        }
+        
+        outline.enabled = false;
     }
 
     // Show vote count during voting phase

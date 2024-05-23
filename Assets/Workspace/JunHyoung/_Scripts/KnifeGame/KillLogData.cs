@@ -23,7 +23,7 @@ public class KillLogData
     /// <param name="sender"></param>
     /// <param name="target"></param>
     /// <param name="type"> 0:death, 1:kill</param>
-    public KillLogData(string sender, string target = null, byte type = 0)
+    public KillLogData(string sender, string target = " ", byte type = 0)
     {
         this.type = type;
         this.sender = sender;

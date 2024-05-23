@@ -18,12 +18,14 @@ public class WinLoseUI : BaseUI
     public void ShowWin(int points)
     {
         Win.SetActive(true);
-        GetUI<TextMeshProUGUI>("Win Point Text").text = $"+{points}P"; ;
+        GetUI<TextMeshProUGUI>("Win Point Text").text = $"+{points}P";
+        FirebaseManager.UpdateRecord(points, true);
     }
 
     public void ShowLose(int points)
     {
         Lose.SetActive(true);
         GetUI<TextMeshProUGUI>("Lose Point Text").text = $"+{points}P";
+        FirebaseManager.UpdateRecord(points);
     }
 }

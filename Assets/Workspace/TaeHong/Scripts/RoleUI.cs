@@ -24,7 +24,6 @@ public class RoleUI : BaseUI
         {
             data = dataSO.GetData(playerRole);
         }
-        Debug.Log(playerRole);
 
         GetUI<Image>("RoleIcon").sprite = data.roleIcon;
         GetUI<TextMeshProUGUI>("RoleName").text = data.roleName;

@@ -22,7 +22,7 @@ public class KnifeGameManager : MonoBehaviourPunCallbacks, IPunObservable
 
     [Header("UI")]
     [SerializeField] KnifeGameScoreBoard scoreBoardUI;
-    //[SerializeField] KnifeGameResultBoard gameResultUI;
+    [SerializeField] KnifeGameResultBoard gameResultUI;
     [SerializeField] WeaponUI weaponUI;
     public WeaponUI WeaponUI => weaponUI;
 
@@ -51,7 +51,7 @@ public class KnifeGameManager : MonoBehaviourPunCallbacks, IPunObservable
     [SerializeField] int playerRadius; // 스폰 거리 간격
 
     [SerializeField] List<Color> colorList;
-    private PlayerController curPlayerController;
+    private KnifePlayer curPlayerController;
     private Dictionary<int, Player> playerDic;
     public Dictionary<int, Player> PlayerDic { get { return playerDic; } }
     /******************************************************
@@ -184,7 +184,7 @@ public class KnifeGameManager : MonoBehaviourPunCallbacks, IPunObservable
         double loadTime = PhotonNetwork.CurrentRoom.GetGameStartTime();
 
         //게임 플레이 카운트 다운 시작
-        //curPlayerController.CanMove = true;
+        curPlayerController.CanMove = true;
         isSBInteractable = true;
         while (PhotonNetwork.Time - loadTime < gamePlayTime)
         {
@@ -205,7 +205,7 @@ public class KnifeGameManager : MonoBehaviourPunCallbacks, IPunObservable
         Manager.Sound.PlaySFX(gameFinishSFX);
 
         //플레이어 조작 OFF
-        //curPlayerController.CanMove = false;
+        curPlayerController.CanMove = false;
 
         // 게임 종료 UI POPUP
         gameResultUI.gameObject.SetActive(true);
@@ -236,11 +236,10 @@ public class KnifeGameManager : MonoBehaviourPunCallbacks, IPunObservable
         // 순번에 맞는 플레이어의 위치 설정
         Vector3 pos = new Vector3(Mathf.Cos(radianAngle) * playerRadius, 2.22f, Mathf.Sin(radianAngle) * playerRadius);
         GameObject player = PhotonNetwork.Instantiate("Knife", pos, Quaternion.LookRotation(-pos)); //플레이어
-        this.player = player.GetComponent<KnifePlayer>();
+        curPlayerController = player.GetComponent<KnifePlayer>();
 
-        player.GetComponent<KnifePlayer>().SetNickName(PhotonNetwork.PlayerList[playerNumber].NickName);
-        player.GetComponent<KnifePlayer>().photonView.RPC("SetWeapon", RpcTarget.MasterClient, KnifeLength.Short);
-        //색깔 설정 - 은 플레이어에서 ㄹ
+        curPlayerController.SetNickName(PhotonNetwork.PlayerList[playerNumber].NickName);
+        curPlayerController.photonView.RPC("SetWeapon", RpcTarget.MasterClient, KnifeLength.Short);
 
     }
 

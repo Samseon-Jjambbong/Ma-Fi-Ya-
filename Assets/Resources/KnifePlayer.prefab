@@ -812,7 +812,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2072bb443109324583b08f9b79e0340, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nickNameText: {fileID: 0}
+  nickNameText: {fileID: 8013876799578283650}
   controller: {fileID: 2223371317601566004}
   animator: {fileID: 9118881926239309246}
   walkAudio: {fileID: 3544733900814580998}

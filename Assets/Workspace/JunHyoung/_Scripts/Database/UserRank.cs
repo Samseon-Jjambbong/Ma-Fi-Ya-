@@ -16,4 +16,9 @@ public class UserRank : MonoBehaviour
         this.name.text = name;
         this.score.text = score.ToString();
     }
+
+    private void OnDisable()
+    {
+        Destroy( this.gameObject );
+    }
 }

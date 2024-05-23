@@ -254,14 +254,7 @@ public class MafiaPunManager : MonoBehaviourPunCallbacks
             yield return new WaitForSeconds(1);
 
             // Check Game Over
-            Debug.Log("Checking Game Over...");
-            if(Manager.Mafia.GameResult != MafiaResult.None)
-            {
-                photonView.RPC("GameOver", RpcTarget.All, (int)Manager.Mafia.GameResult);
-                Debug.Log($"Game Over: {Manager.Mafia.GameResult}");
-                yield break;
-            }
-            Debug.Log("Game not over");
+            yield return GameOverCheck();
 
             // Day Phase
             Debug.Log("Day Phase Start");
@@ -293,18 +286,24 @@ public class MafiaPunManager : MonoBehaviourPunCallbacks
             yield return new WaitForSeconds(1);
 
             // Check Game Over
-            Debug.Log("Checking Game Over...");
-            if (Manager.Mafia.GameResult != MafiaResult.None)
-            {
-                photonView.RPC("GameOver", RpcTarget.All);
-                Debug.Log($"Game Over: {Manager.Mafia.GameResult}");
-                yield break;
-            }
-            Debug.Log("Game not over");
+            yield return GameOverCheck();
 
             // Reset flags
             Manager.Mafia.ResetFlags();
         }
+    }
+
+    private IEnumerator GameOverCheck()
+    {
+        Debug.Log("Checking Game Over...");
+        if (Manager.Mafia.GameResult != MafiaResult.None)
+        {
+            photonView.RPC("GameOver", RpcTarget.All, (int) Manager.Mafia.GameResult);
+            Debug.Log($"Game Over: {Manager.Mafia.GameResult}");
+            StopAllCoroutines();
+        }
+        Debug.Log("Game not over");
+        yield return null;
     }
     #endregion
 

@@ -22,8 +22,12 @@ public class House : MonoBehaviourPun, IPointerClickHandler
     [SerializeField] private Image skillIcon;
     [SerializeField] private MafiaRoleDataSO dataSO;
     public Transform entrance;
+
+    [Header("Skill Effects")]
     [SerializeField] GameObject healEffect;
     [SerializeField] GameObject killEffect;
+    [SerializeField] GameObject blockEffect;
+
     [SerializeField] GameObject speechBubble;
     [SerializeField] TMP_Text bubbleText;
 
@@ -193,8 +197,11 @@ public class House : MonoBehaviourPun, IPointerClickHandler
         }
         else if(mafiaActionType == MafiaActionType.Heal)
         {
-
             yield return PlayHealEffectRoutine(2);
+        }
+        else if (mafiaActionType == MafiaActionType.Block)
+        {
+            yield return PlayBlockEffectRoutine(2);
         }
         yield return null;
     }
@@ -215,6 +222,13 @@ public class House : MonoBehaviourPun, IPointerClickHandler
         }
         yield return new WaitForSeconds(duration);
         healEffect.SetActive(false);
+    }
+
+    private IEnumerator PlayBlockEffectRoutine(float duration)
+    {
+        blockEffect.SetActive(true);
+        yield return new WaitForSeconds(duration);
+        blockEffect.SetActive(false);
     }
 
     /******************************************************

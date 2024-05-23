@@ -34,8 +34,8 @@ namespace Tae
 
         public void SpawnNightMafia(int houseIdx)
         {
-            StartCoroutine(animFactory.PlayerGoActionRoutine(new MafiaAction(2, 3, (MafiaActionType)1)));
-            StartCoroutine(animFactory.PlayerComeActionRoutine(1, (MafiaActionType) 1));
+            StartCoroutine(animFactory.PlayerGoActionRoutine(new MafiaAction(2, 3, (MafiaActionType)0)));
+            StartCoroutine(animFactory.PlayerComeActionRoutine(1, (MafiaActionType)2));
         }
 
         public void ShowPlayerDeath(int houseIdx)

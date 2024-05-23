@@ -37,11 +37,5 @@ public class KillLogManager : MonoBehaviour, IOnEventCallback
             KillLogEntry newLog = Instantiate(killLogEntry,contents);
             newLog.SetEntry(log);
         }
-
-
-        // RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
-        // KillLogData log = new KillLogData("name", "target", 1); // if you Kill
-        // KillLogData log = new KillLogData("name"); //if You Death 
-        // PhotonNetwork.RaiseEvent(KillLogEventCode, log, raiseEventOptions, SendOptions.SendReliable);
     }
 }

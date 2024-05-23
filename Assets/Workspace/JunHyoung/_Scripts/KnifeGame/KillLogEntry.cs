@@ -17,7 +17,7 @@ public class KillLogEntry : MonoBehaviour
     {
         sender.text = data.sender;
 
-        if(data.type == 0 )
+        if(data.type == 1 ) // type 이 kill 이면
         {
             target.text = data.target;
         }

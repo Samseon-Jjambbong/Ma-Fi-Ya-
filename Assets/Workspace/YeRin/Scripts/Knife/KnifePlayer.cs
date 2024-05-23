@@ -330,6 +330,11 @@ public class KnifePlayer : MonoBehaviourPun
                     break;
             }
 
+            if (photonView.IsMine)
+            {
+                KnifeGameManager.Instance.Knife = length;
+                KnifeGameManager.Instance.WeaponUI.SetWeaponUI();
+            }
             photonView.RPC("SetWeapon", RpcTarget.Others, length);
             return;
         }
@@ -345,6 +350,12 @@ public class KnifePlayer : MonoBehaviourPun
             case KnifeLength.Long:
                 longKnife.gameObject.SetActive(true);
                 break;
+        }
+
+        if (photonView.IsMine)
+        {
+            KnifeGameManager.Instance.Knife = length;
+            KnifeGameManager.Instance.WeaponUI.SetWeaponUI();
         }
     }
     #endregion

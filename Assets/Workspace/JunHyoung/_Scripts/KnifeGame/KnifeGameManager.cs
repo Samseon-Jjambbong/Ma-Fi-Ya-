@@ -14,8 +14,6 @@ public class KnifeGameManager : MonoBehaviourPunCallbacks, IPunObservable
     private static KnifeGameManager instance;
     public static KnifeGameManager Instance { get { return instance; } }
 
-    KnifePlayer player;
-    public KnifePlayer Player { get { return player; } set { player = value; } }
 
     [Header("Components")]
     [SerializeField] TextMeshProUGUI infoText;
@@ -25,6 +23,8 @@ public class KnifeGameManager : MonoBehaviourPunCallbacks, IPunObservable
     [Header("UI")]
     [SerializeField] KnifeGameScoreBoard scoreBoardUI;
     //[SerializeField] KnifeGameResultBoard gameResultUI;
+    [SerializeField] WeaponUI weaponUI;
+    public WeaponUI WeaponUI => weaponUI;
 
 
     [Header("GameSettings")]
@@ -36,6 +36,12 @@ public class KnifeGameManager : MonoBehaviourPunCallbacks, IPunObservable
     [SerializeField] AudioClip InGameBGM;
     [SerializeField] AudioClip gameStartSFX;
     [SerializeField] AudioClip gameFinishSFX;
+
+    // Knife Player 관련 정보
+    KnifePlayer player;
+    public KnifePlayer Player { get { return player; } set { player = value; } }
+    KnifeLength knife;
+    public KnifeLength Knife { get { return knife; } set { knife = value; } }
     // 플레이어 리스폰 설정
 
     // 플레이어 스코어 랭킹
@@ -238,7 +244,6 @@ public class KnifeGameManager : MonoBehaviourPunCallbacks, IPunObservable
 
         player.GetComponent<KnifePlayer>().SetNickName(PhotonNetwork.PlayerList[playerNumber].NickName);
         player.GetComponent<KnifePlayer>().photonView.RPC("SetWeapon", RpcTarget.MasterClient, KnifeLength.Short);
-
         //색깔 설정 - 은 플레이어에서 ㄹ
     }
 

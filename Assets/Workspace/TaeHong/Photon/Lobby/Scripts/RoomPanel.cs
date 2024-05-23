@@ -9,6 +9,7 @@ using UnityEngine.UI;
 
 public class RoomPanel : MonoBehaviour
 {
+    [Header("Components")]
     [SerializeField] RectTransform playerContent;
     [SerializeField] PlayerEntry playerEntryPrefab;
     [SerializeField] Button startButton;
@@ -17,6 +18,9 @@ public class RoomPanel : MonoBehaviour
     
     private List<PlayerEntry> playerList;
 
+    [Header("SceneName Setting")]
+    [SerializeField] string MAFIASCENE;
+    [SerializeField] string KNIFESCENE;
     private void Awake()
     {
         playerList = new List<PlayerEntry>();
@@ -64,9 +68,9 @@ public class RoomPanel : MonoBehaviour
         PhotonNetwork.CurrentRoom.IsVisible = false;
 
         if (PhotonNetwork.CurrentRoom.GetGameMode().Equals(GameMode.Mafia))
-            PhotonNetwork.LoadLevel("TestGame");
+            PhotonNetwork.LoadLevel(MAFIASCENE);
         else if (PhotonNetwork.CurrentRoom.GetGameMode().Equals(GameMode.Knife))
-            PhotonNetwork.LoadLevel("KnifeGameScene_Ye");
+            PhotonNetwork.LoadLevel(KNIFESCENE);
     }
 
     public void PlayerEnterRoom(Player newPlayer)

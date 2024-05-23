@@ -25,7 +25,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
             SetActivePanel(Panel.Room);
             return;
         }
-        SetActivePanel(Panel.Menu);
+        menuPanel.Login();
     }
 
     private void Update()

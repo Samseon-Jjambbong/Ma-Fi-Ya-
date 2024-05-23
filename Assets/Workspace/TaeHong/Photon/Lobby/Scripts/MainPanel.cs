@@ -62,6 +62,7 @@ public class MainPanel : MonoBehaviour
     public void Logout()
     {
         PhotonNetwork.Disconnect();
+        FirebaseManager.Auth.SignOut();
     }
 
     public void Login()

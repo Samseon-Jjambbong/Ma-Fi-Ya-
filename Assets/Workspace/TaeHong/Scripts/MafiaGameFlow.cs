@@ -217,7 +217,7 @@ public class MafiaGameFlow : MonoBehaviourPun
 
         Debug.Log("Voting started");
 
-        timer.StartTimer(time);
+        yield return timer.StartTimer(time);
         while (!timer.timerFinished && !(Manager.Mafia.voteCount == Manager.Mafia.sharedData.ActivePlayerCount()))
         {
             yield return new WaitForSeconds(1);

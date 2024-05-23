@@ -13,22 +13,21 @@ public class KnifeGameChatManager : MonoBehaviourPunCallbacks, IChatClientListen
     static KnifeGameChatManager instance;
     static public KnifeGameChatManager Instance { get { return instance; } }
 
+    private ChatClient chatClient;
+    private string userName;
+    private string curChannelName;
+
+    [Header("Chat")]
     [SerializeField] ChatEntry chatEntry;
-    [SerializeField] Transform contents;
-    [SerializeField] RectTransform rectTransform;
+    [SerializeField] Transform contents; // chatEntry 가 생성될 부모
+    [SerializeField] RectTransform rectTransform; // 채팅창 사이즈 조절용
 
     [SerializeField] TMP_InputField inputField;
     [SerializeField] Button buttonFixSize;
 
-    private ChatClient chatClient;
-
-    private string userName;
-    private string curChannelName;
-
     [Header("Message Color Settings")]
     [SerializeField] Color nickNameColor;
     [SerializeField] Color systemMessageColor;
-
 
     /******************************************************
     *                    Unity Events
@@ -50,7 +49,7 @@ public class KnifeGameChatManager : MonoBehaviourPunCallbacks, IChatClientListen
 
     void Start()
     {
-        PhotonPeer.RegisterType(typeof(ChatData), 100, ChatData.Serialize, ChatData.Deserialize);
+        PhotonPeer.RegisterType(typeof(ChatData), (byte)'C', ChatData.Serialize, ChatData.Deserialize);
 
         buttonFixSize.onClick.AddListener(FixSize);
         inputField.onSubmit.AddListener(SendMessage);
@@ -103,8 +102,9 @@ public class KnifeGameChatManager : MonoBehaviourPunCallbacks, IChatClientListen
 
         chatClient.ConnectUsingSettings(PhotonNetwork.PhotonServerSettings.AppSettings.GetChatSettings());
 
-        curChannelName = PhotonNetwork.CurrentRoom.Name + "InGame";
-    }
+        curChannelName = $"{PhotonNetwork.CurrentRoom.Name}InGame"; // 근데 이렇게 채널명을 정하는 방식에는 문제가 있음
+        // 누가 똑같은 이름으로 방 만들면 로비의 방 화면에서 해당 게임의 메세지들을 수신 가능함
+    } 
 
     enum SizeState { Default, MAX, MIN }
     [Header("Chat Size Setting")]
@@ -149,13 +149,15 @@ public class KnifeGameChatManager : MonoBehaviourPunCallbacks, IChatClientListen
     {
         if (!PhotonNetwork.IsMasterClient) return;
 
-        chatClient.PublishMessage(curChannelName, chatdata); // 다른 채널에 킬/데스 메세지를 보내서 킬로그 시스템 구현?
+        //chatClient.PublishMessage(curChannelName, chatdata);
+        // 다른 채널에 킬/데스 메세지를 보내서 킬로그 시스템 구현? X
+        //  => 킬로그는 이거 호출하는 대신 IOnEventCallback 방식으로 구현
     }
 
 
     #endregion
     /******************************************************
-    *              IChatClientListener Callbacks
+    *             IChatClientListener Callbacks
     ******************************************************/
 
     #region Callbacks
@@ -183,7 +185,7 @@ public class KnifeGameChatManager : MonoBehaviourPunCallbacks, IChatClientListen
 
     void IChatClientListener.OnGetMessages(string channelName, string[] senders, object[] messages)
     {
-        Debug.Log($"GetMessage from {channelName}");
+        //Debug.Log($"GetMessage from {channelName}");
         //chatClient.Service(); 가 이거 호출함
         // 일반 채널 채팅 수신
         if (channelName.Equals(curChannelName))
@@ -213,8 +215,8 @@ public class KnifeGameChatManager : MonoBehaviourPunCallbacks, IChatClientListen
     void IChatClientListener.OnSubscribed(string[] channels, bool[] results)
     {
         //내가 채널 입장시
-        ChatEntry newChat = Instantiate(chatEntry, contents);
-        newChat.SetChat(new ChatData(" ", $"You Entered Room:{curChannelName}", Color.black, Color.green));
+        //ChatEntry newChat = Instantiate(chatEntry, contents);
+       // newChat.SetChat(new ChatData(" ", $"You Entered Room:{curChannelName}", Color.black, Color.green));
     }
 
     void IChatClientListener.OnUnsubscribed(string[] channels)
@@ -225,13 +227,14 @@ public class KnifeGameChatManager : MonoBehaviourPunCallbacks, IChatClientListen
     void IChatClientListener.OnUserSubscribed(string channel, string user)
     {
         //유저가 채널에 입장 할 시
-        ChatEntry newChat = Instantiate(chatEntry, contents);
-        newChat.SetChat(new ChatData(" ", $"{user} was Entered {channel}", Color.black, Color.blue));
+        //ChatEntry newChat = Instantiate(chatEntry, contents);
+       // newChat.SetChat(new ChatData(" ", $"{user} was Entered {channel}", Color.black, Color.blue));
     }
 
     void IChatClientListener.OnUserUnsubscribed(string channel, string user)
     {
         // 유저가 채널 퇴장시
     }
+
     #endregion
 }

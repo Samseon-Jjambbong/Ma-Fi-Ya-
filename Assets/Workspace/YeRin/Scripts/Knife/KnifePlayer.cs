@@ -1,3 +1,4 @@
+using ExitGames.Client.Photon;
 using Photon.Pun;
 using Photon.Realtime;
 using System.Collections;
@@ -52,7 +53,8 @@ public class KnifePlayer : MonoBehaviourPun
 
     private Vector3 moveDir;
     Coroutine bubble;
-
+    public const byte KillLogEventCode = 44;
+    RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
     private void Start()
     {
         walkAudio.Stop();
@@ -230,6 +232,8 @@ public class KnifePlayer : MonoBehaviourPun
             Debug.Log($"{player.Name.text} die");
             player.photonView.RPC("Die", RpcTarget.All);
 
+            KillLogData log = new KillLogData(nickNameText.text, player.Name.text, 1);
+            PhotonNetwork.RaiseEvent(KillLogEventCode, log, raiseEventOptions, SendOptions.SendReliable);
             PhotonNetwork.LocalPlayer.AddPlayerKillCount();
         }
     }
@@ -268,6 +272,8 @@ public class KnifePlayer : MonoBehaviourPun
         {
             playerModel.SetActive(false);
             photonView.RPC("Die", RpcTarget.All);
+            KillLogData log = new KillLogData(nickNameText.text);
+            PhotonNetwork.RaiseEvent(KillLogEventCode, log, raiseEventOptions, SendOptions.SendReliable);
         }
     }
     #endregion

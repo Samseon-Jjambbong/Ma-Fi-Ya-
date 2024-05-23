@@ -169,6 +169,8 @@ public class House : MonoBehaviourPun, IPointerClickHandler
     // Show vote count during voting phase
     public void ShowVoteCount(bool show)
     {
+        if (!show)
+            voteCountText.text = "0";
         voteCountText.gameObject.SetActive(show);
     }
 

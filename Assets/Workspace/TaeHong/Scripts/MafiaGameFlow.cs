@@ -221,7 +221,6 @@ public class MafiaGameFlow : MonoBehaviourPun
         foreach (var house in Manager.Mafia.Houses)
         {
             house.ActivateOutline(false);
-            house.ShowVoteCount(false);
         }
 
         EnableChat(false);
@@ -235,6 +234,10 @@ public class MafiaGameFlow : MonoBehaviourPun
         yield return RemovedPlayerRoleRoutine(voteResult);
         Manager.Mafia.ApplyVoteResult(voteResult);
         yield return new WaitForSeconds(1);
+        foreach (var house in Manager.Mafia.Houses)
+        {
+            house.ShowVoteCount(false);
+        }
         Manager.Mafia.voteResultsFinished = true;
     }
 

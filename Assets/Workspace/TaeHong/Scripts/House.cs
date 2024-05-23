@@ -12,7 +12,7 @@ using System.Collections;
 /// The House class handles onClick events made by the player on the house.
 /// Click events should only happen in specific phases.
 /// </summary>
-public class House : MonoBehaviourPun, IPointerClickHandler, IPointerExitHandler, IPunObservable
+public class House : MonoBehaviourPun, IPointerClickHandler
 {
     [Header("Components")]
     [SerializeField] private GameObject useSkillUI;
@@ -50,59 +50,47 @@ public class House : MonoBehaviourPun, IPointerClickHandler, IPointerExitHandler
         voteCountText.text = Manager.Mafia.Votes[houseOwnerId - 1].ToString();
     }
 
+    /******************************************************
+    *                    Click Events
+    ******************************************************/
     // What UI should be shown when a house is clicked
     public void OnPointerClick(PointerEventData eventData)
     {
-        if (!outline.enabled || outline.OutlineParameters.Color == Color.yellow)
+        if (!outline.enabled)
             return;
 
-        // Cancel Skill
-        if (outline.OutlineParameters.Color == Color.red)
+        // Day = Vote
+        if (Manager.Mafia.IsDay)
         {
-            Manager.Mafia.PlayerAction = null;
-            skillIcon.gameObject.SetActive(false);
-            Manager.Mafia.ActivateHouseOutlines();
-            return;
+            // Click
+            if (!voteUI.gameObject.activeInHierarchy)
+            {
+                voteUI.gameObject.SetActive(true);
+            }
+            // Unclick
+            else
+            {
+                // Nothing
+            }
         }
-
-        voteUI.gameObject.SetActive(Manager.Mafia.IsDay);      // Day == vote
-        useSkillUI.gameObject.SetActive(!Manager.Mafia.IsDay); // Night == skill
-    }
-
-    // Show vote count during voting phase
-    public void ShowVoteCount(bool show)
-    {
-        voteCountText.gameObject.SetActive(show);
-    }
-
-    // Hide UI if cursor exits house
-    public void OnPointerExit(PointerEventData eventData)
-    {
-        HideUI();
-    }
-
-    public void HideUI()
-    {
-        useSkillUI.gameObject.SetActive(false);
-        voteUI.gameObject.SetActive(false);
-    }
-
-    public void ActivateOutline(bool activate)
-    {
-        // Check if owner is dead
-        if (PhotonNetwork.CurrentRoom.Players[houseOwnerId].GetDead())
-            return;
-
-        if (activate == false)
+        // Night = Use Skill
+        else
         {
-            skillIcon.gameObject.SetActive(false);
+            // Click
+            if (useSkillUI.gameObject.activeInHierarchy || outline.OutlineParameters.Color == Color.red)
+            {
+                HideUI();
+                Manager.Mafia.PlayerAction = null;
+                skillIcon.gameObject.SetActive(false);
+                outline.OutlineParameters.Color = Color.green;
+                Manager.Mafia.ActivateHouseOutlines();
+            }
+            // Unclick
+            else
+            {
+                useSkillUI.gameObject.SetActive(true);
+            }
         }
-        if (outline.OutlineParameters.Color != Color.green)
-        {
-            outline.OutlineParameters.Color = Color.green;
-        }
-
-        outline.enabled = activate;
     }
 
     public void ClickedUseSkillUI()
@@ -156,6 +144,43 @@ public class House : MonoBehaviourPun, IPointerClickHandler, IPointerExitHandler
         Manager.Mafia.photonView.RPC("BlockVotes", PhotonNetwork.LocalPlayer);
     }
 
+    /******************************************************
+    *                    UI Display
+    ******************************************************/
+    // Outline makes house clickable
+    public void ActivateOutline(bool activate)
+    {
+        // Check if owner is dead
+        if (PhotonNetwork.CurrentRoom.Players[houseOwnerId].GetDead())
+            return;
+
+        if (activate == false)
+        {
+            skillIcon.gameObject.SetActive(false);
+        }
+        if (outline.OutlineParameters.Color != Color.green)
+        {
+            outline.OutlineParameters.Color = Color.green;
+        }
+
+        outline.enabled = activate;
+    }
+
+    // Show vote count during voting phase
+    public void ShowVoteCount(bool show)
+    {
+        voteCountText.gameObject.SetActive(show);
+    }
+
+    public void HideUI()
+    {
+        useSkillUI.gameObject.SetActive(false);
+        voteUI.gameObject.SetActive(false);
+    }
+
+    /******************************************************
+    *                    Effects
+    ******************************************************/
     public IEnumerator PlayEffect(MafiaActionType mafiaActionType)
     {
         if(mafiaActionType == MafiaActionType.Kill)
@@ -188,6 +213,9 @@ public class House : MonoBehaviourPun, IPointerClickHandler, IPointerExitHandler
         healEffect.SetActive(false);
     }
 
+    /******************************************************
+    *                    RPCs
+    ******************************************************/
     [PunRPC]
     private void AddHouse(int id)
     {
@@ -200,13 +228,6 @@ public class House : MonoBehaviourPun, IPointerClickHandler, IPointerExitHandler
     {
         visitorId = id;
     }
-
-    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
-    {
-
-    }
-
-    #region Speech Bubble
 
     [PunRPC]
     public void OpenSpeechBubble(string userName, string sendText)
@@ -230,5 +251,4 @@ public class House : MonoBehaviourPun, IPointerClickHandler, IPointerExitHandler
 
         speechBubble.SetActive(false);
     }
-    #endregion
 }

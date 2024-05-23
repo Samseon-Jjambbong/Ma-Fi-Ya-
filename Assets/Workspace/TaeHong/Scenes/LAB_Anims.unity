@@ -2727,7 +2727,6 @@ MonoBehaviour:
   houseOwner: {fileID: 0}
   houseOwnerId: 0
   visitorId: 0
-  debugMode: 0
 --- !u!64 &541480246
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -3623,7 +3622,6 @@ MonoBehaviour:
   houseOwner: {fileID: 0}
   houseOwnerId: 0
   visitorId: 0
-  debugMode: 0
 --- !u!64 &663192576
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -7206,7 +7204,6 @@ MonoBehaviour:
   houseOwner: {fileID: 0}
   houseOwnerId: 0
   visitorId: 0
-  debugMode: 0
 --- !u!64 &1284738036
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -7976,9 +7973,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sharedData: {fileID: 0}
   animFactory: {fileID: 0}
-  displayRoleTime: 0
-  roleUseTime: 0
-  voteTime: 0
   skillTime: 0
   houses: []
   displayRoleFinished: 0
@@ -8025,7 +8019,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   timer: {fileID: 421478242}
   lightController: {fileID: 410087043}
-  roleUI: {fileID: 1448853668}
+  roleUI: {fileID: 1448853670}
+  skipVoteButton: {fileID: 0}
+  winLoseUI: {fileID: 0}
+  MenuSceneName: 
 --- !u!114 &1424524251
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8291,18 +8288,24 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bcc10fc93702545bcaf9ca3f163c5ead, type: 3}
---- !u!1 &1448853668 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8925477530032483283, guid: bcc10fc93702545bcaf9ca3f163c5ead,
-    type: 3}
-  m_PrefabInstance: {fileID: 1448853667}
-  m_PrefabAsset: {fileID: 0}
 --- !u!224 &1448853669 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 6956658299598324719, guid: bcc10fc93702545bcaf9ca3f163c5ead,
     type: 3}
   m_PrefabInstance: {fileID: 1448853667}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1448853670 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8076335370264643342, guid: bcc10fc93702545bcaf9ca3f163c5ead,
+    type: 3}
+  m_PrefabInstance: {fileID: 1448853667}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ce95007c4170497fbd5128379efb989, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1452416024
 GameObject:
   m_ObjectHideFlags: 0
@@ -10109,7 +10112,6 @@ MonoBehaviour:
   houseOwner: {fileID: 0}
   houseOwnerId: 0
   visitorId: 0
-  debugMode: 0
 --- !u!64 &1779677908
 MeshCollider:
   m_ObjectHideFlags: 0

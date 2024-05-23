@@ -240,7 +240,7 @@ public class KnifeGameManager : MonoBehaviourPunCallbacks, IPunObservable
 
         curPlayerController.SetNickName(PhotonNetwork.PlayerList[playerNumber].NickName);
         curPlayerController.photonView.RPC("SetWeapon", RpcTarget.MasterClient, KnifeLength.Short);
-
+        weaponUI.gameObject.SetActive(true);
     }
 
     /******************************************************

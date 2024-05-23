@@ -1098,6 +1098,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Weapon
       objectReference: {fileID: 0}
+    - target: {fileID: 4823102188490673244, guid: d7d2153c45096a54c92bd317c1e7f25a,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8440344124993664413, guid: d7d2153c45096a54c92bd317c1e7f25a,
         type: 3}
       propertyPath: m_IsActive
@@ -2761,7 +2766,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &964772563
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2780,7 +2785,7 @@ MonoBehaviour:
   gameResultUI: {fileID: 398134945}
   weaponUI: {fileID: 499697908}
   countDownTime: 5
-  gamePlayTime: 35
+  gamePlayTime: 50
   gameReadyBGM: {fileID: 8300000, guid: 29f9c50f088cdd24bbe304b781016d4f, type: 3}
   InGameBGM: {fileID: 8300000, guid: e9d2563098de4c44db2f9fded8cefe35, type: 3}
   gameStartSFX: {fileID: 8300000, guid: 97ab94f37c3683746ba2d6ed44f7087d, type: 3}
@@ -4224,7 +4229,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1520204788
 Transform:
   m_ObjectHideFlags: 0
@@ -4247,7 +4252,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1520204786}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f1f347a729477ea40b1402ac07ca1944, type: 3}
   m_Name: 

@@ -1177,7 +1177,7 @@ MonoBehaviour:
   movePower: 20
   rotateSpeed: 8
   isWalking: 0
-  canMove: 1
+  canMove: 0
   shortKnife: {fileID: 7324432728231609592}
   middleKnife: {fileID: 1720272600417815618}
   longKnife: {fileID: 858563763648759619}

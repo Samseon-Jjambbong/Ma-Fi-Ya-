@@ -16,7 +16,7 @@ public class LeaderBoard : MonoBehaviour
     List<UserRank> userRanks = new List<UserRank>(MAXCOUNT);
 
     const int MAXCOUNT = 10;
-    const string DATA = "winCount"; //"score"
+    const string DATA = "score"; //"score"
 
 
     void Start()

@@ -34,8 +34,10 @@ public class RoleUI : BaseUI
         MafiaRole playerRole = PhotonNetwork.CurrentRoom.Players[playerID].GetPlayerRole();
         MafiaRoleData data = dataSO.GetData(playerRole);
 
+
         GetUI<TextMeshProUGUI>("Text Top").text = $"{PhotonNetwork.CurrentRoom.Players[playerID].NickName}의 직업은";
         GetUI<Image>("RoleIcon").sprite = data.roleIcon;
         GetUI<TextMeshProUGUI>("RoleName").text = data.roleName;
+
     }
 }

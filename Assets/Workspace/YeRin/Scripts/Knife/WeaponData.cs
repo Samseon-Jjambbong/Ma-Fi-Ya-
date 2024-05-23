@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class WeaponData : ScriptableObject
 {
     [SerializeField] Sprite image;
-    [SerializeField] string name;
+    [SerializeField] new string name;
     [SerializeField] string speed;
     [SerializeField] string range;
 

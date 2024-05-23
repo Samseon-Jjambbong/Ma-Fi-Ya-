@@ -8,7 +8,7 @@ public class WeaponUI : MonoBehaviour
 {
     [Header("Components")]
     [SerializeField] Image image;
-    [SerializeField] TMP_Text name;
+    [SerializeField] new TMP_Text name;
     [SerializeField] TMP_Text speed;
     [SerializeField] TMP_Text range;
 

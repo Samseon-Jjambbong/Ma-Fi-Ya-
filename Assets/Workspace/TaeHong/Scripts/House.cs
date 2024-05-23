@@ -104,8 +104,9 @@ public class House : MonoBehaviourPun, IPointerClickHandler
                 // Set outline to red
                 outline.OutlineParameters.Color = Color.red;
                 // Show skill icon
-                MafiaRole playerRole = PhotonNetwork.LocalPlayer.GetPlayerRole();
-                MafiaRoleData data = dataSO.GetData(playerRole);
+
+                MafiaActionType actionType = Manager.Mafia.Player.actionType;
+                MafiaRoleData data = dataSO.GetData(actionType);
                 skillIcon.sprite = data.roleIcon;
                 skillIcon.gameObject.SetActive(true);
                 // Store action info

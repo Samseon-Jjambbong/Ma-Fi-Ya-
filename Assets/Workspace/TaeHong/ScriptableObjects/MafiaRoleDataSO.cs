@@ -1,4 +1,5 @@
 using System;
+using System.Data;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Mafia/MafiaRoleData", fileName = "MafiaRoleData")]
@@ -21,6 +22,21 @@ public class MafiaRoleDataSO : ScriptableObject
                 return policeData;
             case MafiaRole.Insane:
                 return insaneData;
+            default:
+                return null;
+        }
+    }
+
+    public MafiaRoleData GetData(MafiaActionType actionType)
+    {
+        switch (actionType)
+        {
+            case MafiaActionType.Kill:
+                return mafiaData;
+            case MafiaActionType.Heal:
+                return doctorData;
+            case MafiaActionType.Block:
+                return policeData;
             default:
                 return null;
         }

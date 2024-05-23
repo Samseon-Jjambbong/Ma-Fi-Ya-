@@ -13,7 +13,17 @@ public class RoleUI : BaseUI
     public void InitBegin()
     {
         MafiaRole playerRole = PhotonNetwork.LocalPlayer.GetPlayerRole();
-        MafiaRoleData data = dataSO.GetData(playerRole);
+        MafiaRoleData data;
+
+        // If insane, don't reveal
+        if(playerRole == MafiaRole.Insane)
+        {
+            data = dataSO.GetData(Manager.Mafia.Player.actionType);
+        }
+        else
+        {
+            data = dataSO.GetData(playerRole);
+        }
         Debug.Log(playerRole);
 
         GetUI<Image>("RoleIcon").sprite = data.roleIcon;

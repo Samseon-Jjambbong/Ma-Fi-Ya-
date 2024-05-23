@@ -66,7 +66,7 @@ public class MafiaPlayer : MonoBehaviourPun
                     actionType = MafiaActionType.Block;
                     break;
                 case MafiaRole.Insane:
-                    actionType = (MafiaActionType) Random.Range(0, 3);
+                    actionType = (MafiaActionType) Random.Range(1, 3);
                     break;
             }
         }

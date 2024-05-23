@@ -59,6 +59,7 @@ public class MafiaManager : Singleton<MafiaManager>, IPunObservable
     public bool nightPhaseFinished;
     public bool nightEventsFinished;
     public bool nightResultsFinished;
+    public int voteCount;
     public bool dayPhaseFinished;
     public bool voteResultsFinished;
 
@@ -138,6 +139,7 @@ public class MafiaManager : Singleton<MafiaManager>, IPunObservable
             return;
         }
         votes[playerID - 1]++;
+        voteCount++;
         VoteCountChanged?.Invoke();
     }
 

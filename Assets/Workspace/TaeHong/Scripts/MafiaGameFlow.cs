@@ -1,9 +1,8 @@
-using Mafia;
+
 using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using Tae;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -161,6 +160,7 @@ public class MafiaGameFlow : MonoBehaviourPun
         Manager.Mafia.nightPhaseFinished = true;
     }
 
+    
     private IEnumerator ShowNightEventsRoutine()
     {
         Manager.Mafia.sharedData.photonView.RPC("ResetClientFinishedCount", RpcTarget.All);
@@ -215,7 +215,15 @@ public class MafiaGameFlow : MonoBehaviourPun
             Manager.Mafia.Houses[i].ActivateOutline(true);
         }
 
-        yield return timer.StartTimer(time);
+        Debug.Log("Voting started");
+
+        timer.StartTimer(time);
+        while (!timer.timerFinished && !(Manager.Mafia.voteCount == Manager.Mafia.sharedData.ActivePlayerCount()))
+        {
+            yield return new WaitForSeconds(1);
+        }
+
+        Debug.Log("Voting finished");
 
         skipVoteButton.gameObject.SetActive(false);
         foreach (var house in Manager.Mafia.Houses)

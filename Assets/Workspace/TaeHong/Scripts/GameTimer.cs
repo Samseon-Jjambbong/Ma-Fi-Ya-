@@ -10,6 +10,7 @@ public class GameTimer : MonoBehaviour, IPunObservable
     [SerializeField] private TextMeshProUGUI timerText;
 
     public event Action TimerFinished;
+    public bool timerFinished;
 
     private void Start()
     {
@@ -18,6 +19,7 @@ public class GameTimer : MonoBehaviour, IPunObservable
 
     public IEnumerator StartTimer(int duration)
     {
+        timerFinished = false;
         return TimerRoutine(duration);
     }
 
@@ -33,6 +35,7 @@ public class GameTimer : MonoBehaviour, IPunObservable
         timerText.text = t.ToString();
         Debug.Log("Timer finished");
         TimerFinished?.Invoke();
+        timerFinished = true;
     }
 
     public void OnPhotonSerializeView( PhotonStream stream, PhotonMessageInfo info )

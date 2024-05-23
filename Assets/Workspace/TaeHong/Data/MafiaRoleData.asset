@@ -22,5 +22,5 @@ MonoBehaviour:
     roleIcon: {fileID: 21300000, guid: d6e0c61226318b64db8f2ca9069b2dae, type: 3}
     roleName: "\uACBD\uCC30"
   insaneData:
-    roleIcon: {fileID: 21300000, guid: 5b52417985ec0da4cbc51cfda577d8a5, type: 3}
+    roleIcon: {fileID: 21300000, guid: b1f0ab8af36384aa0ae3eacba9de94eb, type: 3}
     roleName: "\uC815\uC2E0\uC774\uC0C1\uC790"

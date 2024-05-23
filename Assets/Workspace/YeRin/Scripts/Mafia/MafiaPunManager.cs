@@ -36,6 +36,10 @@ public class MafiaPunManager : MonoBehaviourPunCallbacks
         }
     }
 
+    /******************************************************
+    *                    Game Setup
+    ******************************************************/
+    #region Game Setup
     public override void OnPlayerPropertiesUpdate(Player targetPlayer, PhotonHashTable changedProps)
     {
         if (changedProps.ContainsKey(CustomProperty.LOAD))
@@ -124,83 +128,6 @@ public class MafiaPunManager : MonoBehaviourPunCallbacks
         }
     }
 
-    private IEnumerator GameLoop()
-    {
-        // Delay
-        yield return new WaitForSeconds(1);
-
-        // Display role 
-        photonView.RPC("DisplayRole", RpcTarget.All, displayRoleTime);
-        yield return new WaitUntil(() => Manager.Mafia.displayRoleFinished);
-
-        // Loop
-        while (true)
-        {
-            // Change to night
-            Debug.Log("Night Phase Start");
-            photonView.RPC("StartNightPhase", RpcTarget.All, displayRoleTime);
-            yield return new WaitUntil(() => Manager.Mafia.nightPhaseFinished);
-            Debug.Log("Night Phase End");
-
-            yield return new WaitForSeconds(1);
-
-            // Show Night Events
-            Debug.Log("Night Events Start");
-            photonView.RPC("ShowNightEvents", RpcTarget.MasterClient);
-            yield return new WaitUntil(() => Manager.Mafia.nightEventsFinished);
-            Debug.Log("Night Events End");
-
-            yield return new WaitForSeconds(1);
-
-            // Show Night Results
-            Debug.Log("Night Results Start");
-            photonView.RPC("ShowNightResults", RpcTarget.All);
-            yield return new WaitUntil(() => Manager.Mafia.nightResultsFinished);
-            Debug.Log("Night Results End");
-
-            yield return new WaitForSeconds(1);
-
-            // Check Game Over
-            Debug.Log("Checking Game Over...");
-            if(Manager.Mafia.GameResult != MafiaResult.None)
-            {
-                photonView.RPC("GameOver", RpcTarget.All);
-                Debug.Log($"Game Over: {Manager.Mafia.GameResult}");
-                yield break;
-            }
-            Debug.Log("Game not over");
-
-            // Day Phase
-            Debug.Log("Day Phase Start");
-            photonView.RPC("StartDayPhase", RpcTarget.All, voteTime);
-            yield return new WaitUntil(() => Manager.Mafia.dayPhaseFinished);
-            Debug.Log("Day Events End");
-              
-            yield return new WaitForSeconds(1);
-
-            // Show Vote Result
-            Debug.Log("Show Vote Results Start");
-            photonView.RPC("ShowVoteResults", RpcTarget.All);
-            yield return new WaitUntil(() => Manager.Mafia.voteResultsFinished);
-            Debug.Log("Show Vote Results End");
-
-            yield return new WaitForSeconds(1);
-
-            // Check Game Over
-            Debug.Log("Checking Game Over...");
-            if (Manager.Mafia.GameResult != MafiaResult.None)
-            {
-                photonView.RPC("GameOver", RpcTarget.All);
-                Debug.Log($"Game Over: {Manager.Mafia.GameResult}");
-                yield break;
-            }
-            Debug.Log("Game not over");
-
-            // Reset flags
-            Manager.Mafia.ResetFlags();
-        }
-    }
-
     private void SpawnPlayer()
     {
         int angle = 180 / (Manager.Mafia.PlayerCount - 1);    // 각 플레이어의 간격의 각도
@@ -284,4 +211,101 @@ public class MafiaPunManager : MonoBehaviourPunCallbacks
             Manager.Mafia.Game.AddPlayer(roles[i]);
         }
     }
+    #endregion
+
+    /******************************************************
+    *                    Game Loop
+    ******************************************************/
+    #region Game Loop
+    private IEnumerator GameLoop()
+    {
+        // Delay
+        yield return new WaitForSeconds(1);
+
+        // Display role 
+        photonView.RPC("DisplayRole", RpcTarget.All, displayRoleTime);
+        yield return new WaitUntil(() => Manager.Mafia.displayRoleFinished);
+
+        // Loop
+        while (true)
+        {
+            // Change to night
+            Debug.Log("Night Phase Start");
+            photonView.RPC("StartNightPhase", RpcTarget.All, skillTime);
+            yield return new WaitUntil(() => Manager.Mafia.nightPhaseFinished);
+            Debug.Log("Night Phase End");
+
+            yield return new WaitForSeconds(1);
+
+            // Show Night Events
+            Debug.Log("Night Events Start");
+            photonView.RPC("ShowNightEvents", RpcTarget.MasterClient);
+            yield return new WaitUntil(() => Manager.Mafia.nightEventsFinished);
+            Debug.Log("Night Events End");
+
+            yield return new WaitForSeconds(1);
+
+            // Show Night Results
+            Debug.Log("Night Results Start");
+            photonView.RPC("ShowNightResults", RpcTarget.All);
+            yield return new WaitUntil(() => Manager.Mafia.nightResultsFinished);
+            Debug.Log("Night Results End");
+
+            yield return new WaitForSeconds(1);
+
+            // Check Game Over
+            yield return GameOverCheck();
+
+            // Day Phase
+            Debug.Log("Day Phase Start");
+            photonView.RPC("StartDayPhase", RpcTarget.All, voteTime);
+            yield return new WaitUntil(() => Manager.Mafia.dayPhaseFinished);
+            Debug.Log("Day Events End");
+              
+            yield return new WaitForSeconds(1);
+
+            // Show Vote Result
+            Debug.Log("Show Vote Results Start");
+            photonView.RPC("CountVotes", RpcTarget.MasterClient);
+            int voteResult = Manager.Mafia.sharedData.playerToKick;
+            Debug.Log($"Vote Result : {voteResult}");
+            if (voteResult != -1)
+            {
+                Debug.Log($"Player{voteResult} got kicked");
+                photonView.RPC("ShowVoteResults", RpcTarget.All, voteResult);
+                yield return new WaitUntil(() => Manager.Mafia.voteResultsFinished);
+            }
+            else
+            {
+                Debug.Log("No one got kicked");
+                yield return new WaitForSeconds(3);
+            }
+            
+            Debug.Log("Show Vote Results End");
+
+            yield return new WaitForSeconds(1);
+
+            // Check Game Over
+            yield return GameOverCheck();
+
+            // Reset flags
+            Manager.Mafia.ResetFlags();
+        }
+    }
+
+    private IEnumerator GameOverCheck()
+    {
+        Debug.Log("Checking Game Over...");
+        if (Manager.Mafia.GameResult != MafiaResult.None)
+        {
+            photonView.RPC("GameOver", RpcTarget.All, (int) Manager.Mafia.GameResult);
+            Debug.Log($"Game Over: {Manager.Mafia.GameResult}");
+            StopAllCoroutines();
+        }
+        Debug.Log("Game not over");
+        yield return null;
+    }
+    #endregion
+
+    
 }

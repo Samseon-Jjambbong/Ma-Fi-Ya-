@@ -12,6 +12,7 @@ public static class CustomProperty
     public const string PLAYERROLE = "PlayerRole";
     public const string PLAYERCOLOR = "PlayerColor";
     public const string MAFIAREADY = "MafiaReady";
+    public const string DEAD = "Dead";
 
     public static bool GetReady(this Player player)
     {
@@ -132,6 +133,21 @@ public static class CustomProperty
     public static void SetMafiaReady(this Player player, bool value)
     {
         PhotonHashtable propertiesToSet = new PhotonHashtable { { MAFIAREADY, value } };
+        player.SetCustomProperties(propertiesToSet);
+    }
+
+    // Player Dead (아마 마피아/칼전 둘다 사용 가능)
+    public static bool GetDead(this Player player)
+    {
+        PhotonHashtable properties = player.CustomProperties;
+        if (properties.ContainsKey(DEAD))
+            return (bool) properties[DEAD];
+        return false;
+    }
+
+    public static void SetDead(this Player player, bool value)
+    {
+        PhotonHashtable propertiesToSet = new PhotonHashtable { { DEAD, value } };
         player.SetCustomProperties(propertiesToSet);
     }
 }

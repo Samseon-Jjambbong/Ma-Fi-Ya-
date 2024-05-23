@@ -111,7 +111,7 @@ public class LeaderBoard : MonoBehaviour
                      string json = item.GetRawJsonValue();
                      UserData data = JsonUtility.FromJson<UserData>(json);
                      string name = data.Name;
-                     int score = data.winCount;
+                     int score = data.score;
                      var userRank = Instantiate(prefab, contents);
                      
                      userRank.Set(rank, name, score);

@@ -1,4 +1,5 @@
 using Photon.Pun;
+using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -10,24 +11,29 @@ using UnityEngine.InputSystem;
 /// 
 /// About player control in Knife Game Mode
 /// </summary>
-public class PlayerController : MonoBehaviourPun
+public class KnifePlayer : MonoBehaviourPun
 {
     [Header("Components")]
     [SerializeField] TMP_Text nickNameText;
     [SerializeField] CharacterController controller;
     [SerializeField] Animator animator;
     [SerializeField] AudioSource walkAudio;
+    [SerializeField] GameObject playerModel;
+    [SerializeField] GameObject speechBubble;
+    [SerializeField] TMP_Text bubbleText;
+    [SerializeField] LayerMask deathZone;
+    [SerializeField] SpriteRenderer flatArrow;
 
     public TMP_Text Name => nickNameText;
 
-    //[SerializeField] GameObject speechBubble;
-    //[SerializeField] TMP_Text bubbleText;
-
+    [SerializeField] Vector3 playerSpawnPos;
     [SerializeField] float movePower;
     [SerializeField] float rotateSpeed;
 
     [Header("States")]
     [SerializeField] private bool isWalking;
+    [SerializeField] private bool canMove;
+    public bool CanMove { get { return canMove; } set { canMove = value; } }
 
     [Header("Knife")]
     [SerializeField] GameObject shortKnife;
@@ -45,11 +51,18 @@ public class PlayerController : MonoBehaviourPun
     Collider[] colliders = new Collider[20];
 
     private Vector3 moveDir;
+    Coroutine bubble;
 
     private void Start()
     {
         walkAudio.Stop();
         SetWeaponLength();
+        playerSpawnPos = transform.position;
+
+        if (photonView.IsMine)
+        {
+            flatArrow.color = new Color(0, 255, 0);
+        }
     }
 
     private void FixedUpdate()
@@ -208,13 +221,16 @@ public class PlayerController : MonoBehaviourPun
             if (Vector3.Dot(transform.forward, dirToTarget) < CosAngle)
                 continue;
 
-            PlayerController player = colliders[i].GetComponent<PlayerController>();
+            KnifePlayer player = colliders[i].GetComponent<KnifePlayer>();
             if (player.gameObject == gameObject)
             {
                 continue;
             }
             // 바로 죽음
             Debug.Log($"{player.Name.text} die");
+            player.photonView.RPC("Die", RpcTarget.All);
+
+            PhotonNetwork.LocalPlayer.AddPlayerKillCount();
         }
     }
     private void OnDrawGizmos()
@@ -224,15 +240,123 @@ public class PlayerController : MonoBehaviourPun
     }
     #endregion
 
+    #region Die
+    [PunRPC]
+    private void Die()
+    {
+        StartCoroutine(DieState());
+    }
 
+    IEnumerator DieState()
+    {
+        controller.enabled = false;
+        yield return new WaitForSeconds(1f);
+
+        playerModel.SetActive(false);
+        PhotonNetwork.LocalPlayer.AddPlayerDeathCount();
+        transform.position = playerSpawnPos;
+
+        yield return new WaitForSeconds(3f);
+
+        controller.enabled = true;
+        playerModel.SetActive(true);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (deathZone.Contain(other.gameObject.layer))
+        {
+            playerModel.SetActive(false);
+            photonView.RPC("Die", RpcTarget.All);
+        }
+    }
+    #endregion
+
+    #region Speech Bubble
+    [PunRPC]
+    public void OpenSpeechBubble(string userName, string sendText)
+    {
+        if (speechBubble.activeSelf)
+        {
+            StopCoroutine(bubble);
+        }
+        else
+        {
+            speechBubble.SetActive(true);
+        }
+
+        bubbleText.text = $"<#333333>{userName}</color>\n<#666666>{sendText}</color>";
+
+        bubble = StartCoroutine(CloseSpeechBubble());
+    }
+    IEnumerator CloseSpeechBubble()
+    {
+        yield return new WaitForSeconds(3f);
+
+        speechBubble.SetActive(false);
+    }
+    #endregion
+
+    #region etx
     [PunRPC]
     private void NickName(string nickName)
     {
         nickNameText.text = nickName;
     }
 
-    public void SetNickName(string nickName)   // PhotonNetwork.PlayerList[playerNumber].NickName
+    public void SetNickName(string nickName)
     {
         photonView.RPC("NickName", RpcTarget.All, nickName);
     }
+
+    [PunRPC]
+    private void SetWeapon(KnifeLength length)
+    {
+        if (PhotonNetwork.IsMasterClient)
+        {
+            switch (Random.Range(0, 3))
+            {
+                case 1:
+                    shortKnife.gameObject.SetActive(true);
+                    length = KnifeLength.Short;
+                    break;
+                case 2:
+                    middleKnife.gameObject.SetActive(true);
+                    length = KnifeLength.Middle;
+                    break;
+                case 3:
+                    longKnife.gameObject.SetActive(true);
+                    length = KnifeLength.Long;
+                    break;
+            }
+
+            if (photonView.IsMine)
+            {
+                KnifeGameManager.Instance.Knife = length;
+                KnifeGameManager.Instance.WeaponUI.SetWeaponUI();
+            }
+            photonView.RPC("SetWeapon", RpcTarget.Others, length);
+            return;
+        }
+
+        switch (length)
+        {
+            case KnifeLength.Short:
+                shortKnife.gameObject.SetActive(true);
+                break;
+            case KnifeLength.Middle:
+                middleKnife.gameObject.SetActive(true);
+                break;
+            case KnifeLength.Long:
+                longKnife.gameObject.SetActive(true);
+                break;
+        }
+
+        if (photonView.IsMine)
+        {
+            KnifeGameManager.Instance.Knife = length;
+            KnifeGameManager.Instance.WeaponUI.SetWeaponUI();
+        }
+    }
+    #endregion
 }

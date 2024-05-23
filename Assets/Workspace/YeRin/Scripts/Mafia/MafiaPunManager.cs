@@ -231,7 +231,7 @@ public class MafiaPunManager : MonoBehaviourPunCallbacks
         {
             // Change to night
             Debug.Log("Night Phase Start");
-            photonView.RPC("StartNightPhase", RpcTarget.All, displayRoleTime);
+            photonView.RPC("StartNightPhase", RpcTarget.All, skillTime);
             yield return new WaitUntil(() => Manager.Mafia.nightPhaseFinished);
             Debug.Log("Night Phase End");
 

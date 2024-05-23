@@ -214,7 +214,7 @@ public class FirebaseManager : MonoBehaviour
         return Auth.CurrentUser.DisplayName;
     }
 
-    public static UserData GetUserData()
+    public static void GetUserData()
     {
         DB
           .GetReference(PATH).Child(Auth.CurrentUser.UserId)
@@ -239,8 +239,6 @@ public class FirebaseManager : MonoBehaviour
                   return;
               }
           });
-
-        return userData;
     }
 
 
@@ -259,42 +257,62 @@ public class FirebaseManager : MonoBehaviour
 
         bool workFlag = true;
         //Get Data From Database
-        GetUserData();
-
-        Debug.Log($"Cur Data | Name: {userData.Name} , Score :{userData.score}, Count:{userData.playCount}");
-
-        //Update UserData Value
-
-        if ( isWin )
-            userData.winCount++;
-
-        userData.playCount++;
-        userData.score += score;
-
-        Debug.Log($"Updated Data | Name: {userData.Name} , Score :{userData.score}, Count:{userData.playCount}");
-
-        //Update Database
-        string json = JsonUtility.ToJson(userData);
-
         DB
-           .GetReference(PATH)
-           .Child(Auth.CurrentUser.UserId)
-           .SetRawJsonValueAsync(json).ContinueWithOnMainThread(task =>
-           {
-               if ( task.IsFaulted )
-               {
-                   Debug.LogError($"DB SetValueAsync Faulted : {task.Exception}");
-                   workFlag = false;
-                   return;
-               }
-               if ( task.IsCanceled )
-               {
-                   Debug.LogError("DB SetValueAsync Canceled");
-                   workFlag = false;
-                   return;
-               }
-           });
+          .GetReference(PATH).Child(Auth.CurrentUser.UserId)
+          .GetValueAsync().ContinueWithOnMainThread(task =>
+          {
+              if (task.IsFaulted)
+              {
+                  Debug.LogError($"DB GetValueAsync Faulted : {task.Exception}");
+                  workFlag = false;
+                  return;
+              }
+              if (task.IsCanceled)
+              {
+                  Debug.LogError($"DB SetValueAsync Canceled");
+                  workFlag = false;
+                  return;
+              }
 
+              DataSnapshot snapshot = task.Result;
+              if (snapshot.Exists)
+              {
+                  string json = snapshot.GetRawJsonValue();
+                  userData = JsonUtility.FromJson<UserData>(json);
+                  if (isWin)
+                      userData.winCount++;
+
+                  userData.playCount++;
+                  userData.score += score;
+                  
+                  json = JsonUtility.ToJson(userData);
+
+                  DB
+                     .GetReference(PATH)
+                     .Child(Auth.CurrentUser.UserId)
+                     .SetRawJsonValueAsync(json).ContinueWithOnMainThread(task =>
+                     {
+                         if (task.IsFaulted)
+                         {
+                             Debug.LogError($"DB SetValueAsync Faulted : {task.Exception}");
+                             workFlag = false;
+                             return;
+                         }
+                         if (task.IsCanceled)
+                         {
+                             Debug.LogError("DB SetValueAsync Canceled");
+                             workFlag = false;
+                             return;
+                         }
+                     });
+                  return;
+              }
+          });
         return workFlag;
+    }
+
+    public void UpdateRecordTest()
+    {
+        UpdateRecord(1);
     }
 }

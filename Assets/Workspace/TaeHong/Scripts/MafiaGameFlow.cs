@@ -255,10 +255,12 @@ public class MafiaGameFlow : MonoBehaviourPun
             if (result == MafiaResult.MafiaWin)
             {
                 winLoseUI.ShowWin(100);
+                FirebaseManager.UpdateRecord(100, true);
             }
             else
             {
                 winLoseUI.ShowLose(50);
+                FirebaseManager.UpdateRecord(50);
             }
         }
         // 내가 시민이면
@@ -267,10 +269,12 @@ public class MafiaGameFlow : MonoBehaviourPun
             if (result == MafiaResult.MafiaWin)
             {
                 winLoseUI.ShowLose(50);
+                FirebaseManager.UpdateRecord(50);
             }
             else
             {
                 winLoseUI.ShowWin(100);
+                FirebaseManager.UpdateRecord(100, true);
             }
         }
         

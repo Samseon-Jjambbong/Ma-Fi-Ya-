@@ -11,7 +11,7 @@ using UnityEngine.InputSystem;
 /// 
 /// About player control in Knife Game Mode
 /// </summary>
-public class PlayerController : MonoBehaviourPun
+public class KnifePlayer : MonoBehaviourPun
 {
     [Header("Components")]
     [SerializeField] TMP_Text nickNameText;
@@ -221,7 +221,7 @@ public class PlayerController : MonoBehaviourPun
             if (Vector3.Dot(transform.forward, dirToTarget) < CosAngle)
                 continue;
 
-            PlayerController player = colliders[i].GetComponent<PlayerController>();
+            KnifePlayer player = colliders[i].GetComponent<KnifePlayer>();
             if (player.gameObject == gameObject)
             {
                 continue;

@@ -14,8 +14,8 @@ public class KnifeGameManager : MonoBehaviourPunCallbacks, IPunObservable
     private static KnifeGameManager instance;
     public static KnifeGameManager Instance { get { return instance; } }
 
-    PlayerController player;
-    public PlayerController Player { get { return player; } set { player = value; } }
+    KnifePlayer player;
+    public KnifePlayer Player { get { return player; } set { player = value; } }
 
     [Header("Components")]
     [SerializeField] TextMeshProUGUI infoText;
@@ -234,10 +234,10 @@ public class KnifeGameManager : MonoBehaviourPunCallbacks, IPunObservable
         // GameObject player = Instantiate(playerprefab, pos, Quaternion.LookRotation(-pos));
         GameObject player = PhotonNetwork.Instantiate("Knife", pos, Quaternion.LookRotation(-pos)); //플레이어
 
-        this.player = player.GetComponent<PlayerController>();
+        this.player = player.GetComponent<KnifePlayer>();
 
-        player.GetComponent<PlayerController>().SetNickName(PhotonNetwork.PlayerList[playerNumber].NickName);
-        player.GetComponent<PlayerController>().photonView.RPC("SetWeapon", RpcTarget.MasterClient, KnifeLength.Short);
+        player.GetComponent<KnifePlayer>().SetNickName(PhotonNetwork.PlayerList[playerNumber].NickName);
+        player.GetComponent<KnifePlayer>().photonView.RPC("SetWeapon", RpcTarget.MasterClient, KnifeLength.Short);
 
         //색깔 설정 - 은 플레이어에서 ㄹ
     }

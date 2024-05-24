@@ -51,6 +51,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73c65728dd6a44e3c91aa8ca75ef5782, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  curData:
+    roleIcon: {fileID: 0}
+    roleName: 
+    roleDescription: 
+  toolTip: {fileID: 0}
+  highLightColor: {r: 0, g: 1, b: 0.08627451, a: 1}
+  mouseOverColor: {r: 1, g: 0.92309815, b: 0, a: 1}
 --- !u!114 &52950409141285813
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -129,7 +136,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 1, b: 0.08817577, a: 1}
+  m_Color: {r: 0, g: 0, b: 0, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1

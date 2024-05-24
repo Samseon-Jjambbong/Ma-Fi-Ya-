@@ -21,7 +21,7 @@ EditorBuildSettings:
     path: Assets/Workspace/JunHyoung/Scenes/InGameChatTest.unity
     guid: 01950a593b70bf444a6269077a74f0f5
   - enabled: 0
-    path: Assets/Scenes/MenuSceneWithUI.unity
+    path: Assets/Scenes/MainMenuScene.unity
     guid: ad074e3a48617314792692a31d3acdce
   - enabled: 0
     path: Assets/Workspace/YeRin/Scene/TestGame_Ye.unity

@@ -353,7 +353,7 @@ public class KnifePlayer : MonoBehaviourPun
     {
         if (PhotonNetwork.IsMasterClient)
         {
-            switch (Random.Range(0, 3))
+            switch (Random.Range(1, 4))
             {
                 case 1:
                     shortKnife.gameObject.SetActive(true);

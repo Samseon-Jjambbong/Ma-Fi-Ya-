@@ -5334,7 +5334,8 @@ PrefabInstance:
       value: KnifeMap
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 3215741447322200607, guid: 5226a7ab9ead9d94ab9b333be0799d2a, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5226a7ab9ead9d94ab9b333be0799d2a, type: 3}

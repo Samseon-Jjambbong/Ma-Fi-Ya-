@@ -37,6 +37,7 @@ public class MafiaPlayer : MonoBehaviourPun
     [Header("Mafia Logic")]
     private Dictionary<int, Player> playerDic;
     public MafiaActionType actionType;
+    public MafiaRole fakeRole; // used only by insane
 
     [Header("States")]
     private bool skillBlocked;
@@ -66,7 +67,17 @@ public class MafiaPlayer : MonoBehaviourPun
                     actionType = MafiaActionType.Block;
                     break;
                 case MafiaRole.Insane:
-                    actionType = Random.Range(0f, 1f) <= 0.5f ? MafiaActionType.Block : MafiaActionType.Heal;
+                    float random = Random.Range(0f, 1f);
+                    if(random <= 0.5f)
+                    {
+                        actionType = MafiaActionType.Block;
+                        fakeRole = MafiaRole.Police;
+                    }
+                    else
+                    {
+                        actionType = MafiaActionType.Heal;
+                        fakeRole = MafiaRole.Doctor;
+                    }
                     break;
             }
         }

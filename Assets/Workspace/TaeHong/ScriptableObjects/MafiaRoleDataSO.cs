@@ -2,6 +2,15 @@ using System;
 using System.Data;
 using UnityEngine;
 
+[Serializable]
+public class MafiaRoleData
+{
+    public Sprite roleIcon;
+    public string roleName;
+    [TextArea]
+    public string roleDescription;
+}
+
 [CreateAssetMenu(menuName = "Mafia/MafiaRoleData", fileName = "MafiaRoleData")]
 public class MafiaRoleDataSO : ScriptableObject
 {
@@ -41,12 +50,4 @@ public class MafiaRoleDataSO : ScriptableObject
                 return null;
         }
     }
-}
-
-
-[Serializable]
-public class MafiaRoleData
-{
-    public Sprite roleIcon;
-    public string roleName;
 }

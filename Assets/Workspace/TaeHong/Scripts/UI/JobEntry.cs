@@ -8,16 +8,20 @@ public class JobEntry : BaseUI
     Image highlight;
     Image icon;
 
-    private void Start()
+    private void OnEnable()
     {
-        highlight = GetUI<Image>("IMG-Outline");
+        highlight = GetUI<Image>("IMG-OutLine");
         icon = GetUI<Image>("IMG-Icon");
     }
 
-    public void InitJobEntry(MafiaRoleData data, bool isMine)
+    public void InitJobEntry(MafiaRoleData data)
     {
-        if (isMine)
-            highlight.enabled = true;
         icon.sprite = data.roleIcon;
+        highlight.enabled = false;
+    }
+
+    public void Highlight()
+    {
+        highlight.enabled = true;
     }
 }

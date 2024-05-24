@@ -484,17 +484,51 @@ PrefabInstance:
       propertyPath: m_Name
       value: CurrentJobPanel
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 7784230047305856026, guid: 1421b2ad707c5a7459a2e42311079e92, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 5707507509747974098, guid: 1421b2ad707c5a7459a2e42311079e92,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6335047855599866147}
   m_SourcePrefab: {fileID: 100100000, guid: 1421b2ad707c5a7459a2e42311079e92, type: 3}
+--- !u!224 &3753328187430572224 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 1006548731196466933, guid: 1421b2ad707c5a7459a2e42311079e92,
+    type: 3}
+  m_PrefabInstance: {fileID: 4170749580307559989}
+  m_PrefabAsset: {fileID: 0}
 --- !u!224 &4399225461645506756 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 354740498581982961, guid: 1421b2ad707c5a7459a2e42311079e92,
     type: 3}
   m_PrefabInstance: {fileID: 4170749580307559989}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &8562567139480930791 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5707507509747974098, guid: 1421b2ad707c5a7459a2e42311079e92,
+    type: 3}
+  m_PrefabInstance: {fileID: 4170749580307559989}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &6335047855599866147
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8562567139480930791}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 83d98e9d24da24a3580c4b127d4f7707, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  grid: {fileID: 3753328187430572224}
+  rolePools: {fileID: 11400000, guid: a837e1b57ca4442d582f6071f3a7fbde, type: 2}
+  roleData: {fileID: 11400000, guid: bdddeb253d6534c5ba32cbb2c14dfa9b, type: 2}
+  jobEntryPrefab: {fileID: 1015756987882932787, guid: 517f44f6fea6e7a4082bfc5dc5d517e4,
+    type: 3}
 --- !u!1001 &5603235184103672837
 PrefabInstance:
   m_ObjectHideFlags: 0

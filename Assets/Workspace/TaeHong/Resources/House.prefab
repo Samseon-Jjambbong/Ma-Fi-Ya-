@@ -1920,20 +1920,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1123029021225077496}
     m_Modifications:
-    - target: {fileID: 342961755164450766, guid: 004b7d3ef83712b41aac35c083398f81,
-        type: 3}
-      propertyPath: m_PresetInfoIsWorld
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 1703228368615138047, guid: 004b7d3ef83712b41aac35c083398f81,
         type: 3}
       propertyPath: m_Name
       value: Speech Bubble
-      objectReference: {fileID: 0}
-    - target: {fileID: 1703228368615138047, guid: 004b7d3ef83712b41aac35c083398f81,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1955471105706691491, guid: 004b7d3ef83712b41aac35c083398f81,
         type: 3}
@@ -2033,11 +2023,6 @@ PrefabInstance:
     - target: {fileID: 1955471105706691491, guid: 004b7d3ef83712b41aac35c083398f81,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2335443417489835517, guid: 004b7d3ef83712b41aac35c083398f81,
-        type: 3}
-      propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

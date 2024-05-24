@@ -21,6 +21,8 @@ public class MafiaGameFlow : MonoBehaviourPun
     [SerializeField] const string  VOTESTART = "Voting started";
     [SerializeField] const string VOTEFINISH = "Voting finished";
     [SerializeField] const string NOONEDIED = "No one died last night";
+    [SerializeField] const string NIGHT2DAY = "Night has come...";
+    [SerializeField] const string DAY2NIGHT = "It's Day Time...";
      private ChatData chatData;
     private void Start()
     {
@@ -128,10 +130,12 @@ public class MafiaGameFlow : MonoBehaviourPun
     {
         // Day -> Night
         yield return ChangeTimeOfDayRoutine();
+        chatData.message = DAY2NIGHT;
+        MafiaGameChatManager.Instance.PublishMessage(chatData);
 
         // Allow chat for mafia
         // TODO : Insert chat ON function here
-        EnableChat(true);
+        EnableChat(false);
 
         // Allow skill usage for X Seconds
         Manager.Mafia.ActivateHouseOutlines();
@@ -146,7 +150,7 @@ public class MafiaGameFlow : MonoBehaviourPun
         yield return new WaitForSeconds(3); // Give time for network to receive actions
 
         // TODO : Insert chat OFF function here
-       EnableChat(false);
+       EnableChat(true);
 
         Manager.Mafia.nightPhaseFinished = true;
     }
@@ -168,6 +172,8 @@ public class MafiaGameFlow : MonoBehaviourPun
     {
         // Night -> Day
         yield return ChangeTimeOfDayRoutine();
+        chatData.message = NIGHT2DAY;
+        MafiaGameChatManager.Instance.PublishMessage(chatData);
 
         // Show Players that died last night
         List<int> killed = Manager.Mafia.sharedData.GetKilledPlayers();

@@ -278,8 +278,6 @@ public class KnifePlayer : MonoBehaviourPun
     IEnumerator DieState()
     {
         controller.enabled = false;
-        /*photonView.RPC("OffWeapon", RpcTarget.All, KnifeGameManager.Instance.Knife);
-        photonView.RPC("SetWeapon", RpcTarget.MasterClient, KnifeGameManager.Instance.Knife);*/
         yield return new WaitForSeconds(1f);
 
         playerModel.SetActive(false);
@@ -382,29 +380,6 @@ public class KnifePlayer : MonoBehaviourPun
                 break;
             case KnifeLength.Long:
                 longKnife.gameObject.SetActive(true);
-                break;
-        }
-
-        if (photonView.IsMine)
-        {
-            KnifeGameManager.Instance.Knife = length;
-            KnifeGameManager.Instance.WeaponUI.SetWeaponUI();
-        }
-    }
-
-    [PunRPC]
-    private void OffWeapon(KnifeLength length)
-    {
-        switch (length)
-        {
-            case KnifeLength.Short:
-                shortKnife.gameObject.SetActive(false);
-                break;
-            case KnifeLength.Middle:
-                middleKnife.gameObject.SetActive(false);
-                break;
-            case KnifeLength.Long:
-                longKnife.gameObject.SetActive(false);
                 break;
         }
 

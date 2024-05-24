@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.124742664, g: 0.13043883, b: 0.11593222, a: 1}
+  m_IndirectSpecularColor: {r: 0.124829866, g: 0.13056408, b: 0.11610476, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1168,7 +1168,7 @@ MonoBehaviour:
   returnLobbyButton: {fileID: 1208978384}
   entryPrefab: {fileID: 1162394613752682339, guid: 8f5a05b317154bb48ac444854fa7b097,
     type: 3}
-  TitleSceneName: MenuSceneWithUI
+  TitleSceneName: TitleSceneVer3
   scoreConfig: {fileID: 11400000, guid: 07a208010fd2e724888f55b8967c4ff6, type: 2}
 --- !u!1 &428919528
 GameObject:

@@ -15,7 +15,8 @@ public class MafiaGameFlow : MonoBehaviourPun
     [SerializeField] private Button skipVoteButton;
     [SerializeField] private WinLoseUI winLoseUI;
     [SerializeField] string MenuSceneName;
-
+    [SerializeField] const int WINPOINTS = 100;
+    [SerializeField] const int LOSEPOINTS = 50;
 
     [Header("System Message")]
     [SerializeField] Color MSGColor = new Color(0.372549f, 0.3647059f, 0.6117647f);
@@ -280,11 +281,11 @@ public class MafiaGameFlow : MonoBehaviourPun
         {
             if (result == MafiaResult.MafiaWin)
             {
-                winLoseUI.ShowWin(100);
+                winLoseUI.ShowWin(WINPOINTS);
             }
             else
             {
-                winLoseUI.ShowLose(50);
+                winLoseUI.ShowLose(LOSEPOINTS);
             }
         }
         // 내가 시민이면
@@ -292,11 +293,11 @@ public class MafiaGameFlow : MonoBehaviourPun
         {
             if (result == MafiaResult.MafiaWin)
             {
-                winLoseUI.ShowLose(50);
+                winLoseUI.ShowLose(LOSEPOINTS);
             }
             else
             {
-                winLoseUI.ShowWin(100);
+                winLoseUI.ShowWin(WINPOINTS);
             }
         }
         

@@ -40,6 +40,10 @@ namespace LoginSystem
             SetInteractable(false);
 
             string name = nameInputField.text;
+
+            if (name == string.Empty)
+                return;
+
             if ( FirebaseManager.UpdateName(name) )
             {
                 panelController.ShowInfo("Update NickName Success!");

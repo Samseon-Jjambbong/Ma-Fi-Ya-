@@ -1,10 +1,11 @@
 using LoginSystem;
 using Photon.Pun;
 using Photon.Realtime;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class TitleScene : MonoBehaviour
+public class TitleScene : BaseScene
 {
     [SerializeField] TitleCanvas titleCanvas;
     [SerializeField] LoginManager loginCanvas;
@@ -38,5 +39,10 @@ public class TitleScene : MonoBehaviour
         titleCanvas.gameObject.SetActive(false);
         loginCanvas.gameObject.SetActive(false);
         lobbyCanvas.gameObject.SetActive(true);
+    }
+
+    public override IEnumerator LoadingRoutine()
+    {
+        yield return null;
     }
 }

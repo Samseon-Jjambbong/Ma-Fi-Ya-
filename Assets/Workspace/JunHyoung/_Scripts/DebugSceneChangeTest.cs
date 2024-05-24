@@ -27,6 +27,7 @@ public class DebugSceneChangeTest : MonoBehaviour
 
     private void ChangeSceneLeaveRoom()
     {
+        Singleton<MafiaManager>.ReleaseInstance();
         PhotonNetwork.LeaveRoom();
         PhotonNetwork.LoadLevel(sceneName);
     }

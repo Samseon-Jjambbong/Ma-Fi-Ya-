@@ -23,6 +23,8 @@ public class MafiaPunManager : MonoBehaviourPunCallbacks
     [SerializeField] private int roleUseTime;
     [SerializeField] private int voteTime;
     [SerializeField] private int skillTime;
+    private bool everyoneReady;
+    private bool masterReady;
 
     private Dictionary<int, Player> playerDic;
 
@@ -66,6 +68,11 @@ public class MafiaPunManager : MonoBehaviourPunCallbacks
         if (propertiesThatChanged.ContainsKey(CustomProperty.GAMESTARTTIME))
         {
             StartCoroutine(StartTime());
+        }
+        if (propertiesThatChanged.ContainsKey(CustomProperty.MAFIAREADY))
+        {
+            everyoneReady = (int)propertiesThatChanged[CustomProperty.MAFIAREADY] == PhotonNetwork.CurrentRoom.PlayerCount;
+            masterReady = (int) propertiesThatChanged[CustomProperty.MAFIAREADY] == 1;
         }
     }
 
@@ -226,7 +233,8 @@ public class MafiaPunManager : MonoBehaviourPunCallbacks
 
         // Display role 
         photonView.RPC("DisplayRole", RpcTarget.All, displayRoleTime);
-        yield return new WaitUntil(() => Manager.Mafia.displayRoleFinished);
+        //yield return new WaitUntil(() => Manager.Mafia.displayRoleFinished);
+        yield return WaitForEveryone();
 
         // Loop
         while (true)
@@ -234,7 +242,8 @@ public class MafiaPunManager : MonoBehaviourPunCallbacks
             // Change to night
             Debug.Log("Night Phase Start");
             photonView.RPC("StartNightPhase", RpcTarget.All, skillTime);
-            yield return new WaitUntil(() => Manager.Mafia.nightPhaseFinished);
+            //yield return new WaitUntil(() => Manager.Mafia.nightPhaseFinished);
+            yield return WaitForEveryone();
             Debug.Log("Night Phase End");
 
             yield return new WaitForSeconds(1);
@@ -242,7 +251,8 @@ public class MafiaPunManager : MonoBehaviourPunCallbacks
             // Show Night Events
             Debug.Log("Night Events Start");
             photonView.RPC("ShowNightEvents", RpcTarget.MasterClient);
-            yield return new WaitUntil(() => Manager.Mafia.nightEventsFinished);
+            //yield return new WaitUntil(() => Manager.Mafia.nightEventsFinished);
+            yield return WaitForMaster();
             Debug.Log("Night Events End");
 
             yield return new WaitForSeconds(1);
@@ -250,7 +260,8 @@ public class MafiaPunManager : MonoBehaviourPunCallbacks
             // Show Night Results
             Debug.Log("Night Results Start");
             photonView.RPC("ShowNightResults", RpcTarget.All);
-            yield return new WaitUntil(() => Manager.Mafia.nightResultsFinished);
+            //yield return new WaitUntil(() => Manager.Mafia.nightResultsFinished);
+            yield return WaitForEveryone();
             Debug.Log("Night Results End");
 
             yield return new WaitForSeconds(1);
@@ -261,7 +272,8 @@ public class MafiaPunManager : MonoBehaviourPunCallbacks
             // Day Phase
             Debug.Log("Day Phase Start");
             photonView.RPC("StartDayPhase", RpcTarget.All, voteTime);
-            yield return new WaitUntil(() => Manager.Mafia.dayPhaseFinished);
+            //yield return new WaitUntil(() => Manager.Mafia.dayPhaseFinished);
+            yield return WaitForEveryone();
             Debug.Log("Day Events End");
               
             yield return new WaitForSeconds(1);
@@ -275,7 +287,8 @@ public class MafiaPunManager : MonoBehaviourPunCallbacks
             {
                 Debug.Log($"Player{voteResult} got kicked");
                 photonView.RPC("ShowVoteResults", RpcTarget.All, voteResult);
-                yield return new WaitUntil(() => Manager.Mafia.voteResultsFinished);
+                //yield return new WaitUntil(() => Manager.Mafia.voteResultsFinished);
+                yield return WaitForEveryone();
             }
             else
             {
@@ -304,10 +317,26 @@ public class MafiaPunManager : MonoBehaviourPunCallbacks
             Debug.Log($"Game Over: {Manager.Mafia.GameResult}");
             StopAllCoroutines();
         }
-        Debug.Log("Game not over");
+        else
+        {
+            Debug.Log("Game not over");
+        }
+        
         yield return null;
     }
-    #endregion
 
-    
+    private IEnumerator WaitForEveryone()
+    {
+        PhotonNetwork.CurrentRoom.ResetMafiaReady();
+        everyoneReady = false;
+        yield return new WaitUntil(() => everyoneReady);
+    }
+
+    private IEnumerator WaitForMaster()
+    {
+        PhotonNetwork.CurrentRoom.ResetMafiaReady();
+        masterReady = false;
+        yield return new WaitUntil(() => masterReady);
+    }
+    #endregion
 }

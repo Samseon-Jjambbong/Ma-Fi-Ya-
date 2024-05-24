@@ -282,10 +282,7 @@ public class MafiaPlayer : MonoBehaviourPun
             return;
         }
         GetComponentInChildren<Renderer>().material.color = new Color(r, g, b, 1f);
-        if(photonView.IsMine)
-        {
-            PhotonNetwork.LocalPlayer.SetPlayerColor(new Color(r, g, b, 1f));
-        }
+        PhotonNetwork.LocalPlayer.SetPlayerColor(new Color(r, g, b, 1f));
     }
     #endregion
 

@@ -1,4 +1,3 @@
-using Firebase.Auth;
 using Firebase.Extensions;
 using Photon.Pun;
 using TMPro;
@@ -26,6 +25,9 @@ namespace LoginSystem
             passApplyButton.onClick.AddListener(PassApply);
             backButton.onClick.AddListener(Back);
             deleteButton.onClick.AddListener(Delete);
+
+            nameInputField.onValueChanged.AddListener(CheckEmpty);
+            nameApplyButton.interactable = false;
         }
 
         private void OnDisable()
@@ -35,12 +37,21 @@ namespace LoginSystem
             confirmInputField.text = string.Empty;
         }
 
+        private void CheckEmpty(string value)
+        {
+            nameApplyButton.interactable = !(value == string.Empty);
+        }
+
         private void NameApply()
         {
             SetInteractable(false);
 
             string name = nameInputField.text;
-            if ( FirebaseManager.UpdateName(name) )
+
+            if (name == string.Empty)
+                return;
+
+            if (FirebaseManager.UpdateName(name))
             {
                 panelController.ShowInfo("Update NickName Success!");
                 PhotonNetwork.LocalPlayer.NickName = name;
@@ -57,7 +68,7 @@ namespace LoginSystem
         {
             SetInteractable(false);
 
-            if ( passInputField.text != confirmInputField.text )
+            if (passInputField.text != confirmInputField.text)
             {
                 panelController.ShowInfo("Password doesn't matched");
                 SetInteractable(true);
@@ -68,13 +79,13 @@ namespace LoginSystem
 
             FirebaseManager.Auth.CurrentUser.UpdatePasswordAsync(passWord).ContinueWithOnMainThread(task =>
             {
-                if ( task.IsCanceled )
+                if (task.IsCanceled)
                 {
                     panelController.ShowInfo("UpdatePasswordAsync Canceled");
                     SetInteractable(true);
                     return;
                 }
-                else if ( task.IsFaulted )
+                else if (task.IsFaulted)
                 {
                     panelController.ShowInfo($"UpdatePasswordAsync failed : {task.Exception.Message}");
                     SetInteractable(true);
@@ -96,13 +107,13 @@ namespace LoginSystem
             SetInteractable(false);
             FirebaseManager.Auth.CurrentUser.DeleteAsync().ContinueWithOnMainThread(task =>
             {
-                if ( task.IsCanceled )
+                if (task.IsCanceled)
                 {
                     //panelController.ShowInfo("DeleteAsync Canceled");
                     SetInteractable(true);
                     return;
                 }
-                else if ( task.IsFaulted )
+                else if (task.IsFaulted)
                 {
                     panelController.ShowInfo($"DeleteAsync failed : {task.Exception.Message}");
                     SetInteractable(true);
@@ -114,7 +125,7 @@ namespace LoginSystem
             });
         }
 
-        private void SetInteractable( bool interactable )
+        private void SetInteractable(bool interactable)
         {
             nameInputField.interactable = interactable;
             passInputField.interactable = interactable;

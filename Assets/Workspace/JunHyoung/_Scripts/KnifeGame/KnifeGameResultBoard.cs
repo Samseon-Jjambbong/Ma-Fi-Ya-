@@ -29,7 +29,7 @@ public class KnifeGameResultBoard : MonoBehaviour
     {
         InitResultBoard();
         CalculateScore();
-        //UpdateToDB();
+        UpdateToDB();
     }
 
     private List<Player> sortedPlayers;
@@ -71,19 +71,19 @@ public class KnifeGameResultBoard : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("UddateRecords Faild!");
+            Debug.LogWarning("UdateRecords Faild!");
         }
     }
 
 
     void ReturnRoom()
     {
-        PhotonNetwork.LoadLevel(TitleSceneName);
+        Manager.Scene.LoadScene(TitleSceneName);
     }
 
     void ReturnLobby()
     {
         PhotonNetwork.LeaveRoom();
-        PhotonNetwork.LoadLevel(TitleSceneName);
+        Manager.Scene.LoadScene(TitleSceneName);
     }
 }

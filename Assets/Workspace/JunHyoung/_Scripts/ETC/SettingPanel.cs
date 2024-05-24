@@ -1,12 +1,18 @@
-using System.Collections;
-using System.Collections.Generic;
+using Photon.Pun;
 using UnityEngine;
 using UnityEngine.UI;
+using UnitySceneManager = UnityEngine.SceneManagement.SceneManager;
+
 
 public class SettingPanel : PopUpUI
 {
+    [Header("Scene Name")]
+    [SerializeField] string TitleSceneName;
+
+    [Header("Components")]
     [SerializeField] Button closeButton;
     [SerializeField] Button exitGameButton;
+    [SerializeField] Button returnLobbyButton;
     [SerializeField] Slider bgmSlider;
     [SerializeField] Slider sfxSlider;
 
@@ -15,11 +21,15 @@ public class SettingPanel : PopUpUI
     {
         closeButton.onClick.AddListener(Close);
         exitGameButton.onClick.AddListener(ExitGame);
+        returnLobbyButton.onClick.AddListener(ReturnLobby);
         bgmSlider.onValueChanged.AddListener(ChangeBGMVol);
         sfxSlider.onValueChanged.AddListener(ChangeSFXVol);
 
         bgmSlider.value = Manager.Sound.BGMVolme;
         sfxSlider.value = Manager.Sound.SFXVolme;
+
+        if(UnitySceneManager.GetActiveScene().name== TitleSceneName)
+            returnLobbyButton.gameObject.SetActive(false);
     }
 
     void ChangeBGMVol(float val)
@@ -35,6 +45,12 @@ public class SettingPanel : PopUpUI
     public void Open()
     {
         Manager.UI.ShowPopUpUI(this);
+    }
+
+    void ReturnLobby()
+    {
+        PhotonNetwork.LeaveRoom();
+        Manager.Scene.LoadScene(TitleSceneName);
     }
 
     void ExitGame()

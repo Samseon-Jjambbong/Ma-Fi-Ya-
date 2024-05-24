@@ -52,7 +52,8 @@ public class MafiaGameChatManager : MonoBehaviourPunCallbacks, IChatClientListen
     [SerializeField] public bool isMafia;
     [SerializeField] public bool isDay; // MafiaGameManager의 isDay에 이벤트 연결해서 사용할것.
 
-    ChatData chatdata; 
+    [SerializeField]
+    public ChatData chatdata; 
 
     /******************************************************
     *                    Unity Events
@@ -197,7 +198,9 @@ public class MafiaGameChatManager : MonoBehaviourPunCallbacks, IChatClientListen
         else // 이외라면 일반 채팅 채널에
         {
             //Debug.Log("Publish to default channnel");
-            chatdata.message=inputField.text;
+            chatdata.messageColor = Color.black;
+            chatdata.message = inputField.text;
+            //Debug.Log($"{chatdata.nameColor.r},{chatdata.nameColor.g},{chatdata.nameColor.b}");
             chatClient.PublishMessage(curChannelName, chatdata);
             PhotonNetwork.LocalPlayer.SetMafiaReady(true);
             Manager.Mafia.Player.photonView.RPC("OpenSpeechBubble", RpcTarget.All, userName, inputField.text);
@@ -207,11 +210,11 @@ public class MafiaGameChatManager : MonoBehaviourPunCallbacks, IChatClientListen
         inputField.ActivateInputField();
     }
 
-    public void PublishMessage(ChatData chatdata)
+    public void PublishMessage(ChatData newChatdata)
     {
         if (!PhotonNetwork.IsMasterClient) return;
 
-        chatClient.PublishMessage(curChannelName, chatdata);
+        chatClient.PublishMessage(curChannelName, newChatdata);
     }
 
     public void SubscribleGhostChannel()
@@ -232,7 +235,9 @@ public class MafiaGameChatManager : MonoBehaviourPunCallbacks, IChatClientListen
         if (changedProps.ContainsKey(CustomProperty.PLAYERCOLOR))
         {
             //nickNameColor = changedProps[CustomProperty.PLAYERCOLOR];
-            nickNameColor = PhotonNetwork.LocalPlayer.GetPlayerColor();
+            //nickNameColor = PhotonNetwork.LocalPlayer.GetPlayerColor();
+            //Debug.Log($"{nickNameColor.r},{nickNameColor.g},{nickNameColor.b}");
+            //chatdata.nameColor = nickNameColor;
         }
 
         if (changedProps.ContainsKey(CustomProperty.PLAYERROLE))

@@ -14,8 +14,8 @@ public class ChatEntry : MonoBehaviour
     public void SetChat( ChatData chatData )
     {
         nameText.text = chatData.name;
-        chatText.text = chatData.message;
         nameText.color = chatData.nameColor;
+        chatText.text = chatData.message;
         chatText.color = chatData.messageColor;
     }
     public void SetTextColor( Color textColor )

@@ -22,7 +22,7 @@ public class CurrentJobPanel : MonoBehaviour
             // Add entries for each role
             JobEntry entry = Instantiate(jobEntryPrefab).GetComponent<JobEntry>();
             entry.InitJobEntry(roleData.GetData(role));
-            entry.transform.parent = grid;
+            entry.transform.SetParent(grid);
 
             // Highlight if my role
             //if (!highlighted) // prevent highlighting more than once

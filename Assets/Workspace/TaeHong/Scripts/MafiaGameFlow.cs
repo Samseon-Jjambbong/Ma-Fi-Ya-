@@ -18,6 +18,9 @@ public class MafiaGameFlow : MonoBehaviourPun
 
 
     [Header("System Message")]
+    [SerializeField] Color MSGColor =Color.yellow;
+    [Range(0,1)]
+    [SerializeField] float MSGAlpha = 0.7f;
     [SerializeField] const string  VOTESTART = "Voting started";
     [SerializeField] const string VOTEFINISH = "Voting finished";
     [SerializeField] const string NOONEDIED = "No one died last night";
@@ -28,7 +31,8 @@ public class MafiaGameFlow : MonoBehaviourPun
     {
         Manager.Mafia.IsDay = true;
         chatData = new ChatData();
-        chatData.messageColor = Color.gray; 
+        chatData.messageColor = MSGColor;
+        chatData.messageColor.a = MSGAlpha;
     }
 
     /******************************************************
@@ -130,7 +134,7 @@ public class MafiaGameFlow : MonoBehaviourPun
     {
         // Day -> Night
         yield return ChangeTimeOfDayRoutine();
-        chatData.message = DAY2NIGHT;
+        chatData.message = NIGHT2DAY;
         MafiaGameChatManager.Instance.PublishMessage(chatData);
 
         // Allow chat for mafia
@@ -172,7 +176,7 @@ public class MafiaGameFlow : MonoBehaviourPun
     {
         // Night -> Day
         yield return ChangeTimeOfDayRoutine();
-        chatData.message = NIGHT2DAY;
+        chatData.message = DAY2NIGHT;
         MafiaGameChatManager.Instance.PublishMessage(chatData);
 
         // Show Players that died last night

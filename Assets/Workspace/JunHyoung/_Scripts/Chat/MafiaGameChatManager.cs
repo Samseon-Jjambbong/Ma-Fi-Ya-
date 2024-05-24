@@ -46,12 +46,13 @@ public class MafiaGameChatManager : MonoBehaviourPunCallbacks, IChatClientListen
     [SerializeField] private Color nickNameColor;
     [SerializeField] Color mafiaMessageColor;
     [SerializeField] Color ghostMessageColor;
-    [SerializeField] Color systemMessageColor;
 
     [Header("For Debugging")]
     [SerializeField] bool isGhost; // = false; /////////////////////////////
     [SerializeField] public bool isMafia;
     [SerializeField] public bool isDay; // MafiaGameManager의 isDay에 이벤트 연결해서 사용할것.
+
+    ChatData chatdata; 
 
     /******************************************************
     *                    Unity Events
@@ -122,6 +123,7 @@ public class MafiaGameChatManager : MonoBehaviourPunCallbacks, IChatClientListen
     void InitChatClient()
     {
         userName = PhotonNetwork.LocalPlayer.NickName;
+        chatdata = new ChatData(userName);
         chatClient = new ChatClient(this);
         chatClient.AuthValues = new Photon.Chat.AuthenticationValues(userName);
 
@@ -172,15 +174,17 @@ public class MafiaGameChatManager : MonoBehaviourPunCallbacks, IChatClientListen
 
         if (isGhost) //죽었으면 고스트 채널에
         {
-            //Debug.Log("Publish to ghost channnel");
-            chatClient.PublishMessage(ghostChannelName, new ChatData(userName, inputField.text, nickNameColor, ghostMessageColor));
+            chatdata.message = inputField.text;
+            chatClient.PublishMessage(ghostChannelName, chatdata);
             Manager.Mafia.Player.photonView.RPC("OpenSpeechBubble", RpcTarget.All, userName, inputField.text);
         }
         else if (!Manager.Mafia.IsDay && isMafia)
         //if(!MafiaManager.Instance.IsDay && isMafia ) // 낮이 아니고, 마피아라면 마피아 채널에
         {
             //Debug.Log("Publish to mafia channnel");
-            chatClient.PublishMessage(mafiaChannelName, new ChatData(userName, inputField.text, nickNameColor, mafiaMessageColor));
+            chatdata.message = inputField.text;
+            chatdata.messageColor = mafiaMessageColor;
+            chatClient.PublishMessage(mafiaChannelName, chatdata);
 
             foreach (Player player in PhotonNetwork.PlayerList)
             {
@@ -193,7 +197,8 @@ public class MafiaGameChatManager : MonoBehaviourPunCallbacks, IChatClientListen
         else // 이외라면 일반 채팅 채널에
         {
             //Debug.Log("Publish to default channnel");
-            chatClient.PublishMessage(curChannelName, new ChatData(userName, inputField.text, nickNameColor));
+            chatdata.message=inputField.text;
+            chatClient.PublishMessage(curChannelName, chatdata);
             PhotonNetwork.LocalPlayer.SetMafiaReady(true);
             Manager.Mafia.Player.photonView.RPC("OpenSpeechBubble", RpcTarget.All, userName, inputField.text);
         }
@@ -212,6 +217,7 @@ public class MafiaGameChatManager : MonoBehaviourPunCallbacks, IChatClientListen
     public void SubscribleGhostChannel()
     {
         chatClient.Subscribe(ghostChannelName, 0, 0);
+        chatdata.messageColor = ghostMessageColor;
         isGhost = true;
     }
 
@@ -223,11 +229,10 @@ public class MafiaGameChatManager : MonoBehaviourPunCallbacks, IChatClientListen
 
     public override void OnPlayerPropertiesUpdate(Player targetPlayer, PhotonHashTable changedProps)
     {
-        if (changedProps.ContainsKey(CustomProperty.PLAYERCOLOR) || changedProps.ContainsKey(CustomProperty.PLAYERROLE))
+        if (changedProps.ContainsKey(CustomProperty.PLAYERCOLOR))
         {
             //nickNameColor = changedProps[CustomProperty.PLAYERCOLOR];
             nickNameColor = PhotonNetwork.LocalPlayer.GetPlayerColor();
-            isMafia = (PhotonNetwork.LocalPlayer.GetPlayerRole() == MafiaRole.Mafia);
         }
 
         if (changedProps.ContainsKey(CustomProperty.PLAYERROLE))

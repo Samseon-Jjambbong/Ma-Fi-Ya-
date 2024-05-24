@@ -31,6 +31,14 @@ public class ChatData
         nameColor = Color.white;
         messageColor = Color.white;
     }
+    public ChatData(string name)
+    {
+        this.name = name;
+        message = string.Empty;
+        nameColor = Color.black;
+        messageColor = Color.black;
+    }
+
     public ChatData( string name, string message )
     {
         this.name = name;

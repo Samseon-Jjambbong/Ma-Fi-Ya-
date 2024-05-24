@@ -990,6 +990,9 @@ MonoBehaviour:
   playerSpawnPos: {x: 0, y: 0, z: 0}
   movePower: 20
   rotateSpeed: 8
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 256
   isWalking: 0
   canMove: 0
   shortKnife: {fileID: 3074664511352261136}
@@ -997,7 +1000,7 @@ MonoBehaviour:
   longKnife: {fileID: 858563763648759619}
   layerMask:
     serializedVersion: 2
-    m_Bits: 192
+    m_Bits: 64
   range: 3.6
   angle: 150
 --- !u!82 &713678459115510290

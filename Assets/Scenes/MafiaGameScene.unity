@@ -3373,21 +3373,6 @@ PrefabInstance:
       propertyPath: jobPanel
       value: 
       objectReference: {fileID: 1632649031}
-    - target: {fileID: 3761031624598095292, guid: 16272b99ff3764479828701e06741280,
-        type: 3}
-      propertyPath: voteTime
-      value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: 3761031624598095292, guid: 16272b99ff3764479828701e06741280,
-        type: 3}
-      propertyPath: skillTime
-      value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: 3761031624598095292, guid: 16272b99ff3764479828701e06741280,
-        type: 3}
-      propertyPath: roleUseTime
-      value: 20
-      objectReference: {fileID: 0}
     - target: {fileID: 4274996574515606696, guid: 16272b99ff3764479828701e06741280,
         type: 3}
       propertyPath: spring
@@ -3456,7 +3441,7 @@ PrefabInstance:
     - target: {fileID: 8211648316349565637, guid: 16272b99ff3764479828701e06741280,
         type: 3}
       propertyPath: sceneViewId
-      value: 4
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8540862403624832752, guid: 16272b99ff3764479828701e06741280,
         type: 3}
@@ -3473,11 +3458,6 @@ PrefabInstance:
       propertyPath: winLoseUI
       value: 
       objectReference: {fileID: 733470816134151915}
-    - target: {fileID: 8540862403624832752, guid: 16272b99ff3764479828701e06741280,
-        type: 3}
-      propertyPath: MenuSceneName
-      value: MenuSceneWithUI
-      objectReference: {fileID: 0}
     - target: {fileID: 8540862403624832752, guid: 16272b99ff3764479828701e06741280,
         type: 3}
       propertyPath: skipVoteButton
@@ -3624,6 +3604,21 @@ PrefabInstance:
     - target: {fileID: 2763532896787814073, guid: 49ba8df2be6234b76adf569229417560,
         type: 3}
       propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5588967625138496660, guid: 49ba8df2be6234b76adf569229417560,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5588967625138496660, guid: 49ba8df2be6234b76adf569229417560,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5588967625138496660, guid: 49ba8df2be6234b76adf569229417560,
+        type: 3}
+      propertyPath: m_SizeDelta.x
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8375609889193680097, guid: 49ba8df2be6234b76adf569229417560,

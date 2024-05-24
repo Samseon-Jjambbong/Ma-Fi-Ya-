@@ -265,7 +265,8 @@ public class KnifePlayer : MonoBehaviourPun
         KnifePlayer diePlayer = PhotonView.Find(targetViewID).GetComponent<KnifePlayer>();
         if (diePlayer != null)
         {
-            diePlayer.photonView.RPC("Die", RpcTarget.Others, false);
+            if (PhotonNetwork.IsMasterClient)
+                diePlayer.photonView.RPC("Die", RpcTarget.All, false);
         }
 
         KnifePlayer attackPlayer = PhotonView.Find(attackerID).GetComponent<KnifePlayer>();

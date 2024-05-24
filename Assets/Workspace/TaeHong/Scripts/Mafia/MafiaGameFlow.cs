@@ -1,5 +1,6 @@
 
 using Photon.Pun;
+using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
 using Tae;
@@ -15,7 +16,8 @@ public class MafiaGameFlow : MonoBehaviourPun
     [SerializeField] private Button skipVoteButton;
     [SerializeField] private WinLoseUI winLoseUI;
     [SerializeField] string MenuSceneName;
-
+    [SerializeField] const int WINPOINTS = 100;
+    [SerializeField] const int LOSEPOINTS = 50;
 
     [Header("System Message")]
     [SerializeField] Color MSGColor = new Color(0.372549f, 0.3647059f, 0.6117647f);
@@ -114,8 +116,6 @@ public class MafiaGameFlow : MonoBehaviourPun
         roleUI.InitBegin();
         yield return timer.StartTimer(time);
         roleUI.gameObject.SetActive(false);
-        //Manager.Mafia.displayRoleFinished = true;
-        Debug.Log($"Player{PhotonNetwork.LocalPlayer.ActorNumber} Ready");
         Ready();
     }
 
@@ -144,8 +144,15 @@ public class MafiaGameFlow : MonoBehaviourPun
         chatData.message = NIGHT2DAY;
         MafiaGameChatManager.Instance.PublishMessage(chatData);
 
+        // Prevent dead players from using skills
+        if (PhotonNetwork.LocalPlayer.GetDead())
+        {
+            yield return new WaitForSeconds(3);
+            Ready();
+            yield break;
+        }
+
         // Allow chat for mafia
-        // TODO : Insert chat ON function here
         EnableChat(false);
 
         // Allow skill usage for X Seconds
@@ -160,10 +167,8 @@ public class MafiaGameFlow : MonoBehaviourPun
 
         yield return new WaitForSeconds(3); // Give time for network to receive actions
 
-        // TODO : Insert chat OFF function here
-       EnableChat(true);
+        EnableChat(true);
 
-        //Manager.Mafia.nightPhaseFinished = true;
         Ready();
     }
 
@@ -176,7 +181,6 @@ public class MafiaGameFlow : MonoBehaviourPun
         Manager.Mafia.photonView.RPC("ShowActions", RpcTarget.All);
         yield return new WaitForSeconds(1);
         yield return new WaitUntil(() => Manager.Mafia.sharedData.clientFinishedCount == Manager.Mafia.ActivePlayerCount());
-        //Manager.Mafia.nightEventsFinished = true;
         Ready();
         Manager.Mafia.sharedData.photonView.RPC("ClearActionInfo", RpcTarget.All);
     }
@@ -204,13 +208,13 @@ public class MafiaGameFlow : MonoBehaviourPun
         }
 
         yield return new WaitForSeconds(1);
-        //Manager.Mafia.nightResultsFinished = true;
         Ready();
     }
 
     // Allow Chat and voting for X Seconds
     private IEnumerator DayPhaseRoutine(int time)
     {
+        // Prevent dead players from voting
         if (PhotonNetwork.LocalPlayer.GetDead())
         {
             yield return new WaitForSeconds(3);
@@ -224,14 +228,6 @@ public class MafiaGameFlow : MonoBehaviourPun
         // Allow voting for X Seconds
         skipVoteButton.gameObject.SetActive(true);
         Manager.Mafia.ActivateHouseOutlines();
-        //for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
-        //{
-        //    Manager.Mafia.Houses[i].ShowVoteCount(true);
-        //    if (i == (PhotonNetwork.LocalPlayer.ActorNumber - 1))
-        //        continue;
-
-        //    Manager.Mafia.Houses[i].ActivateOutline(true);
-        //}
 
         Debug.Log(VOTESTART);
         chatData.message = VOTESTART;
@@ -249,15 +245,8 @@ public class MafiaGameFlow : MonoBehaviourPun
 
         skipVoteButton.gameObject.SetActive(false);
         Manager.Mafia.DeactivateHouseOutlines();
-        //foreach (var house in Manager.Mafia.Houses)
-        //{
-        //    house.ActivateOutline(false);
-        //    house.ShowVoteCount(false);
-        //    house.HideUI();
-        //}
 
         EnableChat(false);
-        //Manager.Mafia.dayPhaseFinished = true;
         Ready();
     }
 
@@ -268,7 +257,6 @@ public class MafiaGameFlow : MonoBehaviourPun
         yield return RemovedPlayerRoleRoutine(voteResult);
         Manager.Mafia.ApplyVoteResult(voteResult);
         yield return new WaitForSeconds(1);
-        //Manager.Mafia.voteResultsFinished = true;
         Ready();
     }
 
@@ -280,11 +268,11 @@ public class MafiaGameFlow : MonoBehaviourPun
         {
             if (result == MafiaResult.MafiaWin)
             {
-                winLoseUI.ShowWin(100);
+                winLoseUI.ShowWin(WINPOINTS);
             }
             else
             {
-                winLoseUI.ShowLose(50);
+                winLoseUI.ShowLose(LOSEPOINTS);
             }
         }
         // 내가 시민이면
@@ -292,21 +280,31 @@ public class MafiaGameFlow : MonoBehaviourPun
         {
             if (result == MafiaResult.MafiaWin)
             {
-                winLoseUI.ShowLose(50);
+                winLoseUI.ShowLose(LOSEPOINTS);
             }
             else
             {
-                winLoseUI.ShowWin(100);
+                winLoseUI.ShowWin(WINPOINTS);
             }
         }
         
         yield return new WaitForSeconds(3);
 
-        // Go back to lobby scene
-        PhotonNetwork.LeaveRoom();
-        Manager.Scene.LoadScene(MenuSceneName);
-        Singleton<MafiaManager>.ReleaseInstance();
+        LeaveGame();
     }
-
     #endregion
+
+    private void LeaveGame()
+    {
+        // Reset every player's dead state
+        foreach (Player player in PhotonNetwork.PlayerList)
+        {
+            player.SetDead(false);
+        }
+        // Release singleton instance
+        Singleton<MafiaManager>.ReleaseInstance();
+
+        // Load Menu Scene
+        Manager.Scene.LoadScene(MenuSceneName);
+    }
 }

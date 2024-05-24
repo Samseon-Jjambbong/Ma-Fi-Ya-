@@ -141,7 +141,7 @@ public class MafiaPunManager : MonoBehaviourPunCallbacks
         // 플레이어의 게임 입장 순번 찾아내기
         for (int i = 1; i <= playerDic.Count; i++)
         {
-            if (playerDic[i] == PhotonNetwork.LocalPlayer)
+            if (playerDic.ContainsKey(i) && playerDic[i] == PhotonNetwork.LocalPlayer)
             {
                 playerNumber = i - 1;
             }

@@ -8,6 +8,7 @@ using UnityEngine.UI;
 
 public class MafiaGameFlow : MonoBehaviourPun
 {
+    [Header("")]
     [SerializeField] private GameTimer timer;
     [SerializeField] private LightController lightController;
     [SerializeField] private RoleUI roleUI;
@@ -15,9 +16,17 @@ public class MafiaGameFlow : MonoBehaviourPun
     [SerializeField] private WinLoseUI winLoseUI;
     [SerializeField] string MenuSceneName;
 
+
+    [Header("System Message")]
+    [SerializeField] const string  VOTESTART = "Voting started";
+    [SerializeField] const string VOTEFINISH = "Voting finished";
+    [SerializeField] const string NOONEDIED = "No one died last night";
+     private ChatData chatData;
     private void Start()
     {
         Manager.Mafia.IsDay = true;
+        chatData = new ChatData();
+        chatData.messageColor = Color.gray; 
     }
 
     /******************************************************
@@ -78,14 +87,7 @@ public class MafiaGameFlow : MonoBehaviourPun
 
     public void EnableChat(bool enable)
     {
-        if (enable)
-        {
-            // TODO: Enable chat here
-        }
-        else
-        {
-            // TODO: Disable chat here
-        }
+        MafiaGameChatManager.Instance.IsChatable = enable;
     }
 
     #endregion
@@ -117,21 +119,8 @@ public class MafiaGameFlow : MonoBehaviourPun
     private IEnumerator ChangeTimeOfDayRoutine()
     {
         yield return lightController.ChangePhase();
-        Manager.Mafia.IsDay = !Manager.Mafia.IsDay;
-        if (!Manager.Mafia.IsDay)
-        {
-            if (!PhotonNetwork.LocalPlayer.GetPlayerRole().Equals(MafiaRole.Mafia) && Manager.Mafia.Player.IsAlive)
-            {
-                MafiaGameChatManager.Instance.IsChatable = false;
-            }
-        }
-        else
-        {
-            if (!MafiaGameChatManager.Instance.IsChatable)
-            {
-                MafiaGameChatManager.Instance.IsChatable = true;
-            }
-        }
+        Manager.Mafia.IsDay = !Manager.Mafia.IsDay; //낮이면 밤으로, 밤이면 낮으로
+        EnableChat(Manager.Mafia.IsDay);
     }
 
     // Night Phase
@@ -142,6 +131,7 @@ public class MafiaGameFlow : MonoBehaviourPun
 
         // Allow chat for mafia
         // TODO : Insert chat ON function here
+        EnableChat(true);
 
         // Allow skill usage for X Seconds
         Manager.Mafia.ActivateHouseOutlines();
@@ -156,6 +146,7 @@ public class MafiaGameFlow : MonoBehaviourPun
         yield return new WaitForSeconds(3); // Give time for network to receive actions
 
         // TODO : Insert chat OFF function here
+       EnableChat(false);
 
         Manager.Mafia.nightPhaseFinished = true;
     }
@@ -182,7 +173,9 @@ public class MafiaGameFlow : MonoBehaviourPun
         List<int> killed = Manager.Mafia.sharedData.GetKilledPlayers();
         if (killed.Count == 0)
         {
-            Debug.Log("No one died last night");
+            Debug.Log(NOONEDIED);
+            chatData.message = NOONEDIED;
+            MafiaGameChatManager.Instance.PublishMessage(chatData);
         }
         else
         {
@@ -215,7 +208,9 @@ public class MafiaGameFlow : MonoBehaviourPun
             Manager.Mafia.Houses[i].ActivateOutline(true);
         }
 
-        Debug.Log("Voting started");
+        Debug.Log(VOTESTART);
+        chatData.message = VOTESTART;
+        MafiaGameChatManager.Instance.PublishMessage(chatData);
 
         yield return timer.StartTimer(time);
         while (!timer.timerFinished && !(Manager.Mafia.voteCount == Manager.Mafia.sharedData.ActivePlayerCount()))
@@ -223,7 +218,9 @@ public class MafiaGameFlow : MonoBehaviourPun
             yield return new WaitForSeconds(1);
         }
 
-        Debug.Log("Voting finished");
+        Debug.Log(VOTEFINISH);
+        chatData.message = VOTEFINISH;
+        MafiaGameChatManager.Instance.PublishMessage(chatData);
 
         skipVoteButton.gameObject.SetActive(false);
         foreach (var house in Manager.Mafia.Houses)

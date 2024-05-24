@@ -25,6 +25,12 @@ public class ChatData
     *                    Constructors
     ******************************************************/
     #region Constructors
+    public ChatData() { 
+        name = string.Empty;
+        message = string.Empty;
+        nameColor = Color.white;
+        messageColor = Color.white;
+    }
     public ChatData( string name, string message )
     {
         this.name = name;
@@ -48,6 +54,20 @@ public class ChatData
         this.nameColor = nameColor;
         this.messageColor = messageColor;
     }
+
+    /// <summary>
+    /// for System Message
+    /// </summary>
+    /// <param name="message"></param>
+    /// <param name="messageColor"></param>
+    public ChatData( string message, Color messageColor)
+    {
+        name = string.Empty;
+        nameColor = Color.white;
+        this.message = message;
+        this.messageColor = messageColor;
+    }
+
     #endregion
 
     /******************************************************

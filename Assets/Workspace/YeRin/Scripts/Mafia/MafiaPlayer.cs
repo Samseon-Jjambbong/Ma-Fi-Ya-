@@ -46,11 +46,18 @@ public class MafiaPlayer : MonoBehaviourPun
     public int Idx => PhotonNetwork.LocalPlayer.ActorNumber - 1;
 
     Coroutine bubble;
+    [SerializeField]
+    Color curColor;
 
     protected virtual void Start()
     {
         // 플레이어 역할 받기
         playerDic = PhotonNetwork.CurrentRoom.Players;
+
+        if (PhotonNetwork.IsMasterClient)
+        {
+            photonView.RPC("SetColor", RpcTarget.MasterClient, Color.black.r, Color.black.g, Color.black.b);
+        }
 
         if (IsMine)
         {
@@ -71,13 +78,14 @@ public class MafiaPlayer : MonoBehaviourPun
             }
         }
 
-        if (PhotonNetwork.IsMasterClient)
-        {
-            photonView.RPC("SetColor", RpcTarget.MasterClient, Color.black.r, Color.black.g, Color.black.b);
-        }
         walkAudio.Stop();
 
         Debug.Log(PhotonNetwork.LocalPlayer.GetPlayerRole());
+    }
+
+    private void OnEnable()
+    {
+
     }
 
     private void FixedUpdate()
@@ -277,12 +285,21 @@ public class MafiaPlayer : MonoBehaviourPun
         if (PhotonNetwork.IsMasterClient)
         {
             GetComponentInChildren<Renderer>().material.color = new Color(Random.value, Random.value, Random.value, 1f);
-            Color color = GetComponentInChildren<Renderer>().material.color;
-            photonView.RPC("SetColor", RpcTarget.Others, color.r, color.g, color.b);
+            curColor = GetComponentInChildren<Renderer>().material.color;
+            if (IsMine)
+            {
+                MafiaGameChatManager.Instance.chatdata.nameColor = curColor;
+            }
+            photonView.RPC("SetColor", RpcTarget.Others, curColor.r, curColor.g, curColor.b);
             return;
         }
-        GetComponentInChildren<Renderer>().material.color = new Color(r, g, b, 1f);
-        PhotonNetwork.LocalPlayer.SetPlayerColor(new Color(r, g, b, 1f));
+        curColor = new Color(r, g, b, 1f);
+        GetComponentInChildren<Renderer>().material.color = curColor;
+        if (IsMine)
+        {
+            MafiaGameChatManager.Instance.chatdata.nameColor = curColor;
+        }
+        //PhotonNetwork.LocalPlayer.SetPlayerColor(new Color(r, g, b, 1f));
     }
     #endregion
 

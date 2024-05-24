@@ -18,9 +18,9 @@ public class MafiaGameFlow : MonoBehaviourPun
 
 
     [Header("System Message")]
-    [SerializeField] Color MSGColor =Color.yellow;
+    [SerializeField] Color MSGColor = new Color(0.372549f, 0.3647059f, 0.6117647f);
     [Range(0,1)]
-    [SerializeField] float MSGAlpha = 0.7f;
+    [SerializeField] float MSGAlpha = 1f;
     [SerializeField] const string  VOTESTART = "Voting started";
     [SerializeField] const string VOTEFINISH = "Voting finished";
     [SerializeField] const string NOONEDIED = "No one died last night";

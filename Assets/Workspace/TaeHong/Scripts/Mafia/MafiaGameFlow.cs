@@ -22,7 +22,7 @@ public class MafiaGameFlow : MonoBehaviourPun
 
     private void Ready()
     {
-        PhotonNetwork.CurrentRoom.IncrementMafiaReady();
+        PhotonNetwork.LocalPlayer.SetMafiaReady(true);
     }
 
     /******************************************************
@@ -301,6 +301,7 @@ public class MafiaGameFlow : MonoBehaviourPun
         // Go back to lobby scene
         PhotonNetwork.LeaveRoom();
         Manager.Scene.LoadScene(MenuSceneName);
+        Singleton<MafiaManager>.ReleaseInstance();
     }
 
     #endregion

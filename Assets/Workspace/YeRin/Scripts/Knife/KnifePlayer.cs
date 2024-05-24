@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.XR;
 using UnityEngine.UIElements;
 
 /// <summary>
@@ -23,7 +24,6 @@ public class KnifePlayer : MonoBehaviourPun
     [SerializeField] GameObject playerModel;
     [SerializeField] GameObject speechBubble;
     [SerializeField] TMP_Text bubbleText;
-    [SerializeField] LayerMask deathZone;
     [SerializeField] SpriteRenderer flatArrow;
 
     public TMP_Text Name => nickNameText;
@@ -31,10 +31,12 @@ public class KnifePlayer : MonoBehaviourPun
     [SerializeField] Vector3 playerSpawnPos;
     [SerializeField] float movePower;
     [SerializeField] float rotateSpeed;
+    [SerializeField] LayerMask groundMask;
 
     [Header("States")]
     [SerializeField] private bool isWalking;
     [SerializeField] private bool canMove = false;
+    [SerializeField] private bool isFalling;
     public bool CanMove { get { return canMove; } set { canMove = value; } }
 
     [Header("Knife")]
@@ -70,10 +72,20 @@ public class KnifePlayer : MonoBehaviourPun
 
     private void FixedUpdate()
     {
-
         if (photonView.IsMine)
         {
             Accelate();
+            if (!isFalling)
+            {
+                if (!Physics.Raycast(transform.position, Vector3.down, 10f, groundMask))
+                {
+                    if (photonView.IsMine)
+                        photonView.RPC("WalkStop", RpcTarget.All);
+                    photonView.RPC("Die", RpcTarget.All, true);
+                    KillLogData log = new KillLogData(nickNameText.text);
+                    PhotonNetwork.RaiseEvent(KillLogEventCode, log, raiseEventOptions, SendOptions.SendReliable);
+                }
+            }
         }
     }
 
@@ -253,7 +265,8 @@ public class KnifePlayer : MonoBehaviourPun
         KnifePlayer diePlayer = PhotonView.Find(targetViewID).GetComponent<KnifePlayer>();
         if (diePlayer != null)
         {
-            diePlayer.photonView.RPC("Die", RpcTarget.Others);
+            if (PhotonNetwork.IsMasterClient)
+                diePlayer.photonView.RPC("Die", RpcTarget.All, false);
         }
 
         KnifePlayer attackPlayer = PhotonView.Find(attackerID).GetComponent<KnifePlayer>();
@@ -270,8 +283,13 @@ public class KnifePlayer : MonoBehaviourPun
     }
 
     [PunRPC]
-    private void Die()
+    private void Die(bool isFall)
     {
+        if (isFall) 
+        {
+            isFalling = true;
+            playerModel.SetActive(false);
+        }
         StartCoroutine(DieState());
     }
 
@@ -287,19 +305,9 @@ public class KnifePlayer : MonoBehaviourPun
 
         yield return new WaitForSeconds(3f);
 
+        isFalling = false;
         controller.enabled = true;
         playerModel.SetActive(true);
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (deathZone.Contain(other.gameObject.layer))
-        {
-            playerModel.SetActive(false);
-            photonView.RPC("Die", RpcTarget.All, photonView.ViewID);
-            KillLogData log = new KillLogData(nickNameText.text);
-            PhotonNetwork.RaiseEvent(KillLogEventCode, log, raiseEventOptions, SendOptions.SendReliable);
-        }
     }
     #endregion
 

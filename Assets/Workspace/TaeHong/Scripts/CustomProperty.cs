@@ -111,13 +111,17 @@ public static class CustomProperty
     {
         PhotonHashtable properties = player.CustomProperties;
         if (properties.ContainsKey(PLAYERCOLOR))
-            return (Color) properties[PLAYERCOLOR];
+        {
+            float[] colorArray = (float[]) properties[PLAYERCOLOR];
+            return new Color(colorArray[0], colorArray[1] , colorArray[2], 1.0f);
+        }
         return Color.white;
     }
 
-    public static void SetPlayerColor(this Player player, Color value)
+    public static void SetPlayerColor(this Player player, float r, float g, float b)
     {
-        PhotonHashtable properties = new PhotonHashtable { { PLAYERCOLOR, value } };
+        PhotonHashtable properties = new PhotonHashtable { { PLAYERCOLOR, new float[] { r,g,b } } };
+        Debug.Log($"Properites set {r},{g},{b}");
         player.SetCustomProperties(properties);
     }
 

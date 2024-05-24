@@ -25,6 +25,20 @@ public class ChatData
     *                    Constructors
     ******************************************************/
     #region Constructors
+    public ChatData() { 
+        name = string.Empty;
+        message = string.Empty;
+        nameColor = Color.white;
+        messageColor = Color.white;
+    }
+    public ChatData(string name)
+    {
+        this.name = name;
+        message = string.Empty;
+        nameColor = Color.black;
+        messageColor = Color.black;
+    }
+
     public ChatData( string name, string message )
     {
         this.name = name;
@@ -48,6 +62,20 @@ public class ChatData
         this.nameColor = nameColor;
         this.messageColor = messageColor;
     }
+
+    /// <summary>
+    /// for System Message
+    /// </summary>
+    /// <param name="message"></param>
+    /// <param name="messageColor"></param>
+    public ChatData( string message, Color messageColor)
+    {
+        name = string.Empty;
+        nameColor = Color.white;
+        this.message = message;
+        this.messageColor = messageColor;
+    }
+
     #endregion
 
     /******************************************************
@@ -73,16 +101,16 @@ public class ChatData
         result.AddRange(messageBytes);
 
         // nameColor 값을 byte 배열로 변환하여 추가
-        result.Add(( byte ) chatData.nameColor.r);
-        result.Add(( byte ) chatData.nameColor.g);
-        result.Add(( byte ) chatData.nameColor.b);
-        result.Add(( byte ) chatData.nameColor.a);
+        result.AddRange(BitConverter.GetBytes(chatData.nameColor.r));
+        result.AddRange(BitConverter.GetBytes(chatData.nameColor.g));
+        result.AddRange(BitConverter.GetBytes(chatData.nameColor.b));
+        result.AddRange(BitConverter.GetBytes(chatData.nameColor.a));
 
         // messageColor 값을 byte 배열로 변환하여 추가
-        result.Add(( byte ) chatData.messageColor.r);
-        result.Add(( byte ) chatData.messageColor.g);
-        result.Add(( byte ) chatData.messageColor.b);
-        result.Add(( byte ) chatData.messageColor.a);
+        result.AddRange(BitConverter.GetBytes(chatData.messageColor.r));
+        result.AddRange(BitConverter.GetBytes(chatData.messageColor.g));
+        result.AddRange(BitConverter.GetBytes(chatData.messageColor.b));
+        result.AddRange(BitConverter.GetBytes(chatData.messageColor.a));
 
         return result.ToArray();
     }
@@ -108,17 +136,25 @@ public class ChatData
         offset += messageLength;
 
         // nameColor 읽기
-        byte r = data [offset++];
-        byte g = data [offset++];
-        byte b = data [offset++];
-        byte a = data [offset++];
+        float r = BitConverter.ToSingle(data, offset);
+        offset += sizeof(float);
+        float g = BitConverter.ToSingle(data, offset);
+        offset += sizeof(float);
+        float b = BitConverter.ToSingle(data, offset);
+        offset += sizeof(float);
+        float a = BitConverter.ToSingle(data, offset);
+        offset += sizeof(float);
         Color nameColor = new Color(r, g, b, a);
 
         // messageColor 읽기
-        r = data [offset++];
-        g = data [offset++];
-        b = data [offset++];
-        a = data [offset++];
+        r = BitConverter.ToSingle(data, offset);
+        offset += sizeof(float);
+        g = BitConverter.ToSingle(data, offset);
+        offset += sizeof(float);
+        b = BitConverter.ToSingle(data, offset);
+        offset += sizeof(float);
+        a = BitConverter.ToSingle(data, offset);
+        offset += sizeof(float);
         Color messageColor = new Color(r, g, b, a);
 
         return new ChatData(name, message, nameColor, messageColor);

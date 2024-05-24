@@ -136,28 +136,6 @@ public static class CustomProperty
         player.SetCustomProperties(propertiesToSet);
     }
 
-    // Room Mafia Ready
-    public static int GetMafiaReady(this Room room)
-    {
-        PhotonHashtable properties = room.CustomProperties;
-        if (properties.ContainsKey(MAFIAREADY))
-            return (int)properties[MAFIAREADY];
-        return 0;
-    }
-
-    public static void IncrementMafiaReady(this Room room)
-    {
-        int value = room.GetMafiaReady() + 1;
-        PhotonHashtable propertiesToSet = new PhotonHashtable { { MAFIAREADY, value } };
-        room.SetCustomProperties(propertiesToSet);
-    }
-
-    public static void ResetMafiaReady(this Room room)
-    {
-        PhotonHashtable propertiesToSet = new PhotonHashtable { { MAFIAREADY, 0 } };
-        room.SetCustomProperties(propertiesToSet);
-    }
-
     // Player Dead (아마 마피아/칼전 둘다 사용 가능)
     public static bool GetDead(this Player player)
     {

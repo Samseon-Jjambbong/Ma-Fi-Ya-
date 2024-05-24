@@ -210,6 +210,7 @@ public class MafiaGameFlow : MonoBehaviourPun
     {
         if (PhotonNetwork.LocalPlayer.GetDead())
         {
+            yield return new WaitForSeconds(3);
             Ready();
             yield break;
         }

@@ -69,11 +69,6 @@ public class MafiaPunManager : MonoBehaviourPunCallbacks
         {
             StartCoroutine(StartTime());
         }
-        if (propertiesThatChanged.ContainsKey(CustomProperty.MAFIAREADY))
-        {
-            everyoneReady = (int)propertiesThatChanged[CustomProperty.MAFIAREADY] == PhotonNetwork.CurrentRoom.PlayerCount;
-            masterReady = (int) propertiesThatChanged[CustomProperty.MAFIAREADY] == 1;
-        }
     }
 
     IEnumerator StartTime()
@@ -313,6 +308,7 @@ public class MafiaPunManager : MonoBehaviourPunCallbacks
         Debug.Log("Checking Game Over...");
         if (Manager.Mafia.GameResult != MafiaResult.None)
         {
+            
             photonView.RPC("GameOver", RpcTarget.All, (int) Manager.Mafia.GameResult);
             Debug.Log($"Game Over: {Manager.Mafia.GameResult}");
             StopAllCoroutines();
@@ -327,16 +323,19 @@ public class MafiaPunManager : MonoBehaviourPunCallbacks
 
     private IEnumerator WaitForEveryone()
     {
-        PhotonNetwork.CurrentRoom.ResetMafiaReady();
-        everyoneReady = false;
-        yield return new WaitUntil(() => everyoneReady);
+        foreach(var player in PhotonNetwork.PlayerList)
+        {
+            player.SetMafiaReady(false);
+        }
+        yield return new WaitForSeconds(1);
+        yield return new WaitUntil(() => PlayerMafiaReadyCount() == PhotonNetwork.CurrentRoom.PlayerCount);
     }
 
     private IEnumerator WaitForMaster()
     {
-        PhotonNetwork.CurrentRoom.ResetMafiaReady();
-        masterReady = false;
-        yield return new WaitUntil(() => masterReady);
+        PhotonNetwork.MasterClient.SetMafiaReady(false);
+        yield return new WaitForSeconds(1);
+        yield return new WaitUntil(() => PhotonNetwork.MasterClient.GetMafiaReady());
     }
     #endregion
 }

@@ -56,6 +56,7 @@ MonoBehaviour:
   nightPhaseFinished: 0
   nightEventsFinished: 0
   nightResultsFinished: 0
+  voteCount: 0
   dayPhaseFinished: 0
   voteResultsFinished: 0
 --- !u!114 &3761031624598095292
@@ -72,6 +73,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   infoText: {fileID: 0}
   mafiaRolesSO: {fileID: 11400000, guid: a837e1b57ca4442d582f6071f3a7fbde, type: 2}
+  jobPanel: {fileID: 0}
   playerRadius: 15
   houseRadius: 21
   colorList: []
@@ -97,7 +99,9 @@ MonoBehaviour:
   roleUI: {fileID: 0}
   skipVoteButton: {fileID: 0}
   winLoseUI: {fileID: 0}
-  MenuSceneName: 
+  MenuSceneName: MainMenuScene
+  MSGColor: {r: 0.372549, g: 0.3647059, b: 0.6117647, a: 1}
+  MSGAlpha: 1
 --- !u!114 &8211648316349565637
 MonoBehaviour:
   m_ObjectHideFlags: 0

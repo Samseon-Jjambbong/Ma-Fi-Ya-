@@ -341,5 +341,13 @@ public class MafiaManager : Singleton<MafiaManager>, IPunObservable
             house.DeactivateOutline();
         }
     }
+
+    public void DeactivateHouseUIs()
+    {
+        foreach (var house in Manager.Mafia.Houses)
+        {
+            house.HideUI();
+        }
+    }
     #endregion
 }

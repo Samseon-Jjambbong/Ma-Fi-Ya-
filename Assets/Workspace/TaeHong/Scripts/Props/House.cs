@@ -72,6 +72,9 @@ public class House : MonoBehaviourPun, IPointerClickHandler
             // Click
             if (!voteUI.gameObject.activeInHierarchy)
             {
+                // Close other house's UI
+                Manager.Mafia.DeactivateHouseUIs();
+
                 voteUI.gameObject.SetActive(true);
             }
             // Unclick
@@ -83,7 +86,7 @@ public class House : MonoBehaviourPun, IPointerClickHandler
         // Night = Use Skill
         else
         {
-            // Click
+            // Unclick
             if (useSkillUI.gameObject.activeInHierarchy || outline.OutlineParameters.Color == Color.red)
             {
                 HideUI();
@@ -92,9 +95,12 @@ public class House : MonoBehaviourPun, IPointerClickHandler
                 outline.OutlineParameters.Color = Color.green;
                 Manager.Mafia.ActivateHouseOutlines();
             }
-            // Unclick
+            // Click
             else
             {
+                // Close other house's UI
+                Manager.Mafia.DeactivateHouseUIs();
+
                 useSkillUI.gameObject.SetActive(true);
             }
         }

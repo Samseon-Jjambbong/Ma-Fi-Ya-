@@ -37,6 +37,7 @@ public class KnifePlayer : MonoBehaviourPun
     [SerializeField] private bool isWalking;
     [SerializeField] private bool canMove = false;
     [SerializeField] private bool isFalling;
+    [SerializeField] private bool canAttack;
     public bool CanMove { get { return canMove; } set { canMove = value; } }
 
     [Header("Knife")]
@@ -68,6 +69,7 @@ public class KnifePlayer : MonoBehaviourPun
         {
             flatArrow.color = new Color(0, 255, 0);
         }
+        canAttack = true;
     }
 
     private void FixedUpdate()
@@ -205,10 +207,14 @@ public class KnifePlayer : MonoBehaviourPun
     }
     private void OnAttack()
     {
+        if (!canAttack)
+            return;
+
         if (photonView.IsMine)
         {
             photonView.RPC("AttackAnimation", RpcTarget.All);
             photonView.RPC("Attack", RpcTarget.MasterClient, transform.position, photonView.ViewID);
+            photonView.RPC("CoolTime", RpcTarget.All);
         }
     }
 
@@ -255,6 +261,19 @@ public class KnifePlayer : MonoBehaviourPun
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, range);
+    }
+
+    [PunRPC]
+    private void CoolTime()
+    {
+        StartCoroutine(StartCoolTime());
+    }
+
+    IEnumerator StartCoolTime()
+    {
+        canAttack = false;
+        yield return new WaitForSeconds(2.1f);
+        canAttack = true;
     }
     #endregion
 

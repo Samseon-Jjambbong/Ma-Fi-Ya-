@@ -35,6 +35,11 @@ public class MafiaGameFlow : MonoBehaviourPun
         chatData.messageColor.a = MSGAlpha;
     }
 
+    private void Ready()
+    {
+        PhotonNetwork.LocalPlayer.SetMafiaReady(true);
+    }
+
     /******************************************************
     *                    RPCs + Methods
     ******************************************************/
@@ -109,7 +114,9 @@ public class MafiaGameFlow : MonoBehaviourPun
         roleUI.InitBegin();
         yield return timer.StartTimer(time);
         roleUI.gameObject.SetActive(false);
-        Manager.Mafia.displayRoleFinished = true;
+        //Manager.Mafia.displayRoleFinished = true;
+        Debug.Log($"Player{PhotonNetwork.LocalPlayer.ActorNumber} Ready");
+        Ready();
     }
 
     // Display Kicked/Killed Player's Role for X Seconds
@@ -156,7 +163,8 @@ public class MafiaGameFlow : MonoBehaviourPun
         // TODO : Insert chat OFF function here
        EnableChat(true);
 
-        Manager.Mafia.nightPhaseFinished = true;
+        //Manager.Mafia.nightPhaseFinished = true;
+        Ready();
     }
 
     
@@ -168,7 +176,8 @@ public class MafiaGameFlow : MonoBehaviourPun
         Manager.Mafia.photonView.RPC("ShowActions", RpcTarget.All);
         yield return new WaitForSeconds(1);
         yield return new WaitUntil(() => Manager.Mafia.sharedData.clientFinishedCount == Manager.Mafia.ActivePlayerCount());
-        Manager.Mafia.nightEventsFinished = true;
+        //Manager.Mafia.nightEventsFinished = true;
+        Ready();
         Manager.Mafia.sharedData.photonView.RPC("ClearActionInfo", RpcTarget.All);
     }
 
@@ -195,28 +204,34 @@ public class MafiaGameFlow : MonoBehaviourPun
         }
 
         yield return new WaitForSeconds(1);
-        Manager.Mafia.nightResultsFinished = true;
+        //Manager.Mafia.nightResultsFinished = true;
+        Ready();
     }
 
     // Allow Chat and voting for X Seconds
     private IEnumerator DayPhaseRoutine(int time)
     {
         if (PhotonNetwork.LocalPlayer.GetDead())
+        {
+            yield return new WaitForSeconds(3);
+            Ready();
             yield break;
-
+        }
+            
         // Allow chat for everyone
         EnableChat(true);
 
         // Allow voting for X Seconds
         skipVoteButton.gameObject.SetActive(true);
-        for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
-        {
-            Manager.Mafia.Houses[i].ShowVoteCount(true);
-            if (i == (PhotonNetwork.LocalPlayer.ActorNumber - 1))
-                continue;
+        Manager.Mafia.ActivateHouseOutlines();
+        //for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
+        //{
+        //    Manager.Mafia.Houses[i].ShowVoteCount(true);
+        //    if (i == (PhotonNetwork.LocalPlayer.ActorNumber - 1))
+        //        continue;
 
-            Manager.Mafia.Houses[i].ActivateOutline(true);
-        }
+        //    Manager.Mafia.Houses[i].ActivateOutline(true);
+        //}
 
         Debug.Log(VOTESTART);
         chatData.message = VOTESTART;
@@ -233,14 +248,17 @@ public class MafiaGameFlow : MonoBehaviourPun
         MafiaGameChatManager.Instance.PublishMessage(chatData);
 
         skipVoteButton.gameObject.SetActive(false);
-        foreach (var house in Manager.Mafia.Houses)
-        {
-            house.ActivateOutline(false);
-            house.ShowVoteCount(false);
-        }
+        Manager.Mafia.DeactivateHouseOutlines();
+        //foreach (var house in Manager.Mafia.Houses)
+        //{
+        //    house.ActivateOutline(false);
+        //    house.ShowVoteCount(false);
+        //    house.HideUI();
+        //}
 
         EnableChat(false);
-        Manager.Mafia.dayPhaseFinished = true;
+        //Manager.Mafia.dayPhaseFinished = true;
+        Ready();
     }
 
     private IEnumerator ShowVoteResultsRoutine(int voteResult)
@@ -250,7 +268,8 @@ public class MafiaGameFlow : MonoBehaviourPun
         yield return RemovedPlayerRoleRoutine(voteResult);
         Manager.Mafia.ApplyVoteResult(voteResult);
         yield return new WaitForSeconds(1);
-        Manager.Mafia.voteResultsFinished = true;
+        //Manager.Mafia.voteResultsFinished = true;
+        Ready();
     }
 
     private IEnumerator GameOverRoutine(int gameResult)
@@ -284,7 +303,9 @@ public class MafiaGameFlow : MonoBehaviourPun
         yield return new WaitForSeconds(3);
 
         // Go back to lobby scene
+        PhotonNetwork.LeaveRoom();
         Manager.Scene.LoadScene(MenuSceneName);
+        Singleton<MafiaManager>.ReleaseInstance();
     }
 
     #endregion

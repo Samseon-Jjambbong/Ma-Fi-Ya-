@@ -21,6 +21,7 @@ public class MafiaManager : Singleton<MafiaManager>, IPunObservable
     private MafiaGameFlow gameFlow;
     public PhotonView photonView => GetComponent<PhotonView>();
     public JobToolTip toolTip;
+    public CurrentJobPanel jobPanel;
     private int playerCount;
     public int PlayerCount => playerCount;
 
@@ -79,6 +80,11 @@ public class MafiaManager : Singleton<MafiaManager>, IPunObservable
         //nightResultsFinished = false;
         //dayPhaseFinished = false;
         //voteResultsFinished = false;
+    }
+
+    public void ShowRoleList()
+    {
+        jobPanel.InitJobPanel();
     }
 
     public int ActivePlayerCount()

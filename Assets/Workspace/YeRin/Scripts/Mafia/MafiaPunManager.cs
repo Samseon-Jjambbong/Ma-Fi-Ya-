@@ -12,7 +12,6 @@ public class MafiaPunManager : MonoBehaviourPunCallbacks
     [Header("Components")]
     [SerializeField] TMP_Text infoText;
     [SerializeField] MafiaRolesSO mafiaRolesSO;
-    [SerializeField] CurrentJobPanel jobPanel;
 
     [Header("Values")]
     [SerializeField] int playerRadius;
@@ -124,7 +123,6 @@ public class MafiaPunManager : MonoBehaviourPunCallbacks
     public void GameStart()
     {
         SpawnPlayer();
-        jobPanel.InitJobPanel();
 
         if (PhotonNetwork.IsMasterClient)
         {

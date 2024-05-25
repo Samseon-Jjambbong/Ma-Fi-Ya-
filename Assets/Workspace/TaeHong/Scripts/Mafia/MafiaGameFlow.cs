@@ -290,7 +290,10 @@ public class MafiaGameFlow : MonoBehaviourPun
         
         yield return new WaitForSeconds(3);
 
-        LeaveGame();
+        if (PhotonNetwork.IsMasterClient)
+        {
+            LeaveGame();
+        }
     }
     #endregion
 
@@ -305,6 +308,10 @@ public class MafiaGameFlow : MonoBehaviourPun
         Singleton<MafiaManager>.ReleaseInstance();
 
         // Load Menu Scene
-        Manager.Scene.LoadScene(MenuSceneName);
+        PhotonNetwork.AutomaticallySyncScene = true;
+        PhotonNetwork.CurrentRoom.IsOpen = true;
+        PhotonNetwork.CurrentRoom.IsVisible = true;
+        PhotonNetwork.LoadLevel(MenuSceneName);
+        //Manager.Scene.LoadScene(MenuSceneName);
     }
 }

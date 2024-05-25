@@ -14,7 +14,7 @@ public class CurrentJobPanel : MonoBehaviour
 
     public void InitJobPanel()
     {
-        //bool highlighted = false;
+        bool highlighted = false;
         MafiaRole myRole = PhotonNetwork.LocalPlayer.GetPlayerRole();
         
         foreach (var role in rolePools.GetRoles(4))
@@ -24,26 +24,26 @@ public class CurrentJobPanel : MonoBehaviour
             entry.InitJobEntry(roleData.GetData(role));
             entry.transform.SetParent(grid);
 
-            // Highlight if my role
-            //if (!highlighted) // prevent highlighting more than once
-            //{
-            //    if (myRole == MafiaRole.Insane)
-            //    {
-            //        if (role == Manager.Mafia.Player.fakeRole)
-            //        {
-            //            entry.Highlight();
-            //            highlighted = true;
-            //        }
-            //    }
-            //    else
-            //    {
-            //        if (role == myRole)
-            //        {
-            //            entry.Highlight();
-            //            highlighted = true;
-            //        }
-            //    }
-            //}
+            //Highlight if my role
+            if (!highlighted) // prevent highlighting more than once
+            {
+                if (myRole == MafiaRole.Insane)
+                {
+                    if (role == Manager.Mafia.Player.fakeRole)
+                    {
+                        entry.Highlight();
+                        highlighted = true;
+                    }
+                }
+                else
+                {
+                    if (role == myRole)
+                    {
+                        entry.Highlight();
+                        highlighted = true;
+                    }
+                }
+            }
         }
     }
 }

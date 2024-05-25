@@ -134,7 +134,11 @@ public class MafiaPunManager : MonoBehaviourPunCallbacks
 
     private void SpawnPlayer()
     {
-        int angle = 180 / (Manager.Mafia.PlayerCount - 1);    // 각 플레이어의 간격의 각도
+        int angle = 0;
+        if (Manager.Mafia.PlayerCount > 1)
+        {
+            angle = 180 / (Manager.Mafia.PlayerCount - 1);    // 각 플레이어의 간격의 각도
+        }
 
         int playerNumber = -1;
 
@@ -172,7 +176,11 @@ public class MafiaPunManager : MonoBehaviourPunCallbacks
 
     private void SpawnHouses()
     {
-        int angle = 180 / (Manager.Mafia.PlayerCount - 1);    // 각 집의 간격의 각도
+        int angle = 0;
+        if (Manager.Mafia.PlayerCount > 1)
+        {
+            angle = 180 / (Manager.Mafia.PlayerCount - 1);    // 각 집의 간격의 각도
+        }
 
         int currentAngle = 180;
         for (int i = 0; i < Manager.Mafia.PlayerCount; i++)

@@ -20,7 +20,7 @@ public class MafiaManager : Singleton<MafiaManager>, IPunObservable
     public AnimationFactory animFactory;
     private MafiaGameFlow gameFlow;
     public PhotonView photonView => GetComponent<PhotonView>();
-
+    public JobToolTip toolTip;
     private int playerCount;
     public int PlayerCount => playerCount;
 
@@ -73,12 +73,12 @@ public class MafiaManager : Singleton<MafiaManager>, IPunObservable
 
     public void ResetFlags()
     {
-        displayRoleFinished = false;
-        nightPhaseFinished = false;
-        nightEventsFinished = false;
-        nightResultsFinished = false;
-        dayPhaseFinished = false;
-        voteResultsFinished = false;
+        //displayRoleFinished = false;
+        //nightPhaseFinished = false;
+        //nightEventsFinished = false;
+        //nightResultsFinished = false;
+        //dayPhaseFinished = false;
+        //voteResultsFinished = false;
     }
 
     public int ActivePlayerCount()

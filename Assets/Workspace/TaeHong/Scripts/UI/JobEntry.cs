@@ -15,7 +15,7 @@ public class JobEntry : BaseUI, IPointerEnterHandler, IPointerExitHandler, IPoin
     {
         highlight = GetUI<Image>("IMG-OutLine");
         icon = GetUI<Image>("IMG-Icon");
-        //toolTip = MafiaManager.Instance.toolTip;
+        toolTip = MafiaManager.Instance.toolTip;
     }
 
     public void InitJobEntry(MafiaRoleData data)

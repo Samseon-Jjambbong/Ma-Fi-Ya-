@@ -78,6 +78,11 @@ public class KnifeGameResultBoard : MonoBehaviour
 
     void ReturnRoom()
     {
+        if (PhotonNetwork.IsMasterClient)
+        {
+            PhotonNetwork.CurrentRoom.IsOpen = true;
+            PhotonNetwork.CurrentRoom.IsVisible = true;
+        }
         PhotonNetwork.AutomaticallySyncScene = false;
         PhotonNetwork.LoadLevel(TitleSceneName);
     }

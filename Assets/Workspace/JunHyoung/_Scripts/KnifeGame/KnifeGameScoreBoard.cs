@@ -62,6 +62,9 @@ public class KnifeGameScoreBoard : MonoBehaviourPunCallbacks
 
     public override void OnPlayerPropertiesUpdate(Player targetPlayer, PhotonHashtable changedProps)
     {
+        if (!isInit)
+            return;
+        
         if (changedProps.ContainsKey(CustomPropertyExtensions.KILL) || changedProps.ContainsKey(CustomPropertyExtensions.DEATH))
         {
             changedEntry = entryDic[targetPlayer.ActorNumber];

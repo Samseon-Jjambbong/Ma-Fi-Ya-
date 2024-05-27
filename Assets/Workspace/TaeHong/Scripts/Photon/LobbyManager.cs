@@ -17,9 +17,21 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     [SerializeField] AudioClip mainBGM;
     [SerializeField] AudioClip roomBGM;
     private ClientState state;
-    
+
+    /*
     private void Start()
     {
+        if (PhotonNetwork.NetworkClientState == ClientState.Joined)
+        {
+            SetActivePanel(Panel.Room);
+            return;
+        }
+        menuPanel.Login();
+    }*/
+    
+    public override void OnEnable() // Start? OnEnable?
+    {
+        base.OnEnable();
         if ( PhotonNetwork.NetworkClientState == ClientState.Joined )
         {
             SetActivePanel(Panel.Room);
@@ -27,7 +39,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         }
         menuPanel.Login();
     }
-
+    
     private void Update()
     {
         ClientState curState = PhotonNetwork.NetworkClientState;
@@ -103,15 +115,16 @@ public class LobbyManager : MonoBehaviourPunCallbacks
 
     public override void OnDisconnected(DisconnectCause cause)
     {
+        Debug.Log($"OnDisconnected : {cause}");
         if (cause == DisconnectCause.ApplicationQuit)
             return;
 
-        if (cause == DisconnectCause.None )
-            return;
+         if (cause == DisconnectCause.None )
+             return;
 
-        Debug.Log($"OnDisconnected : {cause}");
         VCamController.Instance.SetVCam(VCamController.VCam.Login);
         SetActivePanel(Panel.Login);
+        FirebaseManager.Auth.SignOut();
     }
 
     public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)

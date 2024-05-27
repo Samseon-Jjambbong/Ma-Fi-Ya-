@@ -440,7 +440,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6509230691051287020}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -769,7 +769,7 @@ GameObject:
   - component: {fileID: 3140933527721411041}
   - component: {fileID: 6630621585518604253}
   - component: {fileID: 713678459115510290}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Knife
   m_TagString: Untagged
   m_Icon: {fileID: 0}

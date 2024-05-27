@@ -17,7 +17,7 @@ public class CurrentJobPanel : MonoBehaviour
         bool highlighted = false;
         MafiaRole myRole = PhotonNetwork.LocalPlayer.GetPlayerRole();
         
-        foreach (var role in rolePools.GetRoles(4))
+        foreach (var role in rolePools.GetRoles(PhotonNetwork.CurrentRoom.PlayerCount))
         {
             // Add entries for each role
             JobEntry entry = Instantiate(jobEntryPrefab).GetComponent<JobEntry>();

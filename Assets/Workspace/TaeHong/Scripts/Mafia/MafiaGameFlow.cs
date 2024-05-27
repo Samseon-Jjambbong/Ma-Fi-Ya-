@@ -290,26 +290,27 @@ public class MafiaGameFlow : MonoBehaviourPun
         
         yield return new WaitForSeconds(3);
 
-        if (PhotonNetwork.IsMasterClient)
-        {
-            LeaveGame();
-        }
+        LeaveGame();
     }
     #endregion
 
     private void LeaveGame()
     {
-        // Reset every player's dead state
-        foreach (Player player in PhotonNetwork.PlayerList)
-        {
-            player.SetDead(false);
-        }
         // Release singleton instance
         Singleton<MafiaManager>.ReleaseInstance();
 
-        // Load Menu Scene
-        PhotonNetwork.CurrentRoom.IsOpen = true;
-        PhotonNetwork.CurrentRoom.IsVisible = true;
-        PhotonNetwork.LoadLevel(MenuSceneName);
+        if (PhotonNetwork.IsMasterClient)
+        {
+            // Reset every player's dead state
+            foreach (Player player in PhotonNetwork.PlayerList)
+            {
+                player.SetDead(false);
+            }
+
+            // Load Menu Scene
+            PhotonNetwork.CurrentRoom.IsOpen = true;
+            PhotonNetwork.CurrentRoom.IsVisible = true;
+            PhotonNetwork.LoadLevel(MenuSceneName);
+        }
     }
 }

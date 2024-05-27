@@ -50,7 +50,11 @@ public class SettingPanel : PopUpUI
     void ReturnLobby()
     {
         PhotonNetwork.LeaveRoom();
-        Manager.Scene.LoadScene(TitleSceneName);
+        PhotonNetwork.AutomaticallySyncScene = false;
+        PhotonNetwork.LoadLevel(TitleSceneName); //다른유저는 이동 안하는지 확인해볼것
+
+        Manager.UI.ClosePopUpUI();
+        //Manager.Scene.LoadScene(TitleSceneName);
     }
 
     void ExitGame()

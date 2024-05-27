@@ -97,6 +97,11 @@ public class LeaderBoard : MonoBehaviour
                      return;
                  }
 
+                 foreach (Transform child in contents)
+                 {
+                     Destroy(child.gameObject);
+                 }
+
                  DataSnapshot snapshot = task.Result;
 
                  int rank = ( int ) snapshot.ChildrenCount;

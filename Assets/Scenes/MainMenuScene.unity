@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028334, g: 0.22571328, b: 0.3069217, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -2080,6 +2080,80 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4099890921740684, guid: 9d200fbd47e9c7f45ad54450ebd25b94,
     type: 3}
   m_PrefabInstance: {fileID: 667203100}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &671618745
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1376909263}
+    m_Modifications:
+    - target: {fileID: 2470676138403421390, guid: 014ef8500e411f54dbc846c15193c66c,
+        type: 3}
+      propertyPath: m_Name
+      value: ButtonSFXManager
+      objectReference: {fileID: 0}
+    - target: {fileID: 3195155770398801737, guid: 014ef8500e411f54dbc846c15193c66c,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3195155770398801737, guid: 014ef8500e411f54dbc846c15193c66c,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3195155770398801737, guid: 014ef8500e411f54dbc846c15193c66c,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3195155770398801737, guid: 014ef8500e411f54dbc846c15193c66c,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3195155770398801737, guid: 014ef8500e411f54dbc846c15193c66c,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3195155770398801737, guid: 014ef8500e411f54dbc846c15193c66c,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3195155770398801737, guid: 014ef8500e411f54dbc846c15193c66c,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3195155770398801737, guid: 014ef8500e411f54dbc846c15193c66c,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3195155770398801737, guid: 014ef8500e411f54dbc846c15193c66c,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3195155770398801737, guid: 014ef8500e411f54dbc846c15193c66c,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 014ef8500e411f54dbc846c15193c66c, type: 3}
+--- !u!4 &671618746 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3195155770398801737, guid: 014ef8500e411f54dbc846c15193c66c,
+    type: 3}
+  m_PrefabInstance: {fileID: 671618745}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &683068860
 GameObject:
@@ -4984,6 +5058,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 671618746}
   - {fileID: 1791694772}
   - {fileID: 410087041}
   - {fileID: 832575519}
@@ -7767,7 +7842,7 @@ PrefabInstance:
     - target: {fileID: 1239818131184868296, guid: 9ac340f7dfc8a8949a83fc506e021842,
         type: 3}
       propertyPath: m_Text
-      value: kigath99@gmail.com
+      value: www@www.www
       objectReference: {fileID: 0}
     - target: {fileID: 1492533500216400730, guid: 9ac340f7dfc8a8949a83fc506e021842,
         type: 3}
@@ -7917,7 +7992,7 @@ PrefabInstance:
     - target: {fileID: 6790938516768148984, guid: 9ac340f7dfc8a8949a83fc506e021842,
         type: 3}
       propertyPath: m_Text
-      value: dksxoghd
+      value: wwwwww
       objectReference: {fileID: 0}
     - target: {fileID: 7938261658917787842, guid: 9ac340f7dfc8a8949a83fc506e021842,
         type: 3}

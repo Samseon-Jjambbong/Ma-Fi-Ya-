@@ -19,6 +19,6 @@ public class UserRank : MonoBehaviour
 
     private void OnDisable()
     {
-        Destroy( this.gameObject );
+        //Destroy( this.gameObject );
     }
 }

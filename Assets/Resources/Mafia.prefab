@@ -777,11 +777,10 @@ GameObject:
   - component: {fileID: 9023903253295200802}
   - component: {fileID: 5948707589889229996}
   - component: {fileID: 8050245144750070212}
-  - component: {fileID: 7305491169462980883}
   - component: {fileID: 6894020868629885600}
-  - component: {fileID: 6834158331033250613}
   - component: {fileID: -3842724560825231083}
   - component: {fileID: 5139145821787868050}
+  - component: {fileID: 6977144841217382542}
   m_Layer: 0
   m_Name: Mafia
   m_TagString: Untagged
@@ -842,14 +841,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nickNameText: {fileID: 3965873379649464965}
-  rigid: {fileID: 7305491169462980883}
+  controller: {fileID: 6977144841217382542}
   animator: {fileID: 1868700319501625532}
   walkAudio: {fileID: 5139145821787868050}
   speechBubble: {fileID: 1387535484158781875}
   bubbleText: {fileID: 9181774830297415848}
-  movePower: 10
+  movePower: 3
   maxSpeed: 10
-  rotateSpeed: 150
+  rotateSpeed: 8
+  canMove: 1
   actionType: 0
   fakeRole: 0
   curColor: {r: 0, g: 0, b: 0, a: 0}
@@ -873,7 +873,6 @@ MonoBehaviour:
   observableSearch: 2
   ObservedComponents:
   - {fileID: 6894020868629885600}
-  - {fileID: 6834158331033250613}
   - {fileID: -3842724560825231083}
   sceneViewId: 0
   InstantiationId: 0
@@ -909,33 +908,6 @@ MonoBehaviour:
   m_DefaultActionMap: MafiaPlayer
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
---- !u!54 &7305491169462980883
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5130084855338310416}
-  serializedVersion: 4
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 1
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 36
-  m_CollisionDetection: 0
 --- !u!114 &6894020868629885600
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -952,22 +924,6 @@ MonoBehaviour:
   m_SynchronizeRotation: 1
   m_SynchronizeScale: 0
   m_UseLocal: 1
---- !u!114 &6834158331033250613
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5130084855338310416}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 64179f3720bbfe947b7724caa67b7c1d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SynchronizeVelocity: 1
-  m_SynchronizeAngularVelocity: 0
-  m_TeleportEnabled: 0
-  m_TeleportIfDistanceGreaterThan: 3
 --- !u!114 &-3842724560825231083
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1094,6 +1050,32 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!143 &6977144841217382542
+CharacterController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5130084855338310416}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Height: 1.8
+  m_Radius: 0.4
+  m_SlopeLimit: 45
+  m_StepOffset: 0.3
+  m_SkinWidth: 0.08
+  m_MinMoveDistance: 0.001
+  m_Center: {x: 0, y: 0.8, z: 0}
 --- !u!1 &5507819949779788475
 GameObject:
   m_ObjectHideFlags: 0

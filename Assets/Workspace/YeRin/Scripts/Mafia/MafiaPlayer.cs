@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.XR;
 
 /// <summary>
 /// programmer : Yerin, TaeHong
@@ -15,7 +16,7 @@ public class MafiaPlayer : MonoBehaviourPun
 {
     [Header("Components")]
     [SerializeField] TMP_Text nickNameText;
-    [SerializeField] Rigidbody rigid;
+    [SerializeField] CharacterController controller;
     [SerializeField] Animator animator;
     [SerializeField] AudioSource walkAudio;
 
@@ -23,7 +24,6 @@ public class MafiaPlayer : MonoBehaviourPun
     [SerializeField] TMP_Text bubbleText;
 
     [SerializeField] float movePower;
-    [SerializeField] float maxSpeed;
     [SerializeField] float rotateSpeed;
 
     // 플레이어의 생존 여부
@@ -32,7 +32,9 @@ public class MafiaPlayer : MonoBehaviourPun
 
     [Header("Properties")]
     private bool isAlive = true; // 플레이어의 생존 여부
+    [SerializeField] private bool canMove = true;
     public bool IsAlive { get { return isAlive; } }
+    public bool CanMove { get { return canMove; } set { canMove = value; } }
 
     [Header("Mafia Logic")]
     private Dictionary<int, Player> playerDic;
@@ -177,44 +179,54 @@ public class MafiaPlayer : MonoBehaviourPun
         Manager.Mafia.Houses[playerNumber].DeactivateOutline();
     }
 
+    #region Move
     private void OnMove(InputValue value)
     {
         moveDir.x = value.Get<Vector2>().x;
+        if (!canMove)
+            return;
         moveDir.z = value.Get<Vector2>().y;
 
         if (photonView.IsMine)
         {
-            photonView.RPC("Walk", RpcTarget.All);
+            photonView.RPC("WalkStart", RpcTarget.All);
         }
     }
 
     private void Accelate()
     {
+
         if (moveDir.x == 0 && moveDir.z == 0 && isWalking)
         {
-            photonView.RPC("Walk", RpcTarget.All);
+            photonView.RPC("WalkStop", RpcTarget.All);
         }
 
-        if (moveDir.z < 0)
-        {
-            rigid.AddForce(moveDir.z * transform.forward * (movePower + 100f), ForceMode.Force);
-        }
-        else
-        {
-            rigid.AddForce(moveDir.z * transform.forward * movePower, ForceMode.Force);
-        }
-
-        if (rigid.velocity.sqrMagnitude > maxSpeed * maxSpeed)
-        {
-            rigid.velocity = rigid.velocity.normalized * maxSpeed;
-        }
-        currentSpeed = rigid.velocity.magnitude;
+        if (controller.enabled == false)
+            return;
+        controller.SimpleMove(transform.forward * moveDir.z * (movePower * 100) * Time.deltaTime);
     }
 
     private void Rotate()
     {
-        transform.Rotate(Vector3.up, moveDir.x * rotateSpeed * Time.deltaTime);
+        transform.Rotate(Vector3.up, moveDir.x * rotateSpeed * 100f * Time.deltaTime);
     }
+
+    [PunRPC]
+    private void WalkStart()
+    {
+        animator.Play("Walk");
+        isWalking = true;
+        walkAudio.Play();
+    }
+
+    [PunRPC]
+    private void WalkStop()
+    {
+        animator.Play("Idle");
+        isWalking = false;
+        walkAudio.Stop();
+    }
+    #endregion
 
     [PunRPC]
     private void OnHipHopDance(InputValue value)

@@ -168,8 +168,6 @@ public class MafiaGameFlow : MonoBehaviourPun
 
         yield return new WaitForSeconds(3); // Give time for network to receive actions
 
-        EnableChat(true);
-
         Ready();
     }
 

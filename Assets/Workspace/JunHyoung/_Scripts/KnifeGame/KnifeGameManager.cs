@@ -38,8 +38,8 @@ public class KnifeGameManager : MonoBehaviourPunCallbacks, IPunObservable
     [SerializeField] AudioClip gameFinishSFX;
 
     // Knife Player 관련 정보
-    KnifePlayer player;
-    public KnifePlayer Player { get { return player; } set { player = value; } }
+    public KnifePlayer curPlayerController;
+ 
     KnifeLength knife;
     public KnifeLength Knife { get { return knife; } set { knife = value; } }
     // 플레이어 리스폰 설정
@@ -51,7 +51,6 @@ public class KnifeGameManager : MonoBehaviourPunCallbacks, IPunObservable
     [SerializeField] int playerRadius; // 스폰 거리 간격
 
     [SerializeField] List<Color> colorList;
-    private KnifePlayer curPlayerController;
     private Dictionary<int, Player> playerDic;
     public Dictionary<int, Player> PlayerDic { get { return playerDic; } }
     /******************************************************

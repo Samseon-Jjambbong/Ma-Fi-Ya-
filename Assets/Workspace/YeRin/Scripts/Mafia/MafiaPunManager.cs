@@ -74,8 +74,7 @@ public class MafiaPunManager : MonoBehaviourPunCallbacks
         if (PhotonNetwork.IsMasterClient)
         {
             SpawnHouses(); // Spawn {PlayerCount} Houses
-            //AssignRoles(PhotonNetwork.CurrentRoom.PlayerCount);
-            AssignRoles(4); // TODO: CHANGE LATER
+            AssignRoles(PhotonNetwork.CurrentRoom.PlayerCount);
         }
 
         double loadTime = PhotonNetwork.CurrentRoom.GetGameStartTime();

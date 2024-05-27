@@ -91,13 +91,12 @@ public class MafiaPlayer : MonoBehaviourPun
 
         walkAudio.Stop();
 
-        Manager.Mafia.ShowRoleList();
+        if (photonView.IsMine)
+        {
+            Manager.Mafia.ShowRoleList();
+        }
+        
         Debug.Log(PhotonNetwork.LocalPlayer.GetPlayerRole());
-    }
-
-    private void OnEnable()
-    {
-
     }
 
     private void FixedUpdate()

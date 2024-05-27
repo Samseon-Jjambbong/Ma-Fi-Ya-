@@ -91,6 +91,15 @@ public class KnifeGameManager : MonoBehaviourPunCallbacks, IPunObservable
             scoreBoardUI.ActivePanel();
         }
     }
+
+    public override void OnDisable()
+    {
+        base.OnDisable(); 
+
+        // 커스텀 프로퍼티 초기화
+        PhotonNetwork.LocalPlayer.ClearKillDeathCount();
+    }
+    
     #endregion
     /******************************************************
     *                     PunCallbacks

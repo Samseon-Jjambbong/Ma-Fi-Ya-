@@ -39,4 +39,13 @@ public static class CustomPropertyExtensions
         PhotonHashtable properties = new PhotonHashtable { { DEATH, GetPlayerDeathCount(player) + 1 } };
         player.SetCustomProperties(properties);
     }
+
+    /// <summary>
+    /// Clear  Player KillDeath Count
+    /// </summary>
+    /// <param name="player"></param>
+    public static void ClearKillDeathCount(this Player player)
+    {
+        player.SetCustomProperties(new PhotonHashtable { { KILL, 0 } ,{DEATH , 0 } });
+    }
 }

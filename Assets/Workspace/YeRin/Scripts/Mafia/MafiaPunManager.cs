@@ -19,7 +19,6 @@ public class MafiaPunManager : MonoBehaviourPunCallbacks
     [SerializeField] List<Color> colorList;
     [SerializeField] float CountDownTime;
     [SerializeField] private int displayRoleTime;
-    [SerializeField] private int roleUseTime;
     [SerializeField] private int voteTime;
     [SerializeField] private int skillTime;
     private bool everyoneReady;

@@ -27,11 +27,9 @@ public class MafiaManager : Singleton<MafiaManager>, IPunObservable
 
     private bool isDay;
     public bool IsDay { get => isDay; set => isDay = value; }
-    [SerializeField] private float skillTime;
 
     [SerializeField] List<House> houses;
     public List<House> Houses { get { return houses; } set { houses = value; } }
-    public float SkillTime => skillTime;
 
     private MafiaPlayer player;
     public MafiaPlayer Player { get { return player; } set { player = value; } }
@@ -159,7 +157,7 @@ public class MafiaManager : Singleton<MafiaManager>, IPunObservable
     [PunRPC] // Called on players who finished voting
     public void BlockVotes()
     {
-        DeactivateHouseUIs();
+        DeactivateHouseOutlines();
         gameFlow.DisableSkipButton();
     }
 
@@ -365,6 +363,22 @@ public class MafiaManager : Singleton<MafiaManager>, IPunObservable
         foreach (var house in Manager.Mafia.Houses)
         {
             house.HideUI();
+        }
+    }
+
+    public void ShowVoteCounts()
+    {
+        foreach (var house in Manager.Mafia.Houses)
+        {
+            house.ShowVoteCount(true);
+        }
+    }
+
+    public void HideVoteCounts()
+    {
+        foreach (var house in Manager.Mafia.Houses)
+        {
+            house.ShowVoteCount(false);
         }
     }
     #endregion

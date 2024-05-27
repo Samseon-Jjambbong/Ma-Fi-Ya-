@@ -1082,7 +1082,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ff8c79b1bab2944386dcec3aeae3347, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TitleSceneName: MenuSceneWithUI
+  TitleSceneName: MainMenuScene
   closeButton: {fileID: 8395544508699165442}
   exitGameButton: {fileID: 466109839727547457}
   returnLobbyButton: {fileID: 505513956517547983}

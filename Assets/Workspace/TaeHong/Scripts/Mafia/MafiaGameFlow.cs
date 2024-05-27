@@ -308,10 +308,8 @@ public class MafiaGameFlow : MonoBehaviourPun
         Singleton<MafiaManager>.ReleaseInstance();
 
         // Load Menu Scene
-        PhotonNetwork.AutomaticallySyncScene = true;
         PhotonNetwork.CurrentRoom.IsOpen = true;
         PhotonNetwork.CurrentRoom.IsVisible = true;
         PhotonNetwork.LoadLevel(MenuSceneName);
-        //Manager.Scene.LoadScene(MenuSceneName);
     }
 }

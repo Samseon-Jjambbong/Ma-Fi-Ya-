@@ -852,6 +852,7 @@ MonoBehaviour:
   rotateSpeed: 150
   actionType: 0
   fakeRole: 0
+  curColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!114 &5948707589889229996
 MonoBehaviour:
   m_ObjectHideFlags: 0

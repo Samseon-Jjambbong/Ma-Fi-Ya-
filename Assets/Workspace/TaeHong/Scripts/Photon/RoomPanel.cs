@@ -59,7 +59,7 @@ public class RoomPanel : MonoBehaviour
             Destroy(playerContent.GetChild(i).gameObject);
         }
         playerList.Clear();
-        PhotonNetwork.AutomaticallySyncScene = false;
+        //PhotonNetwork.AutomaticallySyncScene = false;
     }
 
     public void StartGame()

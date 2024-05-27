@@ -152,7 +152,7 @@ public class MafiaManager : Singleton<MafiaManager>, IPunObservable
     [PunRPC] // Called on players who finished voting
     public void BlockVotes()
     {
-        DeactivateHouseOutlines();
+        DeactivateHouseUIs();
         gameFlow.DisableSkipButton();
     }
 

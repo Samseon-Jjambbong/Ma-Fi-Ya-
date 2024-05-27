@@ -18,6 +18,7 @@ public class MafiaGameFlow : MonoBehaviourPun
     [SerializeField] string MenuSceneName;
     [SerializeField] const int WINPOINTS = 100;
     [SerializeField] const int LOSEPOINTS = 50;
+    private Coroutine timerRoutine;
 
     [Header("System Message")]
     [SerializeField] Color MSGColor = new Color(0.372549f, 0.3647059f, 0.6117647f);
@@ -233,11 +234,14 @@ public class MafiaGameFlow : MonoBehaviourPun
         chatData.message = VOTESTART;
         MafiaGameChatManager.Instance.PublishMessage(chatData);
 
-        yield return timer.StartTimer(time);
+        timerRoutine = StartCoroutine(timer.StartTimer(time));
         while (!timer.timerFinished && !(Manager.Mafia.voteCount == Manager.Mafia.sharedData.ActivePlayerCount()))
         {
             yield return new WaitForSeconds(1);
         }
+        StopCoroutine(timerRoutine);
+        yield return timer.StartTimer(1);
+        Manager.Mafia.voteCount = 0;
 
         Debug.Log(VOTEFINISH);
         chatData.message = VOTEFINISH;
@@ -290,28 +294,27 @@ public class MafiaGameFlow : MonoBehaviourPun
         
         yield return new WaitForSeconds(3);
 
-        if (PhotonNetwork.IsMasterClient)
-        {
-            LeaveGame();
-        }
+        LeaveGame();
     }
     #endregion
 
     private void LeaveGame()
     {
-        // Reset every player's dead state
-        foreach (Player player in PhotonNetwork.PlayerList)
-        {
-            player.SetDead(false);
-        }
         // Release singleton instance
         Singleton<MafiaManager>.ReleaseInstance();
 
-        // Load Menu Scene
-        PhotonNetwork.AutomaticallySyncScene = true;
-        PhotonNetwork.CurrentRoom.IsOpen = true;
-        PhotonNetwork.CurrentRoom.IsVisible = true;
-        PhotonNetwork.LoadLevel(MenuSceneName);
-        //Manager.Scene.LoadScene(MenuSceneName);
+        if (PhotonNetwork.IsMasterClient)
+        {
+            // Reset every player's dead state
+            foreach (Player player in PhotonNetwork.PlayerList)
+            {
+                player.SetDead(false);
+            }
+
+            // Load Menu Scene
+            PhotonNetwork.CurrentRoom.IsOpen = true;
+            PhotonNetwork.CurrentRoom.IsVisible = true;
+            PhotonNetwork.LoadLevel(MenuSceneName);
+        }
     }
 }

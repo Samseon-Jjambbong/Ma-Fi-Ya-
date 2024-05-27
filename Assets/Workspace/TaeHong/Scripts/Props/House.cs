@@ -46,6 +46,8 @@ public class House : MonoBehaviourPun, IPointerClickHandler
 
     private void OnDisable()
     {
+        if (Manager.Mafia == null)
+            return;
         Manager.Mafia.VoteCountChanged -= OnVoteCountChanged;
     }
 

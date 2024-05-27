@@ -169,7 +169,6 @@ public class House : MonoBehaviourPun, IPointerClickHandler
         if (Manager.Mafia.IsDay)
         {
             HideUI();
-            ShowVoteCount(true);
         }
         else
         {
@@ -186,7 +185,6 @@ public class House : MonoBehaviourPun, IPointerClickHandler
         if (Manager.Mafia.IsDay)
         {
             HideUI();
-            ShowVoteCount(false);
         }
         else
         {
@@ -288,6 +286,7 @@ public class House : MonoBehaviourPun, IPointerClickHandler
 
         bubble = StartCoroutine(CloseSpeechBubble());
     }
+
     IEnumerator CloseSpeechBubble()
     {
         yield return new WaitForSeconds(3f);

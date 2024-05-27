@@ -227,6 +227,7 @@ public class MafiaGameFlow : MonoBehaviourPun
         EnableChat(true);
 
         // Allow voting for X Seconds
+        Manager.Mafia.ShowVoteCounts();
         skipVoteButton.gameObject.SetActive(true);
         Manager.Mafia.ActivateHouseOutlines();
 
@@ -247,6 +248,7 @@ public class MafiaGameFlow : MonoBehaviourPun
         chatData.message = VOTEFINISH;
         MafiaGameChatManager.Instance.PublishMessage(chatData);
 
+        Manager.Mafia.HideVoteCounts();
         skipVoteButton.gameObject.SetActive(false);
         Manager.Mafia.DeactivateHouseOutlines();
 

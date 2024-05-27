@@ -124,6 +124,13 @@ public class MafiaManager : Singleton<MafiaManager>, IPunObservable
 
             // Set player state as dead
             sharedData.SetDead(playerID - 1);
+
+            // Disable chat for kicked player
+            if (PhotonNetwork.LocalPlayer.ActorNumber == playerID)
+            {
+                MafiaGameChatManager.Instance.SubscribleGhostChannel();
+            }
+
             if (PhotonNetwork.IsMasterClient)
             {
                 PlayerDied(playerID);
@@ -217,6 +224,11 @@ public class MafiaManager : Singleton<MafiaManager>, IPunObservable
     #region Vote Result
     public void ApplyVoteResult(int voteResult)
     {
+        // Disable chat for kicked player
+        if(PhotonNetwork.LocalPlayer.ActorNumber == voteResult)
+        {
+            MafiaGameChatManager.Instance.SubscribleGhostChannel();
+        }
         if (PhotonNetwork.IsMasterClient)
         {
             PlayerDied(voteResult);

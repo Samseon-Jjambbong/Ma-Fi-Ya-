@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028326, g: 0.22571333, b: 0.30692202, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -3080,6 +3080,16 @@ PrefabInstance:
       propertyPath: jobPanel
       value: 
       objectReference: {fileID: 1632649031}
+    - target: {fileID: 3761031624598095292, guid: 16272b99ff3764479828701e06741280,
+        type: 3}
+      propertyPath: voteTime
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 3761031624598095292, guid: 16272b99ff3764479828701e06741280,
+        type: 3}
+      propertyPath: skillTime
+      value: 30
+      objectReference: {fileID: 0}
     - target: {fileID: 4274996574515606696, guid: 16272b99ff3764479828701e06741280,
         type: 3}
       propertyPath: spring

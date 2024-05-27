@@ -22,20 +22,37 @@ public class MafiaGameFlow : MonoBehaviourPun
 
     [Header("System Message")]
     [SerializeField] Color MSGColor = new Color(0.372549f, 0.3647059f, 0.6117647f);
-    [Range(0,1)]
+    [Range(0, 1)]
     [SerializeField] float MSGAlpha = 1f;
-    [SerializeField] const string  VOTESTART = "Voting started";
+    [SerializeField] const string VOTESTART = "Voting started";
     [SerializeField] const string VOTEFINISH = "Voting finished";
     [SerializeField] const string NOONEDIED = "No one died last night";
     [SerializeField] const string NIGHT2DAY = "Night has come...";
     [SerializeField] const string DAY2NIGHT = "It's Day Time...";
-     private ChatData chatData;
+
+
+    [Header("Sounds - SFX")]
+    [SerializeField] AudioClip winSFX;
+    [SerializeField] AudioClip loseSFX;
+    [SerializeField] AudioClip exileSFX;
+    [SerializeField] AudioClip dieSFX;
+    [SerializeField] AudioClip turnMorningSFX;
+
+    [Header("Sounds - BGM")]
+    [SerializeField] AudioClip mainBGM;
+    [SerializeField] AudioClip useAblityBGM;
+    [SerializeField] AudioClip voteBGM;
+    [SerializeField] AudioClip nightBGM;
+
+    private ChatData chatData;
     private void Start()
     {
         Manager.Mafia.IsDay = true;
         chatData = new ChatData();
         chatData.messageColor = MSGColor;
         chatData.messageColor.a = MSGAlpha;
+
+        Manager.Sound.PlayBGM(mainBGM);
     }
 
     private void Ready()
@@ -144,7 +161,7 @@ public class MafiaGameFlow : MonoBehaviourPun
         yield return ChangeTimeOfDayRoutine();
         chatData.message = NIGHT2DAY;
         MafiaGameChatManager.Instance.PublishMessage(chatData);
-
+        Manager.Sound.PlayBGM(nightBGM);
         // Prevent dead players from using skills
         if (PhotonNetwork.LocalPlayer.GetDead())
         {
@@ -171,9 +188,10 @@ public class MafiaGameFlow : MonoBehaviourPun
         Ready();
     }
 
-    
+
     private IEnumerator ShowNightEventsRoutine()
     {
+        Manager.Sound.PlayBGM(useAblityBGM);
         Manager.Mafia.sharedData.photonView.RPC("ResetClientFinishedCount", RpcTarget.All);
         Manager.Mafia.photonView.RPC("ParseActionsAndAssign", RpcTarget.MasterClient);
         yield return new WaitForSeconds(1);
@@ -188,6 +206,7 @@ public class MafiaGameFlow : MonoBehaviourPun
     {
         // Night -> Day
         yield return ChangeTimeOfDayRoutine();
+        Manager.Sound.PlaySFX(turnMorningSFX);
         chatData.message = DAY2NIGHT;
         MafiaGameChatManager.Instance.PublishMessage(chatData);
 
@@ -220,7 +239,7 @@ public class MafiaGameFlow : MonoBehaviourPun
             Ready();
             yield break;
         }
-            
+
         // Allow chat for everyone
         EnableChat(true);
 
@@ -228,7 +247,7 @@ public class MafiaGameFlow : MonoBehaviourPun
         Manager.Mafia.ShowVoteCounts();
         skipVoteButton.gameObject.SetActive(true);
         Manager.Mafia.ActivateHouseOutlines();
-
+        Manager.Sound.PlayBGM(voteBGM);
         Debug.Log(VOTESTART);
         chatData.message = VOTESTART;
         MafiaGameChatManager.Instance.PublishMessage(chatData);
@@ -267,31 +286,42 @@ public class MafiaGameFlow : MonoBehaviourPun
     private IEnumerator GameOverRoutine(int gameResult)
     {
         MafiaResult result = (MafiaResult) gameResult;
+        bool isWin = false;
         // 내가 마피아면
         if (PhotonNetwork.LocalPlayer.GetPlayerRole() == MafiaRole.Mafia)
         {
             if (result == MafiaResult.MafiaWin)
             {
-                winLoseUI.ShowWin(WINPOINTS);
+                isWin = true;
             }
             else
             {
-                winLoseUI.ShowLose(LOSEPOINTS);
+                isWin = false;
             }
         }
         // 내가 시민이면
-        else
-        {
+        else{
             if (result == MafiaResult.MafiaWin)
             {
-                winLoseUI.ShowLose(LOSEPOINTS);
+                isWin = false;
             }
             else
             {
-                winLoseUI.ShowWin(WINPOINTS);
+                isWin = true;
             }
         }
-        
+
+        if (isWin)
+        {
+            Manager.Sound.PlaySFX(winSFX);
+            winLoseUI.ShowWin(WINPOINTS);
+        }
+        else
+        {
+            Manager.Sound.PlaySFX(loseSFX);
+            winLoseUI.ShowLose(LOSEPOINTS);
+        }
+
         yield return new WaitForSeconds(3);
 
         LeaveGame();

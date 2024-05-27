@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028326, g: 0.22571333, b: 0.30692202, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028334, g: 0.22571328, b: 0.3069217, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -3207,9 +3207,44 @@ PrefabInstance:
       objectReference: {fileID: 421478242}
     - target: {fileID: 8540862403624832752, guid: 16272b99ff3764479828701e06741280,
         type: 3}
+      propertyPath: dieSFX
+      value: 
+      objectReference: {fileID: 8300000, guid: 2143366e70d323a459f917833190df12, type: 3}
+    - target: {fileID: 8540862403624832752, guid: 16272b99ff3764479828701e06741280,
+        type: 3}
       propertyPath: roleUI
       value: 
       objectReference: {fileID: 733470816134151914}
+    - target: {fileID: 8540862403624832752, guid: 16272b99ff3764479828701e06741280,
+        type: 3}
+      propertyPath: winSFX
+      value: 
+      objectReference: {fileID: 8300000, guid: e17481565a7128b4298581e514652bd9, type: 3}
+    - target: {fileID: 8540862403624832752, guid: 16272b99ff3764479828701e06741280,
+        type: 3}
+      propertyPath: loseSFX
+      value: 
+      objectReference: {fileID: 8300000, guid: 16ca90dbdff30394da45bbd6b120b640, type: 3}
+    - target: {fileID: 8540862403624832752, guid: 16272b99ff3764479828701e06741280,
+        type: 3}
+      propertyPath: mainBGM
+      value: 
+      objectReference: {fileID: 8300000, guid: c60a7adc2d3cce44a978bbcc52bba6ab, type: 3}
+    - target: {fileID: 8540862403624832752, guid: 16272b99ff3764479828701e06741280,
+        type: 3}
+      propertyPath: voteBGM
+      value: 
+      objectReference: {fileID: 8300000, guid: a3687e4ea56820940aa7fb2e62e8cc09, type: 3}
+    - target: {fileID: 8540862403624832752, guid: 16272b99ff3764479828701e06741280,
+        type: 3}
+      propertyPath: exileSFX
+      value: 
+      objectReference: {fileID: 8300000, guid: c1aa550c36050fb4da11350d48a40668, type: 3}
+    - target: {fileID: 8540862403624832752, guid: 16272b99ff3764479828701e06741280,
+        type: 3}
+      propertyPath: nightBGM
+      value: 
+      objectReference: {fileID: 8300000, guid: 29f9c50f088cdd24bbe304b781016d4f, type: 3}
     - target: {fileID: 8540862403624832752, guid: 16272b99ff3764479828701e06741280,
         type: 3}
       propertyPath: winLoseUI
@@ -3217,9 +3252,19 @@ PrefabInstance:
       objectReference: {fileID: 733470816134151915}
     - target: {fileID: 8540862403624832752, guid: 16272b99ff3764479828701e06741280,
         type: 3}
+      propertyPath: useAblityBGM
+      value: 
+      objectReference: {fileID: 8300000, guid: e9d2563098de4c44db2f9fded8cefe35, type: 3}
+    - target: {fileID: 8540862403624832752, guid: 16272b99ff3764479828701e06741280,
+        type: 3}
       propertyPath: skipVoteButton
       value: 
       objectReference: {fileID: 733470816134151913}
+    - target: {fileID: 8540862403624832752, guid: 16272b99ff3764479828701e06741280,
+        type: 3}
+      propertyPath: turnMorningSFX
+      value: 
+      objectReference: {fileID: 8300000, guid: 97ab94f37c3683746ba2d6ed44f7087d, type: 3}
     - target: {fileID: 8540862403624832752, guid: 16272b99ff3764479828701e06741280,
         type: 3}
       propertyPath: lightController
@@ -3396,6 +3441,23 @@ PrefabInstance:
     - target: {fileID: 5588967625138496660, guid: 49ba8df2be6234b76adf569229417560,
         type: 3}
       propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7704518942364232139, guid: 49ba8df2be6234b76adf569229417560,
+        type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 827bb8d5a3ce4b849a673921b3214148,
+        type: 2}
+    - target: {fileID: 7704518942364232139, guid: 49ba8df2be6234b76adf569229417560,
+        type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: 6179386962543796144, guid: 827bb8d5a3ce4b849a673921b3214148,
+        type: 2}
+    - target: {fileID: 7704518942364232139, guid: 49ba8df2be6234b76adf569229417560,
+        type: 3}
+      propertyPath: m_hasFontAssetChanged
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8375609889193680097, guid: 49ba8df2be6234b76adf569229417560,

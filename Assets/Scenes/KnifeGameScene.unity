@@ -1243,7 +1243,7 @@ MonoBehaviour:
   returnLobbyButton: {fileID: 1208978384}
   entryPrefab: {fileID: 1162394613752682339, guid: 8f5a05b317154bb48ac444854fa7b097,
     type: 3}
-  TitleSceneName: TitleSceneVer3
+  TitleSceneName: MainMenuScene
   scoreConfig: {fileID: 11400000, guid: 07a208010fd2e724888f55b8967c4ff6, type: 2}
 --- !u!1 &428919528
 GameObject:

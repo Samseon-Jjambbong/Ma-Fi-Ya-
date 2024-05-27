@@ -78,12 +78,14 @@ public class KnifeGameResultBoard : MonoBehaviour
 
     void ReturnRoom()
     {
-        Manager.Scene.LoadScene(TitleSceneName);
+        PhotonNetwork.AutomaticallySyncScene = false;
+        PhotonNetwork.LoadLevel(TitleSceneName);
     }
 
     void ReturnLobby()
     {
+        PhotonNetwork.AutomaticallySyncScene = false;
         PhotonNetwork.LeaveRoom();
-        Manager.Scene.LoadScene(TitleSceneName);
+        PhotonNetwork.LoadLevel(TitleSceneName);
     }
 }

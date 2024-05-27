@@ -99,11 +99,6 @@ public class MafiaPlayer : MonoBehaviourPun
         Debug.Log(PhotonNetwork.LocalPlayer.GetPlayerRole());
     }
 
-    private void OnEnable()
-    {
-
-    }
-
     private void FixedUpdate()
     {
         if (photonView.IsMine)

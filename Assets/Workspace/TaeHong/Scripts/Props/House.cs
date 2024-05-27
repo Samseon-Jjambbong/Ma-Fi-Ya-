@@ -167,7 +167,7 @@ public class House : MonoBehaviourPun, IPointerClickHandler
         if (Manager.Mafia.IsDay)
         {
             HideUI();
-            ShowVoteCount(false);
+            ShowVoteCount(true);
         }
         else
         {

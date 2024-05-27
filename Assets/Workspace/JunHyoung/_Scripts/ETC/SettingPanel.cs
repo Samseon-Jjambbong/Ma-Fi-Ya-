@@ -49,10 +49,11 @@ public class SettingPanel : PopUpUI
 
     void ReturnLobby()
     {
+        MafiaManager.ReleaseInstance();
         PhotonNetwork.LeaveRoom();
         PhotonNetwork.AutomaticallySyncScene = false;
         PhotonNetwork.LoadLevel(TitleSceneName); //다른유저는 이동 안하는지 확인해볼것
-
+        
         Manager.UI.ClosePopUpUI();
         //Manager.Scene.LoadScene(TitleSceneName);
     }

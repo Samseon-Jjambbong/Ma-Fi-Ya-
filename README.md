@@ -10,7 +10,7 @@
 
 - 기간 : 2024.05.06 ~ 2024.05.27 (2주)
 - 인원 : 4인 (PM 1인, 프로그래밍 3인)
-- 사용 툴 : **Unity(2023.2.15)**, **Photon Pun2** , **Firebase SDK (Auth, Realtime Database)**,
+- 사용 툴 : **Unity(2022.3.22)**, **Photon Pun2** , **Firebase SDK (Auth, Realtime Database)**,
      Visual Studio 2022, Fork, Asana
 
 <br/> <br/> 
